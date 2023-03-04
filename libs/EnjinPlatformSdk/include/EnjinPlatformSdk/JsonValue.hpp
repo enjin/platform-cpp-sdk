@@ -1,5 +1,5 @@
-#ifndef ENJINPLATFORMSDK_JSONOBJECT_HPP
-#define ENJINPLATFORMSDK_JSONOBJECT_HPP
+#ifndef ENJINPLATFORMSDK_JSONVALUE_HPP
+#define ENJINPLATFORMSDK_JSONVALUE_HPP
 
 #include "enjinplatformsdk_export.h"
 #include <memory>
@@ -8,22 +8,22 @@
 namespace enjin::platform::sdk::json
 {
 /// \brief TODO
-class ENJINPLATFORMSDK_EXPORT JsonObject
+class ENJINPLATFORMSDK_EXPORT JsonValue
 {
     class Impl;
 
     std::unique_ptr<Impl> _pimpl;
 
 public:
-    JsonObject();
+    JsonValue();
 
     [[maybe_unused]]
-    JsonObject(const JsonObject& other);
+    JsonValue(const JsonValue& other);
 
     [[maybe_unused]]
-    JsonObject(JsonObject&& other) noexcept;
+    JsonValue(JsonValue&& other) noexcept;
 
-    ~JsonObject();
+    ~JsonValue();
 
     /* TODO: Get array field. (May have to be serialized) */
 
@@ -49,7 +49,7 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
-    JsonObject GetObjectField(const std::string& key) const;
+    JsonValue GetObjectField(const std::string& key) const;
 
     [[maybe_unused]]
     [[nodiscard]]
@@ -125,7 +125,7 @@ public:
     bool TryGetInt64Field(const std::string& key, int64_t& outInt64) const;
 
     [[maybe_unused]]
-    bool TryGetObjectField(const std::string& key, JsonObject& outObject) const;
+    bool TryGetObjectField(const std::string& key, JsonValue& outObject) const;
 
     [[maybe_unused]]
     bool TryGetStringField(const std::string& key, std::string& outString) const;
@@ -136,18 +136,18 @@ public:
     [[maybe_unused]]
     bool TryGetUint64Field(const std::string& key, uint64_t& outUint64) const;
 
-    JsonObject& operator=(const JsonObject& rhs);
+    JsonValue& operator=(const JsonValue& rhs);
 
-    JsonObject& operator=(JsonObject&& rhs) noexcept;
+    JsonValue& operator=(JsonValue&& rhs) noexcept;
 
-    bool operator==(const JsonObject& rhs) const;
+    bool operator==(const JsonValue& rhs) const;
 
-    bool operator!=(const JsonObject& rhs) const;
+    bool operator!=(const JsonValue& rhs) const;
 
     [[maybe_unused]]
-    static JsonObject FromJson(const std::string& json);
+    static JsonValue FromJson(const std::string& json);
 
 };
 }
 
-#endif //ENJINPLATFORMSDK_JSONOBJECT_HPP
+#endif //ENJINPLATFORMSDK_JSONVALUE_HPP

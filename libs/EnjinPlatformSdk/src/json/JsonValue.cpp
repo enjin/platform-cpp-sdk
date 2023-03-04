@@ -1,4 +1,4 @@
-#include "EnjinPlatformSdk/JsonObject.hpp"
+#include "EnjinPlatformSdk/JsonValue.hpp"
 
 #include "rapidjson/document.h"
 #include <stdexcept>
@@ -7,7 +7,7 @@
 using namespace enjin::platform::sdk::json;
 using namespace rapidjson;
 
-class JsonObject::Impl
+class JsonValue::Impl
 {
 public:
     Document document;
@@ -84,9 +84,9 @@ public:
     }
 
     [[nodiscard]]
-    JsonObject GetObjectField(const std::string& key) const
+    JsonValue GetObjectField(const std::string& key) const
     {
-        JsonObject newObject;
+        JsonValue newObject;
         if (TryGetObjectField(key, newObject))
         {
             return newObject;
@@ -262,7 +262,7 @@ public:
         return true;
     }
 
-    bool TryGetObjectField(const std::string& key, JsonObject& outObject) const
+    bool TryGetObjectField(const std::string& key, JsonValue& outObject) const
     {
         if (!HasObjectField(key))
         {
@@ -336,227 +336,227 @@ public:
     }
 };
 
-JsonObject::JsonObject()
+JsonValue::JsonValue()
     : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
-JsonObject::JsonObject(const JsonObject& other)
+JsonValue::JsonValue(const JsonValue& other)
     : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
 [[maybe_unused]]
-JsonObject::JsonObject(JsonObject&& other) noexcept
+JsonValue::JsonValue(JsonValue&& other) noexcept
     : _pimpl(std::exchange(other._pimpl, nullptr))
 {
 }
 
-JsonObject::~JsonObject() = default;
+JsonValue::~JsonValue() = default;
 
 [[maybe_unused]]
-bool JsonObject::GetBoolField(const std::string& key) const
+bool JsonValue::GetBoolField(const std::string& key) const
 {
     return _pimpl->GetBoolField(key);
 }
 
 [[maybe_unused]]
-double JsonObject::GetDoubleField(const std::string& key) const
+double JsonValue::GetDoubleField(const std::string& key) const
 {
     return _pimpl->GetDoubleField(key);
 }
 
 [[maybe_unused]]
-float JsonObject::GetFloatField(const std::string& key) const
+float JsonValue::GetFloatField(const std::string& key) const
 {
     return _pimpl->GetFloatField(key);
 }
 
 [[maybe_unused]]
-int32_t JsonObject::GetIntField(const std::string& key) const
+int32_t JsonValue::GetIntField(const std::string& key) const
 {
     return _pimpl->GetIntField(key);
 }
 
 [[maybe_unused]]
-int64_t JsonObject::GetInt64Field(const std::string& key) const
+int64_t JsonValue::GetInt64Field(const std::string& key) const
 {
     return _pimpl->GetInt64Field(key);
 }
 
 [[maybe_unused]]
-JsonObject JsonObject::GetObjectField(const std::string& key) const
+JsonValue JsonValue::GetObjectField(const std::string& key) const
 {
     return _pimpl->GetObjectField(key);
 }
 
 [[maybe_unused]]
-std::string JsonObject::GetStringField(const std::string& key) const
+std::string JsonValue::GetStringField(const std::string& key) const
 {
     return _pimpl->GetStringField(key);
 }
 
 [[maybe_unused]]
-uint32_t JsonObject::GetUintField(const std::string& key) const
+uint32_t JsonValue::GetUintField(const std::string& key) const
 {
     return _pimpl->GetUintField(key);
 }
 
 [[maybe_unused]]
-uint64_t JsonObject::GetUint64Field(const std::string& key) const
+uint64_t JsonValue::GetUint64Field(const std::string& key) const
 {
     return _pimpl->GetUint64Field(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasArrayField(const std::string& key) const
+bool JsonValue::HasArrayField(const std::string& key) const
 {
     return _pimpl->HasArrayField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasBoolField(const std::string& key) const
+bool JsonValue::HasBoolField(const std::string& key) const
 {
     return _pimpl->HasBoolField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasDoubleField(const std::string& key) const
+bool JsonValue::HasDoubleField(const std::string& key) const
 {
     return _pimpl->HasDoubleField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasFloatField(const std::string& key) const
+bool JsonValue::HasFloatField(const std::string& key) const
 {
     return _pimpl->HasFloatField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasIntField(const std::string& key) const
+bool JsonValue::HasIntField(const std::string& key) const
 {
     return _pimpl->HasIntField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasInt64Field(const std::string& key) const
+bool JsonValue::HasInt64Field(const std::string& key) const
 {
     return _pimpl->HasInt64Field(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasNullField(const std::string& key) const
+bool JsonValue::HasNullField(const std::string& key) const
 {
     return _pimpl->HasNullField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasObjectField(const std::string& key) const
+bool JsonValue::HasObjectField(const std::string& key) const
 {
     return _pimpl->HasObjectField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasStringField(const std::string& key) const
+bool JsonValue::HasStringField(const std::string& key) const
 {
     return _pimpl->HasStringField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasUintField(const std::string& key) const
+bool JsonValue::HasUintField(const std::string& key) const
 {
     return _pimpl->HasUintField(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::HasUint64Field(const std::string& key) const
+bool JsonValue::HasUint64Field(const std::string& key) const
 {
     return _pimpl->HasUint64Field(key);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetBoolField(const std::string& key, bool& outBool) const
+bool JsonValue::TryGetBoolField(const std::string& key, bool& outBool) const
 {
     return _pimpl->TryGetBoolField(key, outBool);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetDoubleField(const std::string& key, double& outDouble) const
+bool JsonValue::TryGetDoubleField(const std::string& key, double& outDouble) const
 {
     return _pimpl->TryGetDoubleField(key, outDouble);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetFloatField(const std::string& key, float& outFloat) const
+bool JsonValue::TryGetFloatField(const std::string& key, float& outFloat) const
 {
     return _pimpl->TryGetFloatField(key, outFloat);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetIntField(const std::string& key, int32_t& outInt) const
+bool JsonValue::TryGetIntField(const std::string& key, int32_t& outInt) const
 {
     return _pimpl->TryGetIntField(key, outInt);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetInt64Field(const std::string& key, int64_t& outInt64) const
+bool JsonValue::TryGetInt64Field(const std::string& key, int64_t& outInt64) const
 {
     return _pimpl->TryGetInt64Field(key, outInt64);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetObjectField(const std::string& key, JsonObject& outObject) const
+bool JsonValue::TryGetObjectField(const std::string& key, JsonValue& outObject) const
 {
     return _pimpl->TryGetObjectField(key, outObject);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetStringField(const std::string& key, std::string& outString) const
+bool JsonValue::TryGetStringField(const std::string& key, std::string& outString) const
 {
     return _pimpl->TryGetStringField(key, outString);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetUintField(const std::string& key, uint32_t& outUint) const
+bool JsonValue::TryGetUintField(const std::string& key, uint32_t& outUint) const
 {
     return _pimpl->TryGetUintField(key, outUint);
 }
 
 [[maybe_unused]]
-bool JsonObject::TryGetUint64Field(const std::string& key, uint64_t& outUint64) const
+bool JsonValue::TryGetUint64Field(const std::string& key, uint64_t& outUint64) const
 {
     return _pimpl->TryGetUint64Field(key, outUint64);
 }
 
-JsonObject& JsonObject::operator=(const JsonObject& rhs)
+JsonValue& JsonValue::operator=(const JsonValue& rhs)
 {
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
 }
 
-JsonObject& JsonObject::operator=(JsonObject&& rhs) noexcept
+JsonValue& JsonValue::operator=(JsonValue&& rhs) noexcept
 {
     _pimpl = std::exchange(rhs._pimpl, nullptr);
 
     return *this;
 }
 
-bool JsonObject::operator==(const JsonObject& rhs) const
+bool JsonValue::operator==(const JsonValue& rhs) const
 {
     return *_pimpl == *rhs._pimpl;
 }
 
-bool JsonObject::operator!=(const JsonObject& rhs) const
+bool JsonValue::operator!=(const JsonValue& rhs) const
 {
     return *_pimpl != *rhs._pimpl;
 }
 
 [[maybe_unused]]
-JsonObject JsonObject::FromJson(const std::string& json)
+JsonValue JsonValue::FromJson(const std::string& json)
 {
-    JsonObject jsonObject;
+    JsonValue jsonObject;
     Document document;
     document.Parse(json.c_str());
 
