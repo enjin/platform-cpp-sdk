@@ -62,4 +62,6 @@ target_include_directories(${TESTS_NAME}
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include"
         "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${PROJECT_NAME}/include")
 
+add_subdirectory(unit)
+
 add_test(NAME ${TESTS_NAME} COMMAND ${TESTS_NAME})
