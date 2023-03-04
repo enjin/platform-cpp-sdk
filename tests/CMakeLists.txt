@@ -39,6 +39,12 @@ target_link_libraries(${TESTS_NAME}
         gmock_main)
 
 ####################################################################################################################
+### Setup other third-party dependencies
+
+# RapidJSON
+target_include_directories(${TESTS_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
+
+####################################################################################################################
 ### Link SDK libraries
 
 target_link_libraries(${TESTS_NAME} PRIVATE ${PROJECT_NAME})
