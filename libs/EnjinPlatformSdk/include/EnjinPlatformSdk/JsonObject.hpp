@@ -89,6 +89,10 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
+    bool HasNullField(const std::string& key) const;
+
+    [[maybe_unused]]
+    [[nodiscard]]
     bool HasObjectField(const std::string& key) const;
 
     [[maybe_unused]]

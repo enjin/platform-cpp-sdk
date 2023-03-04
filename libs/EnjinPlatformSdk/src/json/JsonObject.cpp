@@ -168,6 +168,12 @@ public:
     }
 
     [[nodiscard]]
+    bool HasNullField(const std::string& key) const
+    {
+        return document.HasMember(key.c_str()) && document[key.c_str()].IsNull();
+    }
+
+    [[nodiscard]]
     bool HasObjectField(const std::string& key) const
     {
         return document.HasMember(key.c_str()) && document[key.c_str()].IsObject();
@@ -437,6 +443,12 @@ bool JsonObject::HasIntField(const std::string& key) const
 bool JsonObject::HasInt64Field(const std::string& key) const
 {
     return _pimpl->HasInt64Field(key);
+}
+
+[[maybe_unused]]
+bool JsonObject::HasNullField(const std::string& key) const
+{
+    return _pimpl->HasNullField(key);
 }
 
 [[maybe_unused]]
