@@ -113,6 +113,7 @@ public:
     bool operator!=(const JsonValue& rhs) const;
 
     [[maybe_unused]]
+    [[nodiscard]]
     static JsonValue FromJson(const std::string& json);
 
 };
