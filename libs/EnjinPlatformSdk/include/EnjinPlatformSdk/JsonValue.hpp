@@ -4,6 +4,7 @@
 #include "enjinplatformsdk_export.h"
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace enjin::platform::sdk::json
 {
@@ -25,89 +26,56 @@ public:
 
     ~JsonValue();
 
-    /* TODO: Get array field. (May have to be serialized) */
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool IsArray() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    bool GetBoolField(const std::string& key) const;
+    bool IsBool() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    double GetDoubleField(const std::string& key) const;
+    bool IsDouble() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    float GetFloatField(const std::string& key) const;
+    bool IsFloat() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    int32_t GetIntField(const std::string& key) const;
+    bool IsInt() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    int64_t GetInt64Field(const std::string& key) const;
+    bool IsInt64() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    JsonValue GetObjectField(const std::string& key) const;
+    bool IsNull() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    std::string GetStringField(const std::string& key) const;
+    bool IsNumber() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    uint32_t GetUintField(const std::string& key) const;
+    bool IsObject() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    uint64_t GetUint64Field(const std::string& key) const;
+    bool IsString() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    bool HasArrayField(const std::string& key) const;
+    bool IsUint() const;
 
     [[maybe_unused]]
     [[nodiscard]]
-    bool HasBoolField(const std::string& key) const;
+    bool IsUint64() const;
 
     [[maybe_unused]]
-    [[nodiscard]]
-    bool HasDoubleField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasFloatField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasIntField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasInt64Field(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasNullField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasObjectField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasStringField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasUintField(const std::string& key) const;
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasUint64Field(const std::string& key) const;
-
-    /* TODO: Try-get array field. (May have to be serialized) */
+    bool TryGetArrayField(const std::string& key, std::vector<JsonValue>& outArray) const;
 
     [[maybe_unused]]
     bool TryGetBoolField(const std::string& key, bool& outBool) const;
@@ -125,7 +93,7 @@ public:
     bool TryGetInt64Field(const std::string& key, int64_t& outInt64) const;
 
     [[maybe_unused]]
-    bool TryGetObjectField(const std::string& key, JsonValue& outObject) const;
+    bool TryGetObjectField(const std::string& key, JsonValue& outValue) const;
 
     [[maybe_unused]]
     bool TryGetStringField(const std::string& key, std::string& outString) const;

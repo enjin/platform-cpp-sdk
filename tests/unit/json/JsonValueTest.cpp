@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "EnjinPlatformSdk/JsonValue.hpp"
-#include <stdexcept>
 #include <string>
+#include <vector>
 
 using namespace enjin::platform::sdk::json;
 using namespace testing;
@@ -14,745 +14,55 @@ class JsonValueFromInvalidJsonTest : public TestWithParam<std::string>
 {
 };
 
-TEST_F(JsonValueTest, GetBoolFieldWhenFieldIsNotPresentThrowsError)
+TEST_F(JsonValueTest, TryGetArrayFieldWhenFieldIsNotPresentReturnsFalse)
 {
     // Arrange
     const std::string key("key");
     const std::string json(R"({})");
     const JsonValue jsonObject = JsonValue::FromJson(json);
+    std::vector<JsonValue> outArray = {JsonValue()};
+    const std::vector<JsonValue> expectedArray = outArray;
+
+    // Act
+    const bool result = jsonObject.TryGetArrayField(key, outArray);
 
     // Assert
-    ASSERT_THROW(bool v = jsonObject.GetBoolField(key), std::runtime_error);
+    EXPECT_FALSE(result) << "Expect result is false";
+    EXPECT_EQ(outArray, expectedArray) << "Expect out array is unchanged";
 }
 
-TEST_F(JsonValueTest, GetBoolFieldWhenFieldIsNotABooleanThrowsError)
+TEST_F(JsonValueTest, TryGetArrayFieldWhenFieldIsNotAnArrayReturnsFalse)
 {
     // Arrange
     const std::string key("key");
     const std::string json(R"({"key":null})");
     const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(bool v = jsonObject.GetBoolField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetBoolFieldWhenFieldIsABooleanReturnsExpectedValue)
-{
-    // Arrange
-    const bool expected = true;
-    const std::string key("key");
-    const std::string json(R"({"key":true})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
+    std::vector<JsonValue> outArray = {JsonValue()};
+    const std::vector<JsonValue> expectedArray = outArray;
 
     // Act
-    const bool actual = jsonObject.GetBoolField(key);
+    const bool result = jsonObject.TryGetArrayField(key, outArray);
 
     // Assert
-    ASSERT_EQ(actual, expected);
+    EXPECT_FALSE(result) << "Expect result is false";
+    EXPECT_EQ(outArray, expectedArray) << "Expect out array is unchanged";
 }
 
-TEST_F(JsonValueTest, GetDoubleFieldWhenFieldIsNotPresentThrowsError)
+TEST_F(JsonValueTest, TryGetArrayFieldWhenFieldIsAnArrayReturnsExpectedArray)
 {
     // Arrange
+    const std::vector<JsonValue> expectedArray = {JsonValue()};
     const std::string key("key");
-    const std::string json(R"({})");
+    const std::string json(R"({"key":[null]})");
     const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(double v = jsonObject.GetDoubleField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetDoubleFieldWhenFieldIsNotADoubleThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(double v = jsonObject.GetDoubleField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetDoubleFieldWhenFieldIsADoubleReturnsExpectedValue)
-{
-    // Arrange
-    const double expected = 1.0;
-    const std::string key("key");
-    const std::string json(R"({"key":1.0})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
+    std::vector<JsonValue> outArray;
 
     // Act
-    const double actual = jsonObject.GetDoubleField(key);
+    const bool result = jsonObject.TryGetArrayField(key, outArray);
 
     // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, GetFloatFieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(float v = jsonObject.GetFloatField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetFloatFieldWhenFieldIsNotAFloatThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(float v = jsonObject.GetFloatField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetFloatFieldWhenFieldIsAFloatReturnsExpectedValue)
-{
-    // Arrange
-    const float expected = 1.0;
-    const std::string key("key");
-    const std::string json(R"({"key":1.0})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const float actual = jsonObject.GetFloatField(key);
-
-    // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, GetIntFieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(int32_t v = jsonObject.GetIntField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetIntFieldWhenFieldIsNotAnIntegerThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(int32_t v = jsonObject.GetIntField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetIntFieldWhenFieldIsAnIntegerReturnsExpectedValue)
-{
-    // Arrange
-    const int32_t expected = 1;
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const int32_t actual = jsonObject.GetIntField(key);
-
-    // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, GetInt64FieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(int64_t v = jsonObject.GetInt64Field(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetInt64FieldWhenFieldIsNotALongIntegerThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(int64_t v = jsonObject.GetInt64Field(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetInt64FieldWhenFieldIsALongIntegerReturnsExpectedValue)
-{
-    // Arrange
-    const int64_t expected = 1;
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const int64_t actual = jsonObject.GetInt64Field(key);
-
-    // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, GetObjectFieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(JsonValue o = jsonObject.GetObjectField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetObjectFieldWhenFieldIsNotAnObjectThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(JsonValue o = jsonObject.GetObjectField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetObjectFieldWhenFieldIsAnObjectReturnsExpectedObject)
-{
-    // Arrange
-    const std::string expectedKey("innerKey");
-    const std::string expectedValue("innerValue");
-    const std::string key("key");
-    const std::string json(R"({"key":{"innerKey":"innerValue"}})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const JsonValue actual = jsonObject.GetObjectField(key);
-
-    // Assert
-    ASSERT_TRUE(actual.HasStringField(expectedKey)) << "Assert object has expected key";
-    ASSERT_EQ(actual.GetStringField(expectedKey), expectedValue) << "Assert object has expected value";
-}
-
-TEST_F(JsonValueTest, GetStringFieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(std::string v = jsonObject.GetStringField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetStringFieldWhenFieldIsNotAStringThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(std::string v = jsonObject.GetStringField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetStringFieldWhenFieldIsAStringReturnsExpectedValue)
-{
-    // Arrange
-    const std::string expected("value");
-    const std::string key("key");
-    const std::string json(R"({"key":"value"})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const std::string actual = jsonObject.GetStringField(key);
-
-    // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, GetUintFieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(uint32_t v = jsonObject.GetUintField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetUintFieldWhenFieldIsNotAnUnsignedIntegerThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(uint32_t v = jsonObject.GetUintField(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetUintFieldWhenFieldIsAnUnsignedIntegerReturnsExpectedValue)
-{
-    // Arrange
-    const uint32_t expected = 1;
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const uint32_t actual = jsonObject.GetUintField(key);
-
-    // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, GetUint64FieldWhenFieldIsNotPresentThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(uint64_t v = jsonObject.GetUint64Field(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetUint64FieldWhenFieldIsNotAnUnsignedLongIntegerThrowsError)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Assert
-    ASSERT_THROW(uint64_t v = jsonObject.GetUint64Field(key), std::runtime_error);
-}
-
-TEST_F(JsonValueTest, GetUint64FieldWhenFieldIsAnUnsignedLongIntegerReturnsExpectedValue)
-{
-    // Arrange
-    const uint64_t expected = 1;
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const uint64_t actual = jsonObject.GetUint64Field(key);
-
-    // Assert
-    ASSERT_EQ(actual, expected);
-}
-
-TEST_F(JsonValueTest, HasBoolFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasBoolField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasBoolFieldWhenFieldIsNotABooleanReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasBoolField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasBoolFieldWhenFieldIsABooleanReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":true})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasBoolField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasDoubleFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasDoubleField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasDoubleFieldWhenFieldIsNotADoubleReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasDoubleField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasDoubleFieldWhenFieldIsADoubleReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":1.0})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasDoubleField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasFloatFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasFloatField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasFloatFieldWhenFieldIsNotAFloatReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasFloatField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasFloatFieldWhenFieldIsAFloatReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":1.0})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasFloatField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasIntFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasIntField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasIntFieldWhenFieldIsNotAnIntegerReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasIntField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasIntFieldWhenFieldIsAnIntegerReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasIntField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasInt64FieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasInt64Field(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasInt64FieldWhenFieldIsNotALongIntegerReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasInt64Field(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasInt64FieldWhenFieldIsALongIntegerReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasInt64Field(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasNullFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasNullField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasNullFieldWhenFieldIsNullReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasNullField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasObjectFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasObjectField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasObjectFieldWhenFieldIsNotAnObjectReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasObjectField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasObjectFieldWhenFieldIsAnObjectReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":{}})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasObjectField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasStringFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasStringField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasStringFieldWhenFieldIsNotAStringReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasStringField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasStringFieldWhenFieldIsAStringReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":""})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasStringField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasUintFieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasUintField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasUintFieldWhenFieldIsNotAnUnsignedIntegerReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasUintField(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasUintFieldWhenFieldIsAnUnsignedIntegerReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasUintField(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
-}
-
-TEST_F(JsonValueTest, HasUint64FieldWhenFieldIsNotPresentReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasUint64Field(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasUint64FieldWhenFieldIsNotAnUnsignedLongIntegerReturnsFalse)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":null})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasUint64Field(key);
-
-    // Assert
-    ASSERT_FALSE(actual);
-}
-
-TEST_F(JsonValueTest, HasUint64FieldWhenFieldIsAnUnsignedLongIntegerReturnsTrue)
-{
-    // Arrange
-    const std::string key("key");
-    const std::string json(R"({"key":1})");
-    const JsonValue jsonObject = JsonValue::FromJson(json);
-
-    // Act
-    const bool actual = jsonObject.HasUint64Field(key);
-
-    // Assert
-    ASSERT_TRUE(actual);
+    EXPECT_TRUE(result) << "Expect result is true";
+    EXPECT_EQ(outArray, expectedArray) << "Expect out array equals expected";
 }
 
 TEST_F(JsonValueTest, TryGetBoolFieldWhenFieldIsNotPresentReturnsFalse)
@@ -1016,15 +326,15 @@ TEST_F(JsonValueTest, TryGetObjectFieldWhenFieldIsNotPresentReturnsFalse)
     const std::string key("key");
     const std::string json(R"({})");
     const JsonValue jsonObject = JsonValue::FromJson(json);
-    JsonValue outObject = JsonValue::FromJson(R"({"key":"value"})");
-    const JsonValue expectedObject(outObject);
+    JsonValue outValue = JsonValue::FromJson("{}");
+    const JsonValue expectedValue(outValue);
 
     // Act
-    const bool result = jsonObject.TryGetObjectField(key, outObject);
+    const bool result = jsonObject.TryGetObjectField(key, outValue);
 
     // Assert
     EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_EQ(outObject, expectedObject) << "Expect out object is unchanged";
+    EXPECT_EQ(outValue, expectedValue) << "Expect out value is unchanged";
 }
 
 TEST_F(JsonValueTest, TryGetObjectFieldWhenFieldIsNotAnObjectReturnsFalse)
@@ -1033,34 +343,32 @@ TEST_F(JsonValueTest, TryGetObjectFieldWhenFieldIsNotAnObjectReturnsFalse)
     const std::string key("key");
     const std::string json(R"({"key":null})");
     const JsonValue jsonObject = JsonValue::FromJson(json);
-    JsonValue outObject = JsonValue::FromJson(R"({"innerKey":"innerValue"})");
-    const JsonValue expectedObject(outObject);
+    JsonValue outValue = JsonValue::FromJson("{}");
+    const JsonValue expectedValue(outValue);
 
     // Act
-    const bool result = jsonObject.TryGetObjectField(key, outObject);
+    const bool result = jsonObject.TryGetObjectField(key, outValue);
 
     // Assert
     EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_EQ(outObject, expectedObject) << "Expect out object is unchanged";
+    EXPECT_EQ(outValue, expectedValue) << "Expect out value is unchanged";
 }
 
 TEST_F(JsonValueTest, TryGetObjectFieldWhenFieldIsAnObjectReturnsExpectedObject)
 {
     // Arrange
-    const std::string expectedKey("innerKey");
-    const std::string expectedValue("innerValue");
+    const JsonValue expectedValue = JsonValue::FromJson(R"({"innerKey":"innerValue"})");
     const std::string key("key");
     const std::string json(R"({"key":{"innerKey":"innerValue"}})");
     const JsonValue jsonObject = JsonValue::FromJson(json);
-    JsonValue outObject;
+    JsonValue outValue;
 
     // Act
-    const bool result = jsonObject.TryGetObjectField(key, outObject);
+    const bool result = jsonObject.TryGetObjectField(key, outValue);
 
     // Assert
     EXPECT_TRUE(result) << "Expect result is true";
-    ASSERT_TRUE(outObject.HasStringField(expectedKey)) << "Assert object has expected key";
-    ASSERT_EQ(outObject.GetStringField(expectedKey), expectedValue) << "Assert object has expected value";
+    EXPECT_EQ(outValue, expectedValue) << "Expect out value equals expected";
 }
 
 TEST_F(JsonValueTest, TryGetStringFieldWhenFieldIsNotPresentReturnsFalse)
@@ -1216,30 +524,90 @@ TEST_F(JsonValueTest, TryGetUint64FieldWhenFieldIsAnUnsingedLongIntegerReturnsEx
     EXPECT_EQ(outUint64, expectedUint64) << "Expect out unsigned long integer equals expected";
 }
 
-TEST_F(JsonValueTest, FromJsonGivenValidJsonObjectReturnsExpectedObject)
+TEST_F(JsonValueTest, FromJsonGivenJsonArrayReturnsValueThatIsArray)
 {
     // Arrange
-    const std::string expectedKey("key");
-    const std::string expectedValue("value");
-    const std::string json(R"({"key":"value"})");
+    const std::string json("[]");
 
     // Act
     const JsonValue actual = JsonValue::FromJson(json);
 
     // Assert
-    ASSERT_TRUE(actual.HasStringField(expectedKey)) << "Assert object has expected key";
-    ASSERT_EQ(actual.GetStringField(expectedKey), expectedValue) << "Assert object has expected value";
+    ASSERT_TRUE(actual.IsArray());
 }
 
-TEST_P(JsonValueFromInvalidJsonTest, FromJsonGivenInvalidJsonThrowsError)
+TEST_F(JsonValueTest, FromJsonGivenBooleanJsonReturnsValueThatIsBool)
+{
+    // Arrange
+    const std::string json("true");
+
+    // Act
+    const JsonValue actual = JsonValue::FromJson(json);
+
+    // Assert
+    ASSERT_TRUE(actual.IsBool());
+}
+
+TEST_F(JsonValueTest, FromJsonGivenNullJsonReturnsValueThatIsNull)
+{
+    // Arrange
+    const std::string json("null");
+
+    // Act
+    const JsonValue actual = JsonValue::FromJson(json);
+
+    // Assert
+    ASSERT_TRUE(actual.IsNull());
+}
+
+TEST_F(JsonValueTest, FromJsonGivenNumberJsonReturnsValueThatIsNumber)
+{
+    // Arrange
+    const std::string json("0");
+
+    // Act
+    const JsonValue actual = JsonValue::FromJson(json);
+
+    // Assert
+    ASSERT_TRUE(actual.IsNumber());
+}
+
+TEST_F(JsonValueTest, FromJsonGivenJsonObjectReturnsValueThatIsObject)
+{
+    // Arrange
+    const std::string json("{}");
+
+    // Act
+    const JsonValue actual = JsonValue::FromJson(json);
+
+    // Assert
+    ASSERT_TRUE(actual.IsObject());
+}
+
+TEST_F(JsonValueTest, FromJsonGivenStringJsonReturnsValueThatIsString)
+{
+    // Arrange
+    const std::string json(R"("")");
+
+    // Act
+    const JsonValue actual = JsonValue::FromJson(json);
+
+    // Assert
+    ASSERT_TRUE(actual.IsString());
+}
+
+TEST_P(JsonValueFromInvalidJsonTest, FromJsonGivenInvalidJsonReturnsNullJsonValue)
 {
     // Arrange
     const std::string json = GetParam();
 
+    // Act
+    const JsonValue actual = JsonValue::FromJson(json);
+
     // Assert
-    ASSERT_THROW(JsonValue::FromJson(json), std::runtime_error);
+    ASSERT_TRUE(actual.IsNull());
 }
 
 INSTANTIATE_TEST_SUITE_P(InvalidJsonFormats,
                          JsonValueFromInvalidJsonTest,
-                         Values("null", "1", "true", "false", R"("abc")", "[]"));
+                         Values("", "abc", "[}", "{]"));
