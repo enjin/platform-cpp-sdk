@@ -23,16 +23,6 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN YES)
 option(ENJINSDK_INCLUDE_BEAM "ENJINSDK_INCLUDE_BEAM" OFF)
 option(ENJINSDK_BUILD_TESTS "ENJINSDK_BUILD_TESTS" OFF)
 
-# Sets compiler specific flags
-if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
-    if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
-        target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
-    elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC")
-        target_compile_options(${PROJECT_NAME} PRIVATE /EHsc /MTd /W2 /c /wd4996)
-        target_compile_definitions(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_EXPORTS)
-    endif ()
-endif ()
-
 ####################################################################################################################
 ### Include dependencies
 

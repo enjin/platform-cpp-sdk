@@ -1,9 +1,10 @@
 #include "gtest/gtest.h"
 #include "EnjinPlatformSdk/JsonValue.hpp"
+#include <stdexcept>
 #include <string>
 #include <vector>
 
-using namespace enjin::platform::sdk::json;
+using namespace enjin::platform::sdk;
 using namespace testing;
 
 class JsonValueTest : public Test
@@ -13,6 +14,213 @@ class JsonValueTest : public Test
 class JsonValueFromInvalidJsonTest : public TestWithParam<std::string>
 {
 };
+
+TEST_F(JsonValueTest, GetArrayWhenValueIsNotAnArrayThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(std::vector<JsonValue> v = jsonValue.GetArray(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetArrayWhenValueIsAnArrayReturnsExpected)
+{
+    // Arrange
+    const std::vector<JsonValue> expected = {JsonValue()};
+    const std::string json("[null]");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const std::vector<JsonValue> actual = jsonValue.GetArray();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetBoolWhenValueIsNotABoolThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(bool v = jsonValue.GetBool(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetBoolWhenValueIsABoolReturnsExpected)
+{
+    // Arrange
+    const bool expected = true;
+    const std::string json("true");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const bool actual = jsonValue.GetBool();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetDoubleWhenValueIsNotADoubleThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(double v = jsonValue.GetDouble(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetDoubleWhenValueIsADoubleReturnsExpected)
+{
+    // Arrange
+    const double expected = 1.0;
+    const std::string json("1.0");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const double actual = jsonValue.GetDouble();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetFloatWhenValueIsNotAFloatThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(float v = jsonValue.GetFloat(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetFloatWhenValueIsAFloatReturnsExpected)
+{
+    // Arrange
+    const float expected = 1.0;
+    const std::string json("1.0");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const float actual = jsonValue.GetFloat();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetIntWhenValueIsNotAnIntThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(int32_t v = jsonValue.GetInt(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetIntWhenValueIsAnIntReturnsExpected)
+{
+    // Arrange
+    const int32_t expected = 1;
+    const std::string json("1");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const int32_t actual = jsonValue.GetInt();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetInt64WhenValueIsNotAnInt64ThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(int64_t v = jsonValue.GetInt64(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetInt64WhenValueIsAnInt64ReturnsExpected)
+{
+    // Arrange
+    const int64_t expected = 1;
+    const std::string json("1");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const int64_t actual = jsonValue.GetInt64();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetStringWhenValueIsNotAStringThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(std::string v = jsonValue.GetString(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetStringWhenValueIsAStringReturnsExpected)
+{
+    // Arrange
+    const std::string expected("xyz");
+    const std::string json(R"("xyz")");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const std::string actual = jsonValue.GetString();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetUintWhenValueIsNotAnUintThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(uint32_t v = jsonValue.GetUint(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetUintWhenValueIsAnUintReturnsExpected)
+{
+    // Arrange
+    const uint32_t expected = 1u;
+    const std::string json("1");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const uint32_t actual = jsonValue.GetUint();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
+
+TEST_F(JsonValueTest, GetUint64WhenValueIsNotAnUint64ThrowsError)
+{
+    // Arrange
+    JsonValue jsonValue;
+
+    // Assert
+    ASSERT_THROW(uint64_t v = jsonValue.GetUint64(), std::runtime_error);
+}
+
+TEST_F(JsonValueTest, GetUint64WhenValueIsAnUint64ReturnsExpected)
+{
+    // Arrange
+    const uint64_t expected = 1u;
+    const std::string json("1");
+    JsonValue jsonValue = JsonValue::FromJson(json);
+
+    // Act
+    const uint64_t actual = jsonValue.GetUint64();
+
+    // Assert
+    ASSERT_EQ(actual, expected);
+}
 
 TEST_F(JsonValueTest, TryGetArrayFieldWhenFieldIsNotPresentReturnsFalse)
 {

@@ -1,9 +1,10 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 
 #include "rapidjson/document.h"
+#include <stdexcept>
 #include <utility>
 
-using namespace enjin::platform::sdk::json;
+using namespace enjin::platform::sdk;
 using namespace rapidjson;
 
 class JsonValue::Impl
@@ -21,6 +22,118 @@ public:
     Impl(Impl&& other) noexcept = default;
 
     ~Impl() = default;
+
+    [[nodiscard]]
+    std::vector<JsonValue> GetArray() const
+    {
+        if (!IsArray())
+        {
+            throw std::runtime_error("Cannot get array from non-array JsonValue");
+        }
+
+        std::vector<JsonValue> valueArray;
+
+        for (const Value& el: document.GetArray())
+        {
+            Document newDocument;
+            newDocument.CopyFrom(el, newDocument.GetAllocator());
+
+            JsonValue newValue;
+            newValue._pimpl->document = std::move(newDocument);
+
+            valueArray.emplace_back(std::move(newValue));
+        }
+
+        return valueArray;
+    }
+
+    [[nodiscard]]
+    bool GetBool() const
+    {
+        if (IsBool())
+        {
+            return document.GetBool();
+        }
+
+        throw std::runtime_error("Cannot get boolean from non-boolean JsonValue");
+    }
+
+    [[nodiscard]]
+    double GetDouble() const
+    {
+        if (IsDouble())
+        {
+            return document.GetDouble();
+        }
+
+        throw std::runtime_error("Cannot get double from non-double JsonValue");
+    }
+
+    [[nodiscard]]
+    float GetFloat() const
+    {
+        if (IsFloat())
+        {
+            return document.GetFloat();
+        }
+
+        throw std::runtime_error("Cannot get float from non-float JsonValue");
+    }
+
+    [[nodiscard]]
+    int32_t GetInt() const
+    {
+        if (IsInt())
+        {
+            return document.GetInt();
+        }
+
+        throw std::runtime_error("Cannot get integer from non-integer JsonValue");
+    }
+
+    [[nodiscard]]
+    int64_t GetInt64() const
+    {
+        if (IsInt64())
+        {
+            return document.GetInt64();
+        }
+
+        throw std::runtime_error("Cannot get long from non-long JsonValue");
+    }
+
+    [[nodiscard]]
+    std::string GetString() const
+    {
+        if (IsString())
+        {
+            return document.GetString();
+        }
+
+        throw std::runtime_error("Cannot get string from non-string JsonValue");
+    }
+
+    [[nodiscard]]
+    uint32_t GetUint() const
+    {
+        if (IsUint())
+        {
+            return document.GetUint();
+        }
+
+        throw std::runtime_error("Cannot get unsigned integer from non-unsigned integer JsonValue");
+    }
+
+    [[nodiscard]]
+    uint64_t GetUint64() const
+    {
+        if (IsUint64())
+        {
+            return document.GetUint64();
+        }
+
+        throw std::runtime_error("Cannot get unsigned long from non-unsigned long JsonValue");
+    }
 
     [[nodiscard]]
     bool IsArray() const
@@ -285,6 +398,60 @@ JsonValue::JsonValue(JsonValue&& other) noexcept
 }
 
 JsonValue::~JsonValue() = default;
+
+[[maybe_unused]]
+std::vector<JsonValue> JsonValue::GetArray() const
+{
+    return _pimpl->GetArray();
+}
+
+[[maybe_unused]]
+bool JsonValue::GetBool() const
+{
+    return _pimpl->GetBool();
+}
+
+[[maybe_unused]]
+double JsonValue::GetDouble() const
+{
+    return _pimpl->GetDouble();
+}
+
+[[maybe_unused]]
+float JsonValue::GetFloat() const
+{
+    return _pimpl->GetFloat();
+}
+
+[[maybe_unused]]
+int32_t JsonValue::GetInt() const
+{
+    return _pimpl->GetInt();
+}
+
+[[maybe_unused]]
+int64_t JsonValue::GetInt64() const
+{
+    return _pimpl->GetInt64();
+}
+
+[[maybe_unused]]
+std::string JsonValue::GetString() const
+{
+    return _pimpl->GetString();
+}
+
+[[maybe_unused]]
+uint32_t JsonValue::GetUint() const
+{
+    return _pimpl->GetUint();
+}
+
+[[maybe_unused]]
+uint64_t JsonValue::GetUint64() const
+{
+    return _pimpl->GetUint64();
+}
 
 [[maybe_unused]]
 bool JsonValue::IsArray() const
