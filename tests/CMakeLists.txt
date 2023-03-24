@@ -39,6 +39,12 @@ target_link_libraries(${TESTS_NAME}
         gmock_main)
 
 ####################################################################################################################
+### Setup other third-party dependencies
+
+# RapidJSON
+target_include_directories(${TESTS_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
+
+####################################################################################################################
 ### Link SDK libraries
 
 target_link_libraries(${TESTS_NAME} PRIVATE ${PROJECT_NAME})
@@ -55,5 +61,7 @@ target_include_directories(${TESTS_NAME}
         "$<INSTALL_INTERFACE:include>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include"
         "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${PROJECT_NAME}/include")
+
+add_subdirectory(unit)
 
 add_test(NAME ${TESTS_NAME} COMMAND ${TESTS_NAME})
