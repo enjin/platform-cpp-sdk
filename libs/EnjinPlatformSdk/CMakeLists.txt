@@ -28,8 +28,12 @@ endif ()
 ####################################################################################################################
 ### Setup dependencies
 
-# RapidJSON
-target_include_directories(${PROJECT_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
+if (${ENJINSDK_USING_CONAN})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CONAN_LIBS})
+else ()
+    # RapidJSON
+    target_include_directories(${PROJECT_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
+endif ()
 
 ####################################################################################################################
 ### Target sources
