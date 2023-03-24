@@ -1,1 +1,3 @@
-add_subdirectory(json)
+target_sources(${TESTS_NAME}
+        PRIVATE
+        JsonValueTest.cpp)
