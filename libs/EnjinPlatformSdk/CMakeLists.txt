@@ -15,6 +15,16 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION 2)
 set_property(TARGET ${PROJECT_NAME} PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION 2)
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_NAME}_MAJOR_VERSION)
 
+# Sets compiler specific flags
+if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+    if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
+        target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
+    elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC")
+        target_compile_options(${PROJECT_NAME} PRIVATE /EHsc /MTd /W2 /c /wd4996)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_EXPORTS)
+    endif ()
+endif ()
+
 ####################################################################################################################
 ### Setup dependencies
 
