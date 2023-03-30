@@ -1,4 +1,4 @@
-message(STATUS "Enjin: Building SDK core library")
+message(STATUS "Enjin: Making SDK core library")
 
 include(GenerateExportHeader)
 
@@ -49,10 +49,6 @@ add_subdirectory(src)
 
 ####################################################################################################################
 ### Install library and export package
-
-if (WIN32)
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-endif ()
 
 install(DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/include/"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
