@@ -1,1 +1,1 @@
-#include "Class.hpp"
+#include "EnjinPlatformSdkBeam/Class.hpp"

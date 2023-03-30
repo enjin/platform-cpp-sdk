@@ -1,4 +1,4 @@
-message(STATUS "Enjin: Building SDK beam library")
+message(STATUS "Enjin: Making SDK beam library")
 
 include(GenerateExportHeader)
 
@@ -21,7 +21,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
         target_compile_options(${BEAM_PROJECT_NAME} PRIVATE -Wall -Wextra)
     elseif (${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC")
         target_compile_options(${BEAM_PROJECT_NAME} PRIVATE /EHsc /MTd /W2 /c /wd4996)
-        target_compile_definitions(${BEAM_PROJECT_NAME} PRIVATE ${PROJECT_NAME}_EXPORTS)
+        target_compile_definitions(${BEAM_PROJECT_NAME} PRIVATE ${BEAM_PROJECT_NAME}_EXPORTS)
     endif ()
 endif ()
 
@@ -36,7 +36,7 @@ target_link_libraries(${BEAM_PROJECT_NAME} PUBLIC ${PROJECT_NAME})
 
 include(GNUInstallDirs)
 
-target_include_directories(${PROJECT_NAME} PUBLIC
+target_include_directories(${BEAM_PROJECT_NAME} PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>/${BEAM_PROJECT_NAME}")

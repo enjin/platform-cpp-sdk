@@ -1,5 +1,5 @@
 add_subdirectory(EnjinPlatformSdk)
 
-if (ENJINSDK_INCLUDE_BEAM)
+if (${ENJINSDK_INCLUDE_BEAM})
     add_subdirectory(EnjinPlatformSdkBeam)
 endif ()

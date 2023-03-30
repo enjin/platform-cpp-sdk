@@ -1,0 +1,50 @@
+name: Build & Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions: read-all
+
+jobs:
+  build-and-test:
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Conan
+        uses: turtlebrowser/get-conan@main
+        with:
+          version: 1.59.0
+
+      - name: Cache Conan Packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.conan/data
+          key: ${{ matrix.os }}-conan-${{ hashFiles('**/.conan') }}
+          restore-keys: |
+            ${{ matrix.os }}-conan-
+
+      - name: Restore Packages
+        run: |
+          conan install ./.conan -if ./build --build missing --profile ./.conan/profiles/workflows/${{ matrix.os }}
+
+      - name: Run CMake
+        run: |
+          cmake -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DENJINSDK_BUILD_SHARED=ON -DENJINSDK_INCLUDE_BEAM=ON -DENJINSDK_BUILD_TESTS=ON
+
+      - name: Build
+        run: |
+          cmake --build ./build --config Release -j 12
+
+      - name: Test
+        run: |
+          cd ./build && ctest --verbose --build-config Release
