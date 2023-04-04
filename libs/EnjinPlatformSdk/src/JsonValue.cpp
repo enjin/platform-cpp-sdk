@@ -1,6 +1,8 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 
 #include "rapidjson/document.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/writer.h"
 #include <stdexcept>
 #include <utility>
 
@@ -33,7 +35,7 @@ public:
 
         std::vector<JsonValue> valueArray;
 
-        for (const Value& el: document.GetArray())
+        for (const Value& el : document.GetArray())
         {
             Document newDocument;
             newDocument.CopyFrom(el, newDocument.GetAllocator());
@@ -48,6 +50,19 @@ public:
     }
 
     [[nodiscard]]
+    std::vector<JsonValue> GetArrayField(const std::string& key) const
+    {
+        std::vector<JsonValue> value;
+
+        if (TryGetArrayField(key, value))
+        {
+            return value;
+        }
+
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
+    }
+
+    [[nodiscard]]
     bool GetBool() const
     {
         if (IsBool())
@@ -56,6 +71,19 @@ public:
         }
 
         throw std::runtime_error("Cannot get boolean from non-boolean JsonValue");
+    }
+
+    [[nodiscard]]
+    bool GetBoolField(const std::string& key) const
+    {
+        bool value;
+
+        if (TryGetBoolField(key, value))
+        {
+            return value;
+        }
+
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
     }
 
     [[nodiscard]]
@@ -70,6 +98,19 @@ public:
     }
 
     [[nodiscard]]
+    double GetDoubleField(const std::string& key) const
+    {
+        double value;
+
+        if (TryGetDoubleField(key, value))
+        {
+            return value;
+        }
+
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
+    }
+
+    [[nodiscard]]
     float GetFloat() const
     {
         if (IsFloat())
@@ -78,6 +119,19 @@ public:
         }
 
         throw std::runtime_error("Cannot get float from non-float JsonValue");
+    }
+
+    [[nodiscard]]
+    float GetFloatField(const std::string& key) const
+    {
+        float value;
+
+        if (TryGetFloatField(key, value))
+        {
+            return value;
+        }
+
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
     }
 
     [[nodiscard]]
@@ -92,14 +146,29 @@ public:
     }
 
     [[nodiscard]]
-    int64_t GetInt64() const
+    int32_t GetIntField(const std::string& key) const
     {
-        if (IsInt64())
+        int32_t value;
+
+        if (TryGetIntField(key, value))
         {
-            return document.GetInt64();
+            return value;
         }
 
-        throw std::runtime_error("Cannot get long from non-long JsonValue");
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
+    }
+
+    [[nodiscard]]
+    JsonValue GetObjectField(const std::string& key) const
+    {
+        JsonValue value;
+
+        if (TryGetObjectField(key, value))
+        {
+            return value;
+        }
+
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
     }
 
     [[nodiscard]]
@@ -114,25 +183,51 @@ public:
     }
 
     [[nodiscard]]
-    uint32_t GetUint() const
+    std::string GetStringField(const std::string& key) const
     {
-        if (IsUint())
+        std::string value;
+
+        if (TryGetStringField(key, value))
         {
-            return document.GetUint();
+            return value;
         }
 
-        throw std::runtime_error("Cannot get unsigned integer from non-unsigned integer JsonValue");
+        throw std::runtime_error("Cannot get field '" + key + "' from this JSON value");
     }
 
     [[nodiscard]]
-    uint64_t GetUint64() const
+    JsonValueType GetValueType() const
     {
-        if (IsUint64())
+        switch (document.GetType())
         {
-            return document.GetUint64();
-        }
+            case kNullType:
+                return JsonValueType::Null;
 
-        throw std::runtime_error("Cannot get unsigned long from non-unsigned long JsonValue");
+            case kFalseType:
+            case kTrueType:
+                return JsonValueType::Bool;
+
+            case kObjectType:
+                return JsonValueType::Object;
+
+            case kArrayType:
+                return JsonValueType::Array;
+
+            case kStringType:
+                return JsonValueType::String;
+
+            case kNumberType:
+                return JsonValueType::Number;
+
+            default:
+                throw std::runtime_error("Unknown value type for JSON value");
+        }
+    }
+
+    [[nodiscard]]
+    bool HasObjectField(const std::string& key) const
+    {
+        return IsObject() && document.HasMember(key.c_str());
     }
 
     [[nodiscard]]
@@ -166,21 +261,9 @@ public:
     }
 
     [[nodiscard]]
-    bool IsInt64() const
-    {
-        return document.IsInt64();
-    }
-
-    [[nodiscard]]
     bool IsNull() const
     {
         return document.IsNull();
-    }
-
-    [[nodiscard]]
-    bool IsNumber() const
-    {
-        return document.IsNumber();
     }
 
     [[nodiscard]]
@@ -196,19 +279,22 @@ public:
     }
 
     [[nodiscard]]
-    bool IsUint() const
+    std::string ToString() const
     {
-        return document.IsUint();
-    }
+        StringBuffer buffer;
+        Writer<StringBuffer> writer(buffer);
+        document.Accept(writer);
 
-    [[nodiscard]]
-    bool IsUint64() const
-    {
-        return document.IsUint64();
+        return {buffer.GetString()};
     }
 
     bool TryGetArrayField(const std::string& key, std::vector<JsonValue>& outArray) const
     {
+        if (!IsObject())
+        {
+            return false;
+        }
+
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsArray())
@@ -218,7 +304,7 @@ public:
 
         outArray.clear();
 
-        for (const Value& el: iter->value.GetArray())
+        for (const Value& el : iter->value.GetArray())
         {
             Document newDocument;
             newDocument.CopyFrom(el, newDocument.GetAllocator());
@@ -234,6 +320,11 @@ public:
 
     bool TryGetBoolField(const std::string& key, bool& outBool) const
     {
+        if (!IsObject())
+        {
+            return false;
+        }
+
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsBool())
@@ -248,6 +339,11 @@ public:
 
     bool TryGetDoubleField(const std::string& key, double& outDouble) const
     {
+        if (!IsObject())
+        {
+            return false;
+        }
+
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsDouble())
@@ -262,6 +358,11 @@ public:
 
     bool TryGetFloatField(const std::string& key, float& outFloat) const
     {
+        if (!IsObject())
+        {
+            return false;
+        }
+
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsFloat())
@@ -276,6 +377,11 @@ public:
 
     bool TryGetIntField(const std::string& key, int32_t& outInt) const
     {
+        if (!IsObject())
+        {
+            return false;
+        }
+
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsInt())
@@ -288,22 +394,13 @@ public:
         return true;
     }
 
-    bool TryGetInt64Field(const std::string& key, int64_t& outInt64) const
+    bool TryGetObjectField(const std::string& key, JsonValue& outValue) const
     {
-        Value::ConstMemberIterator iter = document.FindMember(key.c_str());
-
-        if (iter == document.MemberEnd() || !iter->value.IsInt64())
+        if (!IsObject())
         {
             return false;
         }
 
-        outInt64 = iter->value.GetInt64();
-
-        return true;
-    }
-
-    bool TryGetObjectField(const std::string& key, JsonValue& outValue) const
-    {
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsObject())
@@ -320,6 +417,11 @@ public:
 
     bool TryGetStringField(const std::string& key, std::string& outString) const
     {
+        if (!IsObject())
+        {
+            return false;
+        }
+
         Value::ConstMemberIterator iter = document.FindMember(key.c_str());
 
         if (iter == document.MemberEnd() || !iter->value.IsString())
@@ -332,30 +434,130 @@ public:
         return true;
     }
 
-    bool TryGetUintField(const std::string& key, uint32_t& outUint) const
+    bool TrySetObjectField(const std::string& key, const JsonValue& value)
     {
-        Value::ConstMemberIterator iter = document.FindMember(key.c_str());
-
-        if (iter == document.MemberEnd() || !iter->value.IsUint())
+        if (!IsObject())
         {
             return false;
         }
 
-        outUint = iter->value.GetUint();
+        const char* kStr = key.c_str();
+
+        if (document.HasMember(kStr))
+        {
+            document.RemoveMember(kStr);
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(kStr, allocator);
+        Value v;
+
+        v.CopyFrom(value._pimpl->document, allocator);
+        document.AddMember(k.Move(), v.Move(), allocator);
 
         return true;
     }
 
-    bool TryGetUint64Field(const std::string& key, uint64_t& outUint64) const
+    bool TrySetObjectField(const std::string& key, const std::vector<JsonValue>& value)
     {
-        Value::ConstMemberIterator iter = document.FindMember(key.c_str());
-
-        if (iter == document.MemberEnd() || !iter->value.IsUint64())
+        if (!IsObject())
         {
             return false;
         }
 
-        outUint64 = iter->value.GetUint64();
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(kArrayType);
+
+        for (const JsonValue& el : value)
+        {
+            Value elValue;
+
+            elValue.CopyFrom(el._pimpl->document, allocator);
+            v.PushBack(elValue.Move(), allocator);
+        }
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetObjectField(const std::string& key, const bool value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetObjectField(const std::string& key, const double value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetObjectField(const std::string& key, const float value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetObjectField(const std::string& key, const int32_t value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetObjectField(const std::string& key, const std::string& value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value.c_str(), allocator);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
 
         return true;
     }
@@ -406,9 +608,21 @@ std::vector<JsonValue> JsonValue::GetArray() const
 }
 
 [[maybe_unused]]
+std::vector<JsonValue> JsonValue::GetArrayField(const std::string& key) const
+{
+    return _pimpl->GetArrayField(key);
+}
+
+[[maybe_unused]]
 bool JsonValue::GetBool() const
 {
     return _pimpl->GetBool();
+}
+
+[[maybe_unused]]
+bool JsonValue::GetBoolField(const std::string& key) const
+{
+    return _pimpl->GetBoolField(key);
 }
 
 [[maybe_unused]]
@@ -418,9 +632,21 @@ double JsonValue::GetDouble() const
 }
 
 [[maybe_unused]]
+double JsonValue::GetDoubleField(const std::string& key) const
+{
+    return _pimpl->GetDoubleField(key);
+}
+
+[[maybe_unused]]
 float JsonValue::GetFloat() const
 {
     return _pimpl->GetFloat();
+}
+
+[[maybe_unused]]
+float JsonValue::GetFloatField(const std::string& key) const
+{
+    return _pimpl->GetFloatField(key);
 }
 
 [[maybe_unused]]
@@ -430,9 +656,15 @@ int32_t JsonValue::GetInt() const
 }
 
 [[maybe_unused]]
-int64_t JsonValue::GetInt64() const
+int32_t JsonValue::GetIntField(const std::string& key) const
 {
-    return _pimpl->GetInt64();
+    return _pimpl->GetIntField(key);
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::GetObjectField(const std::string& key) const
+{
+    return _pimpl->GetObjectField(key);
 }
 
 [[maybe_unused]]
@@ -442,15 +674,21 @@ std::string JsonValue::GetString() const
 }
 
 [[maybe_unused]]
-uint32_t JsonValue::GetUint() const
+std::string JsonValue::GetStringField(const std::string& key) const
 {
-    return _pimpl->GetUint();
+    return _pimpl->GetStringField(key);
 }
 
 [[maybe_unused]]
-uint64_t JsonValue::GetUint64() const
+JsonValueType JsonValue::GetValueType() const
 {
-    return _pimpl->GetUint64();
+    return _pimpl->GetValueType();
+}
+
+[[maybe_unused]]
+bool JsonValue::HasObjectField(const std::string& key) const
+{
+    return _pimpl->HasObjectField(key);
 }
 
 [[maybe_unused]]
@@ -484,21 +722,9 @@ bool JsonValue::IsInt() const
 }
 
 [[maybe_unused]]
-bool JsonValue::IsInt64() const
-{
-    return _pimpl->IsInt64();
-}
-
-[[maybe_unused]]
 bool JsonValue::IsNull() const
 {
     return _pimpl->IsNull();
-}
-
-[[maybe_unused]]
-bool JsonValue::IsNumber() const
-{
-    return _pimpl->IsNumber();
 }
 
 [[maybe_unused]]
@@ -514,15 +740,9 @@ bool JsonValue::IsString() const
 }
 
 [[maybe_unused]]
-bool JsonValue::IsUint() const
+std::string JsonValue::ToString() const
 {
-    return _pimpl->IsUint();
-}
-
-[[maybe_unused]]
-bool JsonValue::IsUint64() const
-{
-    return _pimpl->IsUint64();
+    return _pimpl->ToString();
 }
 
 [[maybe_unused]]
@@ -556,12 +776,6 @@ bool JsonValue::TryGetIntField(const std::string& key, int32_t& outInt) const
 }
 
 [[maybe_unused]]
-bool JsonValue::TryGetInt64Field(const std::string& key, int64_t& outInt64) const
-{
-    return _pimpl->TryGetInt64Field(key, outInt64);
-}
-
-[[maybe_unused]]
 bool JsonValue::TryGetObjectField(const std::string& key, JsonValue& outValue) const
 {
     return _pimpl->TryGetObjectField(key, outValue);
@@ -574,15 +788,45 @@ bool JsonValue::TryGetStringField(const std::string& key, std::string& outString
 }
 
 [[maybe_unused]]
-bool JsonValue::TryGetUintField(const std::string& key, uint32_t& outUint) const
+bool JsonValue::TrySetObjectField(const std::string& key, const JsonValue& value)
 {
-    return _pimpl->TryGetUintField(key, outUint);
+    return _pimpl->TrySetObjectField(key, value);
 }
 
 [[maybe_unused]]
-bool JsonValue::TryGetUint64Field(const std::string& key, uint64_t& outUint64) const
+bool JsonValue::TrySetObjectField(const std::string& key, const std::vector<JsonValue>& value)
 {
-    return _pimpl->TryGetUint64Field(key, outUint64);
+    return _pimpl->TrySetObjectField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetObjectField(const std::string& key, const bool value)
+{
+    return _pimpl->TrySetObjectField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetObjectField(const std::string& key, const double value)
+{
+    return _pimpl->TrySetObjectField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetObjectField(const std::string& key, const float value)
+{
+    return _pimpl->TrySetObjectField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetObjectField(const std::string& key, const int32_t value)
+{
+    return _pimpl->TrySetObjectField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetObjectField(const std::string& key, const std::string& value)
+{
+    return _pimpl->TrySetObjectField(key, value);
 }
 
 JsonValue& JsonValue::operator=(const JsonValue& rhs)
