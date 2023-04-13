@@ -8,3 +8,5 @@ target_sources(${PROJECT_NAME}
         JsonDeserializableBase.cpp
         JsonUtil.cpp
         JsonValue.cpp)
+
+add_subdirectory(graphql)

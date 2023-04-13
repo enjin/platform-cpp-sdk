@@ -3,5 +3,6 @@ target_sources(${TESTS_NAME}
         GraphQlFragmentTest.cpp
         GraphQlParameterHolderTest.cpp
         GraphQlRequestBaseTest.cpp
+        GraphQlResponseTest.cpp
         ObjectGraphQlRequestTest.cpp
         ScalarGraphQlRequestTest.cpp)
