@@ -1,13 +1,12 @@
 #ifndef ENJINPLATFORMSDK_IJSONDESERIALIZABLE_HPP
 #define ENJINPLATFORMSDK_IJSONDESERIALIZABLE_HPP
 
-#include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 
 namespace enjin::platform::sdk
 {
 /// \brief Interface for JSON deserializable types.
-class ENJINPLATFORMSDK_EXPORT IJsonDeserializable
+class IJsonDeserializable
 {
 public:
     /// \brief Class destructor.
