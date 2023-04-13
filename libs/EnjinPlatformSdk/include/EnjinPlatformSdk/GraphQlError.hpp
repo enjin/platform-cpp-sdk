@@ -12,7 +12,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models an error in a GraphQL response.
-class ENJINPLATFORMSDK_EXPORT [[maybe_unused]] GraphQlError : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT GraphQlError : public JsonDeserializableBase
 {
     std::optional<std::string> _message;
     std::optional<JsonValue> _extensions;

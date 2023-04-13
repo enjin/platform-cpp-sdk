@@ -14,7 +14,7 @@ namespace enjin::platform::sdk
 /// \brief Represents a GraphQL response message from the platform for a single operation.
 /// \tparam TResult The type to be returned in the result.
 template<class TResult>
-class [[maybe_unused]] GraphQlResponse final : public JsonDeserializableBase
+class GraphQlResponse final : public JsonDeserializableBase
 {
     std::optional<GraphQlData<TResult>> _data;
     std::optional<std::vector<GraphQlError>> _errors;

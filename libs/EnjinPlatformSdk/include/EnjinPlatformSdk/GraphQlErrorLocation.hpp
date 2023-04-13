@@ -8,7 +8,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models the location of where an error in a GraphQL request occurred.
-class ENJINPLATFORMSDK_EXPORT [[maybe_unused]] GraphQlErrorLocation : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT GraphQlErrorLocation : public JsonDeserializableBase
 {
     std::optional<int32_t> line;
     std::optional<int32_t> column;

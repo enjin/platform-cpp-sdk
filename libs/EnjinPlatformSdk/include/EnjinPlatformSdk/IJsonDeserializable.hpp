@@ -7,7 +7,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Interface for JSON deserializable types.
-class ENJINPLATFORMSDK_EXPORT [[maybe_unused]] IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT IJsonDeserializable
 {
 public:
     /// \brief Class destructor.

@@ -8,7 +8,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Fake JSON deserializable class for testing.
-class [[maybe_unused]] FakeJsonDeserializable : public JsonDeserializableBase
+class FakeJsonDeserializable : public JsonDeserializableBase
 {
     std::optional<bool> _field;
 

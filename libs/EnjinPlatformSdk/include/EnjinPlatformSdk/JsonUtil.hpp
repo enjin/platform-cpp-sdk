@@ -13,7 +13,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Utility class for handling JSON values.
-class ENJINPLATFORMSDK_EXPORT [[maybe_unused]] JsonUtil final
+class ENJINPLATFORMSDK_EXPORT JsonUtil final
 {
 public:
     JsonUtil() = delete;
