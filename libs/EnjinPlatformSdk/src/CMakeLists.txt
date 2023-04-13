@@ -5,4 +5,8 @@ target_include_directories(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
         PRIVATE
+        JsonDeserializableBase.cpp
+        JsonUtil.cpp
         JsonValue.cpp)
+
+add_subdirectory(graphql)

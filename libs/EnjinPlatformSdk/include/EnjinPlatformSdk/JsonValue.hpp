@@ -2,6 +2,7 @@
 #define ENJINPLATFORMSDK_JSONVALUE_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/JsonValueType.hpp"
 #include <memory>
 #include <string>
 #include <vector>
@@ -11,6 +12,7 @@ namespace enjin::platform::sdk
 /// \brief Class representing a JSON value.
 class ENJINPLATFORMSDK_EXPORT JsonValue
 {
+    /// \brief The implementation of this class.
     class Impl;
 
     std::unique_ptr<Impl> _pimpl;
@@ -38,11 +40,27 @@ public:
     [[nodiscard]]
     std::vector<JsonValue> GetArray() const;
 
+    /// \brief Gets an array field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::vector<JsonValue> GetArrayField(const std::string& key) const;
+
     /// \brief Gets the boolean this value represents.
     /// \return The boolean.
     [[maybe_unused]]
     [[nodiscard]]
     bool GetBool() const;
+
+    /// \brief Gets a boolean field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool GetBoolField(const std::string& key) const;
 
     /// \brief Gets the double this value represents.
     /// \return The double.
@@ -50,11 +68,27 @@ public:
     [[nodiscard]]
     double GetDouble() const;
 
+    /// \brief Gets a double field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    double GetDoubleField(const std::string& key) const;
+
     /// \brief Gets the float this value represents.
     /// \return The float.
     [[maybe_unused]]
     [[nodiscard]]
     float GetFloat() const;
+
+    /// \brief Gets a float field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    float GetFloatField(const std::string& key) const;
 
     /// \brief Gets the integer this value represents.
     /// \return The integer.
@@ -62,11 +96,21 @@ public:
     [[nodiscard]]
     int32_t GetInt() const;
 
-    /// \brief Gets the long integer this value represents.
-    /// \return The long integer.
+    /// \brief Gets a 32-bit integer field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
     [[maybe_unused]]
     [[nodiscard]]
-    int64_t GetInt64() const;
+    int32_t GetIntField(const std::string& key) const;
+
+    /// \brief Gets an object field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    JsonValue GetObjectField(const std::string& key) const;
 
     /// \brief Gets the string this value represents.
     /// \return The string.
@@ -74,17 +118,27 @@ public:
     [[nodiscard]]
     std::string GetString() const;
 
-    /// \brief Gets the unsigned integer this value represents.
-    /// \return The unsigned integer.
+    /// \brief Gets a string field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
     [[maybe_unused]]
     [[nodiscard]]
-    uint32_t GetUint() const;
+    std::string GetStringField(const std::string& key) const;
 
-    /// \brief Gets the unsigned long integer this value represents.
-    /// \return The unsigned long integer.
+    /// \brief Gets the JSON type of this value.
+    /// \return The JSON type.
     [[maybe_unused]]
     [[nodiscard]]
-    uint64_t GetUint64() const;
+    JsonValueType GetValueType() const;
+
+    /// \brief Determines whether this value-object has a field with the given key.
+    /// \param key The field key.
+    /// \return Whether the field is present.
+    /// \remarks This function may return false if either this value is not an object or the field is not present in it.
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasObjectField(const std::string& key) const;
 
     /// \brief Determines whether this value represents an array.
     /// \return Whether this value represents an array.
@@ -116,23 +170,11 @@ public:
     [[nodiscard]]
     bool IsInt() const;
 
-    /// \brief Determines whether this value represents a long integer.
-    /// \return Whether this value represents a long integer.
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool IsInt64() const;
-
     /// \brief Determines whether this value represents a null.
     /// \return Whether this value represents a null.
     [[maybe_unused]]
     [[nodiscard]]
     bool IsNull() const;
-
-    /// \brief Determines whether this value represents a number.
-    /// \return Whether this value represents a number.
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool IsNumber() const;
 
     /// \brief Determines whether this value represents an object.
     /// \return Whether this value represents an object.
@@ -146,17 +188,11 @@ public:
     [[nodiscard]]
     bool IsString() const;
 
-    /// \brief Determines whether this value represents an unsigned integer.
-    /// \return Whether this value represents an unsigned integer.
+    /// \brief Converts this value into its string representation.
+    /// \return The stringified representation of this value.
     [[maybe_unused]]
     [[nodiscard]]
-    bool IsUint() const;
-
-    /// \brief Determines whether this value represents an unsigned long integer.
-    /// \return Whether this value represents an unsigned long integer.
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool IsUint64() const;
+    std::string ToString() const;
 
     /// \brief Tries to get the value of the given array field.
     /// \param key The field key.
@@ -186,19 +222,12 @@ public:
     [[maybe_unused]]
     bool TryGetFloatField(const std::string& key, float& outFloat) const;
 
-    /// \brief Tries to get the value of the given integer field.
+    /// \brief Tries to get the value of the given 32-bit integer field.
     /// \param key The field key.
     /// \param outInt The output integer.
     /// \return Whether the field was retrieved.
     [[maybe_unused]]
     bool TryGetIntField(const std::string& key, int32_t& outInt) const;
-
-    /// \brief Tries to get the value of the given long integer field.
-    /// \param key The field key.
-    /// \param outInt64 The output long integer.
-    /// \return Whether the field was retrieved.
-    [[maybe_unused]]
-    bool TryGetInt64Field(const std::string& key, int64_t& outInt64) const;
 
     /// \brief Tries to get the value of the given object field.
     /// \param key The field key.
@@ -214,19 +243,54 @@ public:
     [[maybe_unused]]
     bool TryGetStringField(const std::string& key, std::string& outString) const;
 
-    /// \brief Tries to get the value of the given unsigned integer field.
+    /// \brief Tries to set a field on this value-object with the given value.
     /// \param key The field key.
-    /// \param outUint The output unsigned integer.
-    /// \return Whether the field was retrieved.
+    /// \param value The field value.
+    /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TryGetUintField(const std::string& key, uint32_t& outUint) const;
+    bool TrySetObjectField(const std::string& key, const JsonValue& value);
 
-    /// \brief Tries to get the value of the given unsigned long integer field.
+    /// \brief Tries to set a field on this value-object with the given array of values.
     /// \param key The field key.
-    /// \param outUint64 The output unsigned long integer.
-    /// \return Whether the field was retrieved.
+    /// \param value The field value.
+    /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TryGetUint64Field(const std::string& key, uint64_t& outUint64) const;
+    bool TrySetObjectField(const std::string& key, const std::vector<JsonValue>& value);
+
+    /// \brief Tries to set a field on this value-object with the given boolean.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetObjectField(const std::string& key, bool value);
+
+    /// \brief Tries to set a field on this value-object with the given double.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetObjectField(const std::string& key, double value);
+
+    /// \brief Tries to set a field on this value-object with the given float.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetObjectField(const std::string& key, float value);
+
+    /// \brief Tries to set a field on this value-object with the given 32-bit integer.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetObjectField(const std::string& key, int32_t value);
+
+    /// \brief Tries to set a field on this value-object with the given string.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetObjectField(const std::string& key, const std::string& value);
 
     JsonValue& operator=(const JsonValue& rhs);
 
