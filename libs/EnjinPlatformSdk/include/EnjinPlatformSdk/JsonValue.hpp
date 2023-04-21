@@ -34,6 +34,11 @@ public:
     /// \brief Class destructor.
     ~JsonValue();
 
+    /// \brief Adds the given element to this value if this value is an array.
+    /// \param element The element to add.
+    [[maybe_unused]]
+    void AddArrayElement(const JsonValue& element);
+
     /// \brief Gets the array this value represents.
     /// \return The array.
     [[maybe_unused]]
@@ -187,6 +192,12 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     bool IsString() const;
+
+    /// \brief Removes an element at the given index from this value if this value is an array.
+    /// \param index The index of the element to remove.
+    /// \throws std::out_of_range If the index is out of range.
+    [[maybe_unused]]
+    void RemoveArrayElement(int index);
 
     /// \brief Converts this value into its string representation.
     /// \return The stringified representation of this value.

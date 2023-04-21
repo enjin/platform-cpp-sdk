@@ -25,6 +25,17 @@ public:
 
     ~Impl() = default;
 
+    void AddArrayElement(const JsonValue& element)
+    {
+        if (!IsArray())
+        {
+            return;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        document.PushBack(element._pimpl->document, allocator);
+    }
+
     [[nodiscard]]
     std::vector<JsonValue> GetArray() const
     {
@@ -276,6 +287,21 @@ public:
     bool IsString() const
     {
         return document.IsString();
+    }
+
+    void RemoveArrayElement(int index)
+    {
+        if (!IsArray())
+        {
+            return;
+        }
+
+        if (index < 0 || index >= document.Size())
+        {
+            throw std::out_of_range("Index out of range");
+        }
+
+        document.Erase(document.Begin() + index);
     }
 
     [[nodiscard]]
@@ -602,6 +628,12 @@ JsonValue::JsonValue(JsonValue&& other) noexcept
 JsonValue::~JsonValue() = default;
 
 [[maybe_unused]]
+void JsonValue::AddArrayElement(const JsonValue& element)
+{
+    _pimpl->AddArrayElement(element);
+}
+
+[[maybe_unused]]
 std::vector<JsonValue> JsonValue::GetArray() const
 {
     return _pimpl->GetArray();
@@ -737,6 +769,12 @@ bool JsonValue::IsObject() const
 bool JsonValue::IsString() const
 {
     return _pimpl->IsString();
+}
+
+[[maybe_unused]]
+void JsonValue::RemoveArrayElement(const int index)
+{
+    _pimpl->RemoveArrayElement(index);
 }
 
 [[maybe_unused]]
