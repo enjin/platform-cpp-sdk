@@ -2,6 +2,7 @@
 #include "MockGraphQlFragment.hpp"
 #include "EnjinPlatformSdk/GraphQlFragment.hpp"
 #include <memory>
+#include <string>
 
 using namespace enjin::platform::sdk;
 using namespace testing;

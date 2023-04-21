@@ -36,36 +36,6 @@ public:
 
     GraphQlFragment& operator=(GraphQlFragment<TFragment>&& rhs) noexcept = default;
 
-    // region IGraphQlParameterHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    std::string CompileParameters() const override
-    {
-        return GraphQlParameterHolder<TFragment>::CompileParameters();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasParameters() const override
-    {
-        return GraphQlParameterHolder<TFragment>::HasParameters();
-    }
-
-    [[maybe_unused]]
-    TFragment& SetParameter(std::string key, StringSerializablePtr value) override
-    {
-        return GraphQlParameterHolder<TFragment>::SetParameter(std::move(key), std::move(value));
-    }
-
-    [[maybe_unused]]
-    TFragment& SetParameter(std::string key, std::vector<StringSerializablePtr> values) override
-    {
-        return GraphQlParameterHolder<TFragment>::SetParameter(std::move(key), std::move(values));
-    }
-
-    // endregion IGraphQlParameterHolder
-
     // region IGraphQlFragment
 
     [[maybe_unused]]
@@ -153,6 +123,43 @@ public:
     }
 
     // endregion IGraphQlFragment
+
+    // region IGraphQlParameterHolder
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string CompileParameters() const override
+    {
+        return GraphQlParameterHolder<TFragment>::CompileParameters();
+    }
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    const std::map<std::string, SerializablePtr>& GetParameters() const override
+    {
+        return GraphQlParameterHolder<TFragment>::GetParameters();
+    }
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameters() const override
+    {
+        return GraphQlParameterHolder<TFragment>::HasParameters();
+    }
+
+    [[maybe_unused]]
+    TFragment& RemoveParameter(const std::string& key) override
+    {
+        return GraphQlParameterHolder<TFragment>::RemoveParameter(key);
+    }
+
+    [[maybe_unused]]
+    TFragment& SetParameter(std::string key, SerializablePtr value) override
+    {
+        return GraphQlParameterHolder<TFragment>::SetParameter(std::move(key), std::move(value));
+    }
+
+    // endregion IGraphQlParameterHolder
 
 protected:
     /// \brief Constructs an instance of this class.

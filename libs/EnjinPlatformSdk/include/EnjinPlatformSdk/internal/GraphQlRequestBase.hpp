@@ -3,8 +3,9 @@
 
 #include "EnjinPlatformSdk/GraphQlParameterHolder.hpp"
 #include "EnjinPlatformSdk/GraphQlRequestType.hpp"
+#include "EnjinPlatformSdk/GraphQlUploadHolder.hpp"
 #include "EnjinPlatformSdk/IGraphQlRequest.hpp"
-#include "EnjinPlatformSdk/IJsonSerializable.hpp"
+#include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include <map>
 #include <sstream>
@@ -18,13 +19,14 @@ namespace enjin::platform::sdk
 /// \tparam TRequest The request class.
 template<class TRequest>
 class GraphQlRequestBase : public GraphQlParameterHolder<TRequest>,
+                           public GraphQlUploadHolder,
                            public IGraphQlRequest<TRequest>
 {
     const std::string _name;
     const GraphQlRequestType _type;
     std::string _resultHeader;
     std::string _typeName;
-    std::map<std::string, std::pair<std::string, JsonSerializablePtr>> _variables;
+    std::map<std::string, std::pair<std::string, SerializablePtr>> _variables;
 
     static constexpr char ColonSeparator[] = ": ";
     static constexpr char CommaSeparator[] = ", ";
@@ -78,7 +80,7 @@ public:
         return !_variables.empty();
     }
 
-    TRequest& SetVariable(std::string name, std::string type, JsonSerializablePtr value) override
+    TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) override
     {
         if (value == nullptr)
         {
@@ -86,7 +88,7 @@ public:
         }
         else
         {
-            std::pair<std::string, JsonSerializablePtr> pair(std::move(type), std::move(value));
+            std::pair<std::string, SerializablePtr> pair(std::move(type), std::move(value));
             _variables.emplace(std::move(name), std::move(pair));
         }
 
@@ -94,6 +96,17 @@ public:
     }
 
     // endregion IGraphQlRequest
+
+    // region IGraphQlUploadHolder
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    const std::set<std::string>& GetUploadParameterPaths() const override
+    {
+        return GraphQlUploadHolder::GetUploadParameterPaths();
+    }
+
+    // endregion IGraphQlUploadHolder
 
 protected:
     /// \brief Base constructor to be used by GraphQL requests.

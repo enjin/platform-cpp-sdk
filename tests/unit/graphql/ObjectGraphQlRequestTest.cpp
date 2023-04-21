@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "MockGraphQlFragment.hpp"
-#include "MockStringSerializable.hpp"
+#include "MockSerializable.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/GraphQlRequestType.hpp"
 #include <memory>
@@ -29,13 +29,13 @@ public:
 
     // Mocks
     MockGraphQlFragmentPtr mockFragment;
-    MockStringSerializablePtr mockParameterValue;
+    MockSerializablePtr mockParameterValue;
 
 protected:
     void SetUp() override
     {
         mockFragment = std::make_shared<NiceMockGraphQlFragment>();
-        mockParameterValue = std::make_shared<NiceMockStringSerializable>();
+        mockParameterValue = std::make_shared<NiceMockSerializable>();
 
         classUnderTest = std::make_unique<ObjectGraphQlRequestImpl>();
     }

@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "MockJsonSerializable.hpp"
-#include "MockStringSerializable.hpp"
+#include "MockSerializable.hpp"
 #include "EnjinPlatformSdk/GraphQlRequestType.hpp"
 #include "EnjinPlatformSdk/internal/GraphQlRequestBase.hpp"
 #include <memory>
@@ -25,12 +24,6 @@ public:
     {
         GraphQlRequestBase<GraphQlRequestBaseImpl>::AppendHeader(ss);
     }
-
-    [[nodiscard]]
-    std::string ToString() const override
-    {
-        return {};
-    }
 };
 
 class GraphQlRequestBaseTest : public Test
@@ -39,14 +32,14 @@ public:
     std::unique_ptr<GraphQlRequestBaseImpl> classUnderTest;
 
     // Mocks
-    MockStringSerializablePtr mockParameterValue;
-    MockJsonSerializablePtr mockVariableValue;
+    MockSerializablePtr mockParameterValue;
+    MockSerializablePtr mockVariableValue;
 
 protected:
     void SetUp() override
     {
-        mockParameterValue = std::make_shared<NiceMockStringSerializable>();
-        mockVariableValue = std::make_shared<NiceMockJsonSerializable>();
+        mockParameterValue = std::make_shared<NiceMockSerializable>();
+        mockVariableValue = std::make_shared<NiceMockSerializable>();
 
         classUnderTest = std::make_unique<GraphQlRequestBaseImpl>();
     }

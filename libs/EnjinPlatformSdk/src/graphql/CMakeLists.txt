@@ -1,4 +1,5 @@
 target_sources(${PROJECT_NAME}
         PRIVATE
         GraphQlError.cpp
-        GraphQlErrorLocation.cpp)
+        GraphQlErrorLocation.cpp
+        GraphQlUploadHolder.cpp)

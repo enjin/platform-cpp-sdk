@@ -1,10 +1,9 @@
 #ifndef ENJINPLATFORMSDK_IGRAPHQLPARAMETERHOLDER_HPP
 #define ENJINPLATFORMSDK_IGRAPHQLPARAMETERHOLDER_HPP
 
-#include "EnjinPlatformSdk/IStringSerializable.hpp"
+#include "EnjinPlatformSdk/ISerializable.hpp"
 #include <map>
 #include <string>
-#include <vector>
 
 namespace enjin::platform::sdk
 {
@@ -26,6 +25,12 @@ public:
     [[nodiscard]]
     virtual std::string CompileParameters() const = 0;
 
+    /// \brief Returns the parameters held by this holder.
+    /// \return The parameters.
+    [[maybe_unused]]
+    [[nodiscard]]
+    virtual const std::map<std::string, SerializablePtr>& GetParameters() const = 0;
+
     /// \brief Determines whether this holder has any parameters stored in it.
     /// \return Whether this holder has any parameters stored in it.
     [[maybe_unused]]
@@ -42,19 +47,18 @@ public:
     /// \brief Class destructor.
     ~IGraphQlParameterHolder() override = default;
 
-    /// \brief Sets a singular parameter to be stored by this holder.
+    /// \brief Removes the specified parameter from this holder.
+    /// \param key The parameter key.
+    /// \return This holder for chaining.
+    [[maybe_unused]]
+    virtual THolder& RemoveParameter(const std::string& key) = 0;
+
+    /// \brief Sets parameter to be stored by this holder.
     /// \param key The parameter key.
     /// \param value The parameter value.
     /// \return This holder for chaining.
     [[maybe_unused]]
-    virtual THolder& SetParameter(std::string key, StringSerializablePtr value) = 0;
-
-    /// \brief Sets a value-array parameter to be stored by this holder.
-    /// \param key The parameter key.
-    /// \param values The parameter values.
-    /// \return This holder for chaining.
-    [[maybe_unused]]
-    virtual THolder& SetParameter(std::string key, std::vector<StringSerializablePtr> values) = 0;
+    virtual THolder& SetParameter(std::string key, SerializablePtr value) = 0;
 };
 }
 

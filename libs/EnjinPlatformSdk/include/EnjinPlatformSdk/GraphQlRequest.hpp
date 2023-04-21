@@ -3,7 +3,7 @@
 
 #include "EnjinPlatformSdk/GraphQlRequestType.hpp"
 #include "EnjinPlatformSdk/IGraphQlRequest.hpp"
-#include "EnjinPlatformSdk/IStringSerializable.hpp"
+#include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/internal/GraphQlRequestBase.hpp"
 #include <memory>
 #include <optional>
@@ -36,15 +36,11 @@ public:
     /// \brief Class destructor.
     ~GraphQlRequest() override = default;
 
-    GraphQlRequest<TRequest>& operator=(const GraphQlRequest<TRequest>& rhs) = default;
-
-    GraphQlRequest<TRequest>& operator=(GraphQlRequest<TRequest>&& rhs) noexcept = default;
-
-    // region IStringSerializable
-
+    /// \brief Returns the query string of this request.
+    /// \return The query string for this request.
     [[maybe_unused]]
     [[nodiscard]]
-    std::string ToString() const override
+    std::string ToString() const
     {
         std::stringstream ss;
 
@@ -54,7 +50,9 @@ public:
         return ss.str();
     }
 
-    // endregion IStringSerializable
+    GraphQlRequest<TRequest>& operator=(const GraphQlRequest<TRequest>& rhs) = default;
+
+    GraphQlRequest<TRequest>& operator=(GraphQlRequest<TRequest>&& rhs) noexcept = default;
 
 protected:
     /// \brief Initializes an instance of this class.
@@ -88,6 +86,26 @@ public:
 
     /// \brief Class destructor.
     ~GraphQlRequest() override = default;
+
+    /// \brief Returns the query string of this request.
+    /// \return The query string for this request.
+    /// \throws std::runtime If this request has no attached fragment.
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string ToString() const
+    {
+        if (!HasFragment())
+        {
+            throw std::runtime_error("Cannot serialize request without a fragment");
+        }
+
+        std::stringstream ss;
+
+        GraphQlRequestBase<TRequest>::AppendHeader(ss);
+        ss << " { " << static_cast<IGraphQlFragment<>&>(*_fragment).CompileFields() << " } }";
+
+        return ss.str();
+    }
 
     GraphQlRequest& operator=(const GraphQlRequest<TRequest, TFragment>& rhs) = default;
 
@@ -182,36 +200,23 @@ public:
     }
 
     [[maybe_unused]]
-    TRequest& SetVariable(std::string name, std::string type, JsonSerializablePtr value) override
+    TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) override
     {
         return GraphQlRequestBase<TRequest>::SetVariable(std::move(name), std::move(type), std::move(value));
     }
 
     // endregion IGraphQlRequest
 
-    // region IStringSerializable
+    // region IGraphQlUploadHolder
 
-    /// \brief Converts this serializable into a string.
-    /// \return The string representation of this class.
-    /// \throws std::runtime If this request has no attached fragment.
     [[maybe_unused]]
     [[nodiscard]]
-    std::string ToString() const override
+    const std::set<std::string>& GetUploadParameterPaths() const override
     {
-        if (!HasFragment())
-        {
-            throw std::runtime_error("Cannot serialize request without a fragment");
-        }
-
-        std::stringstream ss;
-
-        GraphQlRequestBase<TRequest>::AppendHeader(ss);
-        ss << " { " << static_cast<IGraphQlFragment<>&>(*_fragment).CompileFields() << " } }";
-
-        return ss.str();
+        return GraphQlRequestBase<TRequest>::GetUploadParameterPaths();
     }
 
-    // endregion IStringSerializable
+    // endregion IGraphQlUploadHolder
 
 protected:
     /// \brief Initializes an instance of this class.

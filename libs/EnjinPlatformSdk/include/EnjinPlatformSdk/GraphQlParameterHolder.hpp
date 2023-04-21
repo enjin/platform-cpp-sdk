@@ -2,12 +2,10 @@
 #define ENJINPLATFORMSDK_GRAPHQLPARAMETERHOLDER_HPP
 
 #include "EnjinPlatformSdk/IGraphQlParameterHolder.hpp"
-#include "EnjinPlatformSdk/IStringSerializable.hpp"
+#include "EnjinPlatformSdk/ISerializable.hpp"
 #include <map>
 #include <sstream>
 #include <string>
-#include <type_traits>
-#include <vector>
 
 namespace enjin::platform::sdk
 {
@@ -16,8 +14,7 @@ namespace enjin::platform::sdk
 template<class THolder>
 class GraphQlParameterHolder : public IGraphQlParameterHolder<THolder>
 {
-    std::map<std::string, std::vector<StringSerializablePtr>> _listedParameters;
-    std::map<std::string, StringSerializablePtr> _nonListedParameters;
+    std::map<std::string, SerializablePtr> _parameters;
 
     static constexpr char ColonSeparator[] = ": ";
     static constexpr char CommaSeparator[] = ", ";
@@ -33,24 +30,6 @@ public:
 
     /// \brief Class destructor.
     ~GraphQlParameterHolder() override = default;
-
-    /// \brief Returns the parameters that are comprised of arrays.
-    /// \return The array parameters.
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::map<std::string, std::vector<StringSerializablePtr>>& GetListedParameters() const
-    {
-        return _listedParameters;
-    }
-
-    /// \brief Returns the parameters that are not comprised of arrays.
-    /// \return The non-array parameters.
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::map<std::string, StringSerializablePtr>& GetNonListedParameters() const
-    {
-        return _nonListedParameters;
-    }
 
     GraphQlParameterHolder& operator=(const GraphQlParameterHolder<THolder>& rhs) = default;
 
@@ -69,10 +48,10 @@ public:
 
         std::stringstream ss;
 
-        const int parametersCount = _nonListedParameters.size() + _listedParameters.size();
+        const int parametersCount = _parameters.size();
         int parameterIdx = 0;
 
-        for (const auto& [k, v] : _nonListedParameters)
+        for (const auto& [k, v] : _parameters)
         {
             parameterIdx++;
 
@@ -89,72 +68,42 @@ public:
             }
         }
 
-        for (const auto& [k, v] : _listedParameters)
-        {
-            ss << k << ": [";
-
-            const int subParametersCount = v.size();
-            int subParameterIdx = 0;
-
-            for (const StringSerializablePtr& subParameter : v)
-            {
-                subParameterIdx++;
-
-                if (subParameter == nullptr)
-                {
-                    continue;
-                }
-
-                ss << subParameter->ToString();
-
-                if (subParameterIdx < subParametersCount)
-                {
-                    ss << CommaSeparator;
-                }
-            }
-
-            ss << "]";
-
-            if (parameterIdx < parametersCount - 1)
-            {
-                ss << CommaSeparator;
-            }
-
-            parameterIdx++;
-        }
-
         return ss.str();
+    }
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    const std::map<std::string, SerializablePtr>& GetParameters() const override
+    {
+        return _parameters;
     }
 
     [[maybe_unused]]
     [[nodiscard]]
     bool HasParameters() const override
     {
-        return !_nonListedParameters.empty() || !_listedParameters.empty();
+        return !_parameters.empty();
     }
 
     [[maybe_unused]]
-    THolder& SetParameter(std::string key, StringSerializablePtr value) override
+    THolder& RemoveParameter(const std::string& key) override
     {
-        _listedParameters.erase(key);
-
-        if (value == nullptr)
-        {
-            _nonListedParameters.erase(key);
-        }
-        else
-        {
-            _nonListedParameters.emplace(key, value);
-        }
+        _parameters.erase(key);
 
         return static_cast<THolder&>(*this);
     }
 
     [[maybe_unused]]
-    THolder& SetParameter(std::string key, std::vector<StringSerializablePtr> values) override
+    THolder& SetParameter(std::string key, SerializablePtr value) override
     {
-        _nonListedParameters.erase(key);
-        _listedParameters.emplace(key, values);
+        if (value == nullptr)
+        {
+            _parameters.erase(key);
+        }
+        else
+        {
+            _parameters.emplace(key, value);
+        }
 
         return static_cast<THolder&>(*this);
     }

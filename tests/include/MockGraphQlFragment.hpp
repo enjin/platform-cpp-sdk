@@ -7,6 +7,14 @@
 
 namespace enjin::platform::sdk
 {
+class MockGraphQlFragment;
+
+/// \brief Definition for a nice mock of IGraphQlFragment.
+using NiceMockGraphQlFragment = testing::NiceMock<MockGraphQlFragment>;
+
+/// \brief Definition for a pointer containing a nice mock of IGraphQlFragment.
+using MockGraphQlFragmentPtr = std::shared_ptr<NiceMockGraphQlFragment>;
+
 /// \brief Mock class for IGraphQlFragment.
 class MockGraphQlFragment : public IGraphQlFragment<MockGraphQlFragment>
 {
@@ -31,20 +39,16 @@ public:
 
     MOCK_METHOD(std::string, CompileParameters, (), (const));
 
+    MOCK_METHOD((const std::map<std::string, SerializablePtr>&), GetParameters, (), (const));
+
     MOCK_METHOD(bool, HasParameters, (), (const));
 
-    MOCK_METHOD(MockGraphQlFragment&, SetParameter, (std::string key, StringSerializablePtr value), ());
+    MOCK_METHOD(MockGraphQlFragment&, RemoveParameter, (const std::string& key), ());
 
-    MOCK_METHOD(MockGraphQlFragment&, SetParameter, (std::string key, std::vector<StringSerializablePtr> values), ());
+    MOCK_METHOD(MockGraphQlFragment&, SetParameter, (std::string key, SerializablePtr value), ());
 
     // endregion IGraphQlParameterHolder
 };
-
-/// \brief Definition for a nice mock of IGraphQlFragment.
-typedef testing::NiceMock<MockGraphQlFragment> NiceMockGraphQlFragment;
-
-/// \brief Definition for a pointer containing a nice mock of IGraphQlFragment.
-typedef std::shared_ptr<NiceMockGraphQlFragment> MockGraphQlFragmentPtr;
 }
 
 #endif //ENJINPLATFORMSDK_MOCKGRAPHQLFRAGMENT_HPP

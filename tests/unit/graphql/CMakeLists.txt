@@ -4,5 +4,6 @@ target_sources(${TESTS_NAME}
         GraphQlParameterHolderTest.cpp
         GraphQlRequestBaseTest.cpp
         GraphQlResponseTest.cpp
+        GraphQlUploadHolderTest.cpp
         ObjectGraphQlRequestTest.cpp
         ScalarGraphQlRequestTest.cpp)
