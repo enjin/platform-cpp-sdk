@@ -1,3 +1,4 @@
 add_subdirectory(graphql)
 add_subdirectory(json)
 add_subdirectory(model)
+add_subdirectory(util)

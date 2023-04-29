@@ -1,8 +1,7 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 
+#include "RapidJsonUtil.hpp"
 #include "rapidjson/document.h"
-#include "rapidjson/stringbuffer.h"
-#include "rapidjson/writer.h"
 #include <stdexcept>
 #include <utility>
 
@@ -307,11 +306,7 @@ public:
     [[nodiscard]]
     std::string ToString() const
     {
-        StringBuffer buffer;
-        Writer<StringBuffer> writer(buffer);
-        document.Accept(writer);
-
-        return {buffer.GetString()};
+        return RapidJsonUtil::DocumentToString(document);
     }
 
     bool TryGetArrayField(const std::string& key, std::vector<JsonValue>& outArray) const
