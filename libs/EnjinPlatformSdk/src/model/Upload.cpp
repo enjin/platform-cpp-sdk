@@ -1,5 +1,6 @@
 #include "EnjinPlatformSdk/Upload.hpp"
 
+#include <ios>
 #include <sstream>
 #include <stdexcept>
 #include <utility>
@@ -10,8 +11,9 @@ using namespace enjin::platform::sdk;
 Upload::Upload() = default;
 
 [[maybe_unused]]
-Upload::Upload(std::ifstream file)
-    : file(std::move(file))
+Upload::Upload(std::string filename)
+    : file(std::ifstream(filename, std::ios::in)),
+      filename(std::move(filename))
 {
 }
 

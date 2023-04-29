@@ -5,6 +5,7 @@
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include <fstream>
 #include <memory>
+#include <string>
 
 namespace enjin::platform::sdk
 {
@@ -14,14 +15,17 @@ struct ENJINPLATFORMSDK_EXPORT Upload : public ISerializable
     /// \brief The file for this upload.
     std::ifstream file;
 
+    /// \brief The name of the file for this upload.
+    std::string filename;
+
     /// \brief Constructs an instance of this struct.
     [[maybe_unused]]
     Upload();
 
-    /// \brief Constructs an instance of this struct with the given filestream.
-    /// \param file The filestream.
+    /// \brief Constructs an instance of this struct with the given file.
+    /// \param filename The name of the file.
     [[maybe_unused]]
-    explicit Upload(std::ifstream file);
+    explicit Upload(std::string filename);
 
     Upload(const Upload& other) = delete;
 
