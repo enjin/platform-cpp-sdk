@@ -33,6 +33,15 @@ if (${ENJINSDK_USING_CONAN})
 else ()
     # RapidJSON
     target_include_directories(${PROJECT_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
+
+    # cpp-httplib
+    target_link_libraries(${PROJECT_NAME} PRIVATE httplib::httplib)
+
+    # OpenSSL
+    target_link_libraries(${PROJECT_NAME}
+            PRIVATE
+            OpenSSL::SSL
+            OpenSSL::Crypto)
 endif ()
 
 ####################################################################################################################
