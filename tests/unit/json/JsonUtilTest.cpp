@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "FakeJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonUtil.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
@@ -12,6 +13,41 @@ using namespace testing;
 class JsonUtilTest : public Test
 {
 };
+
+TEST_F(JsonUtilTest, GetArrayWhenJsonIsNotAnArrayOutArrayIsEmpty)
+{
+    // Arrange
+    const JsonValue json;
+    std::vector<FakeJsonDeserializable> outArray;
+
+    // Assumptions
+    ASSERT_THAT(json.IsArray(), IsFalse()) << "Assume JSON value is not an array";
+
+    // Act
+    JsonUtil::GetArray(json, outArray);
+
+    // Assert
+    ASSERT_THAT(outArray, IsEmpty()) << "Assert out array is empty";
+}
+
+TEST_F(JsonUtilTest, GetArrayWhenJsonIsAnArrayOutArrayHasExpectedElements)
+{
+    // Arrange
+    const int expectedSize = 2;
+    const std::vector<FakeJsonDeserializable> expected = {FakeJsonDeserializable(true), FakeJsonDeserializable(true)};
+    const JsonValue json = JsonValue::FromJson(R"([{"field":true},{"field":true}])");
+    std::vector<FakeJsonDeserializable> outArray;
+
+    // Assumptions
+    ASSERT_THAT(json.IsArray(), IsTrue()) << "Assume JSON value is an array";
+
+    // Act
+    JsonUtil::GetArray(json, outArray);
+
+    // Assert
+    ASSERT_THAT(outArray, SizeIs(expectedSize)) << "Assert out array has expected size";
+    EXPECT_THAT(outArray, Eq(expected)) << "Assert that out array equals expected";
+}
 
 TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
 {
