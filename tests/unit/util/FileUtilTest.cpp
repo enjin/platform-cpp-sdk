@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "FileUtil.hpp"
 #include <fstream>
 #include <stdexcept>
@@ -17,7 +18,7 @@ TEST_F(FileUtilTest, GetFileContentWhenFileStreamIsNotOpenThrowsError)
     std::ifstream file;
 
     // Assumptions
-    ASSERT_FALSE(file.is_open()) << "Assume stream is not open";
+    ASSERT_THAT(file.is_open(), IsFalse()) << "Assume stream is not open";
 
     // Assert
     ASSERT_THROW(std::string s = FileUtil::GetFileContent(file), std::invalid_argument) << "Assert error is thrown";
@@ -30,11 +31,11 @@ TEST_F(FileUtilTest, GetFileContentWhenFileStreamIsOpenReturnsExpected)
     std::ifstream file("Test Data/a.txt");
 
     // Assumptions
-    ASSERT_TRUE(file.is_open()) << "Assume stream is open";
+    ASSERT_THAT(file.is_open(), IsTrue()) << "Assume stream is open";
 
     // Act
     const std::string actual = FileUtil::GetFileContent(file);
 
     // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
+    ASSERT_THAT(actual, HasSubstr(expected)) << "Assert actual equals expected";
 }

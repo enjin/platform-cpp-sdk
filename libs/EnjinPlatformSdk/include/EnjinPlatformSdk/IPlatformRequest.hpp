@@ -3,12 +3,18 @@
 
 #include "EnjinPlatformSdk/MultipartFormData.hpp"
 #include <map>
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>
 
 namespace enjin::platform::sdk
 {
+class IPlatformRequest;
+
+/// \brief Definition for a pointer containing a platform request type.
+using PlatformRequestPtr [[maybe_unused]] = std::shared_ptr<IPlatformRequest>;
+
 /// \brief Interface for platform requests to implement.
 class IPlatformRequest
 {

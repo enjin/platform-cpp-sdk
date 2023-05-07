@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "EnjinPlatformSdk/PlatformResponse.hpp"
 
 using namespace enjin::platform::sdk;
@@ -26,7 +27,7 @@ TEST_P(PlatformResponseSuccessCodesTest, IsSuccessStatusCodeForSuccessfulCodesRe
     const bool actual = res.IsSuccessStatusCode();
 
     // Assert
-    ASSERT_TRUE(actual) << "Assert true for status code " << statusCode;
+    ASSERT_THAT(actual, IsTrue()) << "Assert true for status code " << statusCode;
 }
 
 TEST_P(PlatformResponseCodes0To199Test, IsSuccessStatusCodeForCodes0To199ReturnsFalse)
@@ -39,7 +40,7 @@ TEST_P(PlatformResponseCodes0To199Test, IsSuccessStatusCodeForCodes0To199Returns
     const bool actual = res.IsSuccessStatusCode();
 
     // Assert
-    ASSERT_FALSE(actual) << "Assert false for status code " << statusCode;
+    ASSERT_THAT(actual, IsFalse()) << "Assert false for status code " << statusCode;
 }
 
 TEST_P(PlatformResponseCodes300To500Test, IsSuccessStatusCodeForCodes300To500ReturnsFalse)
@@ -52,7 +53,7 @@ TEST_P(PlatformResponseCodes300To500Test, IsSuccessStatusCodeForCodes300To500Ret
     const bool actual = res.IsSuccessStatusCode();
 
     // Assert
-    ASSERT_FALSE(actual) << "Assert false for status code " << statusCode;
+    ASSERT_THAT(actual, IsFalse()) << "Assert false for status code " << statusCode;
 }
 
 INSTANTIATE_TEST_SUITE_P(SuccessCodes,
