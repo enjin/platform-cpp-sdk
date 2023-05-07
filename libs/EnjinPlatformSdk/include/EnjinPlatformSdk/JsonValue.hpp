@@ -197,7 +197,7 @@ public:
     /// \param index The index of the element to remove.
     /// \throws std::out_of_range If the index is out of range.
     [[maybe_unused]]
-    void RemoveArrayElement(int index);
+    void RemoveArrayElement(size_t index);
 
     /// \brief Converts this value into its string representation.
     /// \return The stringified representation of this value.

@@ -3,7 +3,6 @@
 #include "FileUtil.hpp"
 #include "RapidJsonUtil.hpp"
 #include "rapidjson/document.h"
-#include <sstream>
 #include <stdexcept>
 #include <utility>
 
@@ -35,7 +34,7 @@ std::string PlatformRequest::CreateOperationContent(const std::vector<Operation>
         Document::AllocatorType& allocator = document.GetAllocator();
 
         // Adds each operation to the operations array
-        for (int i = 0; i < operations.size(); i++)
+        for (size_t i = 0; i < operations.size(); i++)
         {
             const Operation& operation = operations[i];
 

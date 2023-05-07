@@ -288,14 +288,14 @@ public:
         return document.IsString();
     }
 
-    void RemoveArrayElement(int index)
+    void RemoveArrayElement(size_t index)
     {
         if (!IsArray())
         {
             return;
         }
 
-        if (index < 0 || index >= document.Size())
+        if (index >= document.Size())
         {
             throw std::out_of_range("Index out of range");
         }
@@ -767,7 +767,7 @@ bool JsonValue::IsString() const
 }
 
 [[maybe_unused]]
-void JsonValue::RemoveArrayElement(const int index)
+void JsonValue::RemoveArrayElement(const size_t index)
 {
     _pimpl->RemoveArrayElement(index);
 }
