@@ -67,7 +67,7 @@ public:
 
         for (const auto& [k, v] : _variables)
         {
-            json.TrySetObjectField(k, v.second->ToJson());
+            json.TrySetField(k, v.second->ToJson());
         }
 
         return json;

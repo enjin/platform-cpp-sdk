@@ -18,14 +18,15 @@ class ENJINPLATFORMSDK_EXPORT JsonUtil final
 public:
     JsonUtil() = delete;
 
-    /// \brief Gets the typed elements from a JSON array and writes it to the given out array.
+    /// \brief Tries to get the typed elements from a JSON array and writes it to the given out array.
     /// \tparam T The array element type. Must implement IJsonDeserializable.
     /// \param json The JSON value-array.
     /// \param outArray The out array to write to.
+    /// \return Whether the array was retrieved.
     /// \remarks If the JSON value is not an array, then this function will only clear the given out array.
     template<class T>
     [[maybe_unused]]
-    static void GetArray(const JsonValue& json, std::vector<T>& outArray)
+    static bool TryGetArray(const JsonValue& json, std::vector<T>& outArray)
     {
         static_assert(std::is_base_of<IJsonDeserializable, T>::value,
                       "Type T does not implement IJsonDeserializable");
@@ -34,7 +35,7 @@ public:
 
         if (!json.IsArray())
         {
-            return;
+            return false;
         }
 
         for (const JsonValue& jsonEl : json.GetArray())
@@ -44,6 +45,8 @@ public:
 
             outArray.push_back(std::move(t));
         }
+
+        return true;
     }
 
     /// \brief Tries to get the specified field from the given JSON value-object.
@@ -62,7 +65,7 @@ public:
 
         JsonValue value;
 
-        if (!json.TryGetObjectField(key, value))
+        if (!json.TryGetField(key, value))
         {
             outField.reset();
 
@@ -225,7 +228,7 @@ inline bool JsonUtil::TryGetField(const JsonValue& json, const std::string& key,
 {
     JsonValue newField;
 
-    if (json.TryGetObjectField(key, newField))
+    if (json.TryGetField(key, newField))
     {
         outField = std::move(newField);
 

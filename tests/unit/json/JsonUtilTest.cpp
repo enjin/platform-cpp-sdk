@@ -14,7 +14,7 @@ class JsonUtilTest : public Test
 {
 };
 
-TEST_F(JsonUtilTest, GetArrayWhenJsonIsNotAnArrayOutArrayIsEmpty)
+TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsNotAnArrayOutArrayIsEmpty)
 {
     // Arrange
     const JsonValue json;
@@ -24,13 +24,13 @@ TEST_F(JsonUtilTest, GetArrayWhenJsonIsNotAnArrayOutArrayIsEmpty)
     ASSERT_THAT(json.IsArray(), IsFalse()) << "Assume JSON value is not an array";
 
     // Act
-    JsonUtil::GetArray(json, outArray);
+    JsonUtil::TryGetArray(json, outArray);
 
     // Assert
     ASSERT_THAT(outArray, IsEmpty()) << "Assert out array is empty";
 }
 
-TEST_F(JsonUtilTest, GetArrayWhenJsonIsAnArrayOutArrayHasExpectedElements)
+TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsAnArrayOutArrayHasExpectedElements)
 {
     // Arrange
     const int expectedSize = 2;
@@ -42,7 +42,7 @@ TEST_F(JsonUtilTest, GetArrayWhenJsonIsAnArrayOutArrayHasExpectedElements)
     ASSERT_THAT(json.IsArray(), IsTrue()) << "Assume JSON value is an array";
 
     // Act
-    JsonUtil::GetArray(json, outArray);
+    JsonUtil::TryGetArray(json, outArray);
 
     // Assert
     ASSERT_THAT(outArray, SizeIs(expectedSize)) << "Assert out array has expected size";
@@ -57,7 +57,7 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonDoesNotHaveFieldReturnsFalseAndRe
     std::optional<FakeJsonDeserializable> outField({});
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -76,7 +76,7 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonHasFieldGetsField)
     std::optional<FakeJsonDeserializable> outField({});
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -94,7 +94,7 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonDoesNotHaveFieldReturnsFalse
     std::optional<std::vector<FakeJsonDeserializable>> outField({});
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -113,7 +113,7 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonHasFieldGetsField)
     std::optional<std::vector<FakeJsonDeserializable>> outField({});
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -131,7 +131,7 @@ TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonDoesNotHaveFieldReturnsFalseAndRe
     std::optional<bool> outField(false);
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -150,7 +150,7 @@ TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonHasFieldGetsField)
     std::optional<bool> outField(false);
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -168,7 +168,7 @@ TEST_F(JsonUtilTest, TryGetFieldForDoubleWhenJsonDoesNotHaveFieldReturnsFalseAnd
     std::optional<double> outField((double) 0.0);
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -187,7 +187,7 @@ TEST_F(JsonUtilTest, TryGetFieldForDoubleWhenJsonHasFieldGetsField)
     std::optional<double> outField((double) 0.0);
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -205,7 +205,7 @@ TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonDoesNotHaveFieldReturnsFalseAndR
     std::optional<float> outField((float) 0.0);
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -224,7 +224,7 @@ TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonHasFieldGetsField)
     std::optional<float> outField((float) 0.0);
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -242,7 +242,7 @@ TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonDoesNotHaveFieldReturnsFalseAn
     std::optional<int32_t> outField((int32_t) 0);
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -261,7 +261,7 @@ TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonHasFieldGetsField)
     std::optional<int32_t> outField((int32_t) 0);
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -279,7 +279,7 @@ TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonDoesNotHaveFieldReturnsFalseAnd
     std::optional<JsonValue> outField(JsonValue::FromJson("null"));
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -298,7 +298,7 @@ TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonHasFieldGetsField)
     std::optional<JsonValue> outField(JsonValue::FromJson("null"));
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -316,7 +316,7 @@ TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonDoesNotHaveFieldReturnsFalseAnd
     std::optional<std::string> outField("");
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -335,7 +335,7 @@ TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonHasFieldGetsField)
     std::optional<std::string> outField("");
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -353,7 +353,7 @@ TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonDoesNotHaveFieldReturnsFal
     std::optional<std::vector<std::string>> outField({});
 
     // Assumptions
-    ASSERT_FALSE(json.HasObjectField(fieldName)) << "Assume object does not have field";
+    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
@@ -372,7 +372,7 @@ TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonHasFieldGetsField)
     std::optional<std::vector<std::string>> outField({});
 
     // Assumptions
-    ASSERT_TRUE(json.HasObjectField(fieldName)) << "Assume object has field";
+    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
