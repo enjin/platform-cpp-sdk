@@ -26,3 +26,7 @@ macro(setup_output_directories)
         set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
     endif ()
 endmacro()
+
+macro(set_sdk_version_macro)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE ENJINPLATFORMSDK_VERSION="${PROJECT_VERSION}")
+endmacro()
