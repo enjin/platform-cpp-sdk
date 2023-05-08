@@ -80,6 +80,8 @@ target_include_directories(${TESTS_NAME}
 
 add_subdirectory("Test Data") # Include test data
 add_subdirectory(fake)
+add_subdirectory(mock)
+add_subdirectory(suite)
 add_subdirectory(unit)
 
 add_test(NAME ${TESTS_NAME} COMMAND ${TESTS_NAME})
