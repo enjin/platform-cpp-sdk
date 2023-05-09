@@ -21,7 +21,7 @@ std::string TestDataTestSuite::CreateTestDataPath(const std::string& path)
 
     std::stringstream ss;
 
-    ss << TEST_DATA_DIRECTORY << path;
+    ss << TEST_DATA_DIRECTORY << "/" << path;
 
     return ss.str();
 }
