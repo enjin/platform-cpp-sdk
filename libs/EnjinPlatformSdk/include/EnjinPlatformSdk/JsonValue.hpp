@@ -34,6 +34,11 @@ public:
     /// \brief Class destructor.
     ~JsonValue();
 
+    /// \brief Adds the given element to this value if this value is an array.
+    /// \param element The element to add.
+    [[maybe_unused]]
+    void AddArrayElement(const JsonValue& element);
+
     /// \brief Gets the array this value represents.
     /// \return The array.
     [[maybe_unused]]
@@ -76,6 +81,14 @@ public:
     [[nodiscard]]
     double GetDoubleField(const std::string& key) const;
 
+    /// \brief Gets a field from this value-object.
+    /// \param key The field key.
+    /// \return The field value.
+    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    JsonValue GetField(const std::string& key) const;
+
     /// \brief Gets the float this value represents.
     /// \return The float.
     [[maybe_unused]]
@@ -104,14 +117,6 @@ public:
     [[nodiscard]]
     int32_t GetIntField(const std::string& key) const;
 
-    /// \brief Gets an object field from this value-object.
-    /// \param key The field key.
-    /// \return The field value.
-    /// \throws runtime_error Thrown if the field is unable to be gotten from this value.
-    [[maybe_unused]]
-    [[nodiscard]]
-    JsonValue GetObjectField(const std::string& key) const;
-
     /// \brief Gets the string this value represents.
     /// \return The string.
     [[maybe_unused]]
@@ -138,7 +143,7 @@ public:
     /// \remarks This function may return false if either this value is not an object or the field is not present in it.
     [[maybe_unused]]
     [[nodiscard]]
-    bool HasObjectField(const std::string& key) const;
+    bool HasField(const std::string& key) const;
 
     /// \brief Determines whether this value represents an array.
     /// \return Whether this value represents an array.
@@ -188,6 +193,12 @@ public:
     [[nodiscard]]
     bool IsString() const;
 
+    /// \brief Removes an element at the given index from this value if this value is an array.
+    /// \param index The index of the element to remove.
+    /// \throws std::out_of_range If the index is out of range.
+    [[maybe_unused]]
+    void RemoveArrayElement(size_t index);
+
     /// \brief Converts this value into its string representation.
     /// \return The stringified representation of this value.
     [[maybe_unused]]
@@ -215,6 +226,13 @@ public:
     [[maybe_unused]]
     bool TryGetDoubleField(const std::string& key, double& outDouble) const;
 
+    /// \brief Tries to get the value of the given field.
+    /// \param key The field key.
+    /// \param outValue The output value.
+    /// \return Whether the field was retrieved.
+    [[maybe_unused]]
+    bool TryGetField(const std::string& key, JsonValue& outValue) const;
+
     /// \brief Tries to get the value of the given float field.
     /// \param key The field key.
     /// \param outFloat The output float.
@@ -229,13 +247,6 @@ public:
     [[maybe_unused]]
     bool TryGetIntField(const std::string& key, int32_t& outInt) const;
 
-    /// \brief Tries to get the value of the given object field.
-    /// \param key The field key.
-    /// \param outValue The output value.
-    /// \return Whether the field was retrieved.
-    [[maybe_unused]]
-    bool TryGetObjectField(const std::string& key, JsonValue& outValue) const;
-
     /// \brief Tries to get the value of the given string field.
     /// \param key The field key.
     /// \param outString The output string.
@@ -248,49 +259,49 @@ public:
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, const JsonValue& value);
+    bool TrySetField(const std::string& key, const JsonValue& value);
 
     /// \brief Tries to set a field on this value-object with the given array of values.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, const std::vector<JsonValue>& value);
+    bool TrySetField(const std::string& key, const std::vector<JsonValue>& value);
 
     /// \brief Tries to set a field on this value-object with the given boolean.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, bool value);
+    bool TrySetField(const std::string& key, bool value);
 
     /// \brief Tries to set a field on this value-object with the given double.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, double value);
+    bool TrySetField(const std::string& key, double value);
 
     /// \brief Tries to set a field on this value-object with the given float.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, float value);
+    bool TrySetField(const std::string& key, float value);
 
     /// \brief Tries to set a field on this value-object with the given 32-bit integer.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, int32_t value);
+    bool TrySetField(const std::string& key, int32_t value);
 
     /// \brief Tries to set a field on this value-object with the given string.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetObjectField(const std::string& key, const std::string& value);
+    bool TrySetField(const std::string& key, const std::string& value);
 
     JsonValue& operator=(const JsonValue& rhs);
 

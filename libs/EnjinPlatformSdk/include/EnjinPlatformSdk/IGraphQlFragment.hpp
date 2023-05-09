@@ -12,7 +12,7 @@ template<class...>
 class IGraphQlFragment;
 
 /// \brief Definition for a pointer containing a GraphQL fragment type.
-typedef std::shared_ptr<IGraphQlFragment<>> GraphQlFragmentPtr;
+using GraphQlFragmentPtr [[maybe_unused]] = std::shared_ptr<IGraphQlFragment<>>;
 
 /// \brief Interface for GraphQL fragments.
 template<class...>

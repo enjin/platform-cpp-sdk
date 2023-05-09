@@ -1,0 +1,12 @@
+target_sources(${TESTS_NAME}
+        PRIVATE
+        JsonDeserializableBaseTest.cpp
+        JsonUtilTest.cpp
+        JsonValueArrayTest.cpp
+        JsonValueBoolTest.cpp
+        JsonValueDoubleTest.cpp
+        JsonValueFloatTest.cpp
+        JsonValueIntegerTest.cpp
+        JsonValueObjectTest.cpp
+        JsonValueStringTest.cpp
+        JsonValueTest.cpp)

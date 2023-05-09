@@ -2,12 +2,13 @@
 #define ENJINPLATFORMSDK_IGRAPHQLREQUEST_HPP
 
 #include "EnjinPlatformSdk/IGraphQlFragment.hpp"
-#include "EnjinPlatformSdk/IJsonSerializable.hpp"
-#include "EnjinPlatformSdk/IStringSerializable.hpp"
+#include "EnjinPlatformSdk/IGraphQlUploadHolder.hpp"
+#include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include <memory>
 #include <string>
 #include <type_traits>
+#include <vector>
 
 namespace enjin::platform::sdk
 {
@@ -16,7 +17,7 @@ class IGraphQlRequest;
 
 /// \brief Interface for GraphQL requests.
 template<class...>
-class IGraphQlRequest : public IStringSerializable
+class IGraphQlRequest : public IGraphQlUploadHolder
 {
 public:
     /// \brief Class destructor.
@@ -56,7 +57,7 @@ public:
     /// \param value The variable value.
     /// \return This request for chaining.
     [[maybe_unused]]
-    virtual TRequest& SetVariable(std::string name, std::string type, JsonSerializablePtr value) = 0;
+    virtual TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) = 0;
 };
 
 /// \brief Interface for GraphQL requests with a settable fragment for response data.

@@ -30,6 +30,8 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     set(ENJINSDK_USING_CONAN 1)
 else ()
     include("cmake/FindRapidJSON.cmake")
+    include("cmake/FindCppHttpLib.cmake")
+    include("cmake/FindOpenSSL.cmake")
 endif ()
 
 # Setup output directories before creating any targets

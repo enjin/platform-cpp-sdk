@@ -21,6 +21,7 @@ class GraphQlResponse final : public JsonDeserializableBase
 
 public:
     /// \brief Constructs an instance of this class.
+    [[maybe_unused]]
     GraphQlResponse() = default;
 
     /// \brief Copy constructor.

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "MockStringSerializable.hpp"
+#include "MockSerializable.hpp"
 #include "EnjinPlatformSdk/GraphQlParameterHolder.hpp"
 #include <memory>
 
@@ -21,12 +21,12 @@ public:
     std::unique_ptr<GraphQlParameterHolderImpl> classUnderTest;
 
     // Mocks
-    MockStringSerializablePtr mockValue;
+    MockSerializablePtr mockValue;
 
 protected:
     void SetUp() override
     {
-        mockValue = std::make_shared<NiceMockStringSerializable>();
+        mockValue = std::make_shared<NiceMockSerializable>();
 
         classUnderTest = std::make_unique<GraphQlParameterHolderImpl>();
     }
@@ -47,54 +47,11 @@ TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasNoParametersRet
     ASSERT_EQ(actual, expected) << "Assert actual equals expected";
 }
 
-TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasNonListedParametersReturnsExpected)
+TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasParametersReturnsExpected)
 {
     // Arrange - Data
     const std::string expected(R"(param: "value")");
     classUnderTest->SetParameter("param", mockValue);
-
-    // Arrange - Stubbing
-    EXPECT_CALL(*mockValue, ToString())
-        .WillRepeatedly(Return(R"("value")"));
-
-    // Assumptions
-    ASSERT_TRUE(classUnderTest->HasParameters()) << "Assume holder has parameters";
-
-    // Act
-    const std::string actual = classUnderTest->CompileParameters();
-
-    // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
-}
-
-TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasListedParametersReturnsExpected)
-{
-    // Arrange - Data
-    const std::string expected(R"(param: ["value", "value", "value"])");
-    const std::vector<StringSerializablePtr> values = {mockValue, mockValue, mockValue};
-    classUnderTest->SetParameter("param", values);
-
-    // Arrange - Stubbing
-    EXPECT_CALL(*mockValue, ToString())
-        .WillRepeatedly(Return(R"("value")"));
-
-    // Assumptions
-    ASSERT_TRUE(classUnderTest->HasParameters()) << "Assume holder has parameters";
-
-    // Act
-    const std::string actual = classUnderTest->CompileParameters();
-
-    // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
-}
-
-TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasListedAndNonListedParametersReturnsExpected)
-{
-    // Arrange - Data
-    const std::string expected(R"(param1: "value", param2: ["value", "value", "value"])");
-    const std::vector<StringSerializablePtr> values = {mockValue, mockValue, mockValue};
-    classUnderTest->SetParameter("param1", mockValue);
-    classUnderTest->SetParameter("param2", values);
 
     // Arrange - Stubbing
     EXPECT_CALL(*mockValue, ToString())
@@ -129,4 +86,32 @@ TEST_F(GraphQlParameterHolderTest, HasParametersWhenHolderHasParametersReturnsTr
 
     // Assert
     ASSERT_TRUE(actual);
+}
+
+TEST_F(GraphQlParameterHolderTest, RemoveParameterWhenHolderDoesNotHaveParameterDoesNotThrowError)
+{
+    // Arrange
+    const std::string key("key");
+
+    // Assumptions
+    ASSERT_FALSE(classUnderTest->GetParameters().contains(key)) << "Assume holder does not have parameter";
+
+    // Assert
+    ASSERT_NO_THROW(classUnderTest->RemoveParameter(key)) << "Assert error is not thrown";
+}
+
+TEST_F(GraphQlParameterHolderTest, RemoveParameterWhenHolderHasParameterParameterIsRemoved)
+{
+    // Arrange
+    const std::string key("key");
+    classUnderTest->SetParameter(key, mockValue);
+
+    // Assumptions
+    ASSERT_TRUE(classUnderTest->GetParameters().contains(key)) << "Assume holder has parameter";
+
+    // Act
+    classUnderTest->RemoveParameter(key);
+
+    // Assert
+    ASSERT_FALSE(classUnderTest->GetParameters().contains(key)) << "Assert parameter was removed";
 }

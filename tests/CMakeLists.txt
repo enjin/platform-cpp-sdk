@@ -59,16 +59,14 @@ target_include_directories(${TESTS_NAME}
         PRIVATE
         "$<INSTALL_INTERFACE:include>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include"
-        "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${PROJECT_NAME}/include")
+        "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${PROJECT_NAME}/src/include")
 target_link_libraries(${TESTS_NAME} PRIVATE ${PROJECT_NAME})
 
 # Beam library
 if (${ENJINSDK_INCLUDE_BEAM})
     target_include_directories(${TESTS_NAME}
             PRIVATE
-            "$<INSTALL_INTERFACE:include>"
-            "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include"
-            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${BEAM_PROJECT_NAME}/include")
+            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${BEAM_PROJECT_NAME}/src/include")
     target_link_libraries(${TESTS_NAME} PRIVATE ${BEAM_PROJECT_NAME})
 endif ()
 
@@ -80,7 +78,10 @@ target_include_directories(${TESTS_NAME}
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include)
 
+add_subdirectory("Test Data") # Include test data
 add_subdirectory(fake)
+add_subdirectory(mock)
+add_subdirectory(suite)
 add_subdirectory(unit)
 
 add_test(NAME ${TESTS_NAME} COMMAND ${TESTS_NAME})
