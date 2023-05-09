@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
+#include "TestDataTestSuite.hpp"
 #include "EnjinPlatformSdk/MultipartFormData.hpp"
 #include "EnjinPlatformSdk/PlatformRequest.hpp"
 #include "EnjinPlatformSdk/SerializableArray.hpp"
@@ -16,7 +17,8 @@ using RequestBuilder = PlatformRequest::PlatformRequestBuilder;
 using UploadArray = std::shared_ptr<SerializableArray<Upload>>;
 using UploadPtr = std::shared_ptr<Upload>;
 
-class PlatformRequestTest : public Test
+class PlatformRequestTest : public Test,
+                            public TestDataTestSuite
 {
 };
 
@@ -93,7 +95,7 @@ TEST_F(PlatformRequestTest, BuildRequestWithSingleFileVariableReturnsRequestWith
     const std::string expectedMapVariables(R"({"0":["variables.file"]})");
     const std::string expectedFileFormName(R"("0")");
     const std::string expectedFileContent(R"(Alpha file content.)");
-    const std::string expectedFileName("Test Data/a.txt");
+    const std::string expectedFileName(CreateTestDataPath("a.txt"));
     std::map<std::string, SerializablePtr> variables;
     std::map<std::string, Upload&> uploads;
     UploadPtr upload = std::make_shared<Upload>(expectedFileName);
@@ -133,10 +135,10 @@ TEST_F(PlatformRequestTest, BuildRequestWithFileListVariableReturnsRequestWithEx
     const std::string expectedMapVariables(R"({"0":["variables.files.0"],"1":["variables.files.1"]})");
     const std::string expectedFile0FormName(R"("0")");
     const std::string expectedFile0Content(R"(Alpha file content.)");
-    const std::string expectedFile0Name("Test Data/a.txt");
+    const std::string expectedFile0Name(CreateTestDataPath("a.txt"));
     const std::string expectedFile1FormName(R"("1")");
     const std::string expectedFile1Content(R"(Bravo file content.)");
-    const std::string expectedFile1Name("Test Data/b.txt");
+    const std::string expectedFile1Name(CreateTestDataPath("b.txt"));
     std::map<std::string, SerializablePtr> variables;
     std::map<std::string, Upload&> uploads;
     UploadArray files = std::make_shared<SerializableArray<Upload>>();
@@ -184,10 +186,10 @@ TEST_F(PlatformRequestTest, BuildBatchRequestWithFileVariablesReturnsRequestWith
     const std::string expectedMapVariables(R"({"0":["0.variables.file"],"1":["1.variables.file"]})");
     const std::string expectedFile0FormName(R"("0")");
     const std::string expectedFile0Content(R"(Alpha file content.)");
-    const std::string expectedFile0Name("Test Data/a.txt");
+    const std::string expectedFile0Name(CreateTestDataPath("a.txt"));
     const std::string expectedFile1FormName(R"("1")");
     const std::string expectedFile1Content(R"(Bravo file content.)");
-    const std::string expectedFile1Name("Test Data/b.txt");
+    const std::string expectedFile1Name(CreateTestDataPath("b.txt"));
     std::map<std::string, SerializablePtr> variables0;
     std::map<std::string, SerializablePtr> variables1;
     std::map<std::string, Upload&> uploads0;
@@ -239,16 +241,16 @@ TEST_F(PlatformRequestTest, BuildBatchRequestWithFileListVariablesReturnsRequest
         R"({"0":["0.variables.files.0"],"1":["0.variables.files.1"],"2":["1.variables.files.0"],"3":["1.variables.files.1"]})");
     const std::string expectedFile0FormName(R"("0")");
     const std::string expectedFile0Content(R"(Alpha file content.)");
-    const std::string expectedFile0Name("Test Data/a.txt");
+    const std::string expectedFile0Name(CreateTestDataPath("a.txt"));
     const std::string expectedFile1FormName(R"("1")");
     const std::string expectedFile1Content(R"(Bravo file content.)");
-    const std::string expectedFile1Name("Test Data/b.txt");
+    const std::string expectedFile1Name(CreateTestDataPath("b.txt"));
     const std::string expectedFile2FormName(R"("2")");
     const std::string expectedFile2Content(R"(Charlie file content.)");
-    const std::string expectedFile2Name("Test Data/c.txt");
+    const std::string expectedFile2Name(CreateTestDataPath("c.txt"));
     const std::string expectedFile3FormName(R"("3")");
     const std::string expectedFile3Content(R"(Delta file content.)");
-    const std::string expectedFile3Name("Test Data/d.txt");
+    const std::string expectedFile3Name(CreateTestDataPath("d.txt"));
     std::map<std::string, SerializablePtr> variables0;
     std::map<std::string, SerializablePtr> variables1;
     std::map<std::string, Upload&> uploads0;

@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "FileUtil.hpp"
+#include "TestDataTestSuite.hpp"
 #include <fstream>
 #include <stdexcept>
 #include <string>
@@ -8,7 +9,8 @@
 using namespace enjin::platform::sdk;
 using namespace testing;
 
-class FileUtilTest : public Test
+class FileUtilTest : public Test,
+                     public TestDataTestSuite
 {
 };
 
@@ -28,7 +30,7 @@ TEST_F(FileUtilTest, GetFileContentWhenFileStreamIsOpenReturnsExpected)
 {
     // Arrange
     const std::string expected(R"(Alpha file content.)");
-    std::ifstream file("Test Data/a.txt");
+    std::ifstream file(CreateTestDataPath("a.txt"));
 
     // Assumptions
     ASSERT_THAT(file.is_open(), IsTrue()) << "Assume stream is open";
