@@ -1,5 +1,6 @@
 target_sources(${PROJECT_NAME}
         PRIVATE
+        IntegerRange.cpp
         SerializableBool.cpp
         SerializableDouble.cpp
         SerializableFloat.cpp
