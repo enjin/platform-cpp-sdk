@@ -110,7 +110,7 @@ public:
     [[maybe_unused]]
     void RemoveAt(size_t index)
     {
-        if (index < 0 || index >= Length())
+        if (index >= Length())
         {
             throw std::out_of_range("Index out of range");
         }

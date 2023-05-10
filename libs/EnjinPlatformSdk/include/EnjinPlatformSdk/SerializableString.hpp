@@ -12,8 +12,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#ifndef ENJINPLATFORMSDK_SERIALIZABLEINT_HPP
-#define ENJINPLATFORMSDK_SERIALIZABLEINT_HPP
+#ifndef ENJINPLATFORMSDK_SERIALIZABLESTRING_HPP
+#define ENJINPLATFORMSDK_SERIALIZABLESTRING_HPP
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/ISerializable.hpp"
@@ -22,49 +22,49 @@
 
 namespace enjin::platform::sdk
 {
-/// \brief Struct for serializable 32-bit integers.
-struct ENJINPLATFORMSDK_EXPORT SerializableInt : public ISerializable
+/// \brief Struct for serializable string.
+struct ENJINPLATFORMSDK_EXPORT SerializableString : public ISerializable
 {
     /// \brief The value of this instance.
-    int32_t value;
+    std::string value;
 
     /// \brief Constructs an instance of this struct.
     [[maybe_unused]]
-    SerializableInt();
+    SerializableString();
 
     /// \brief Constructs an instance of this struct with the given value.
     /// \param value The value.
     [[maybe_unused]]
-    explicit SerializableInt(int32_t value);
+    explicit SerializableString(std::string value);
 
     /// \brief Copy constructor.
     /// \param other The other instance to copy from.
     [[maybe_unused]]
-    SerializableInt(const SerializableInt& other);
+    SerializableString(const SerializableString& other);
 
     /// \brief Move constructor.
     /// \param other The other instance to move.
     [[maybe_unused]]
-    SerializableInt(SerializableInt&& other) noexcept;
+    SerializableString(SerializableString&& other) noexcept;
 
     /// \brief Struct destructor.
-    ~SerializableInt() override;
+    ~SerializableString() override;
 
-    SerializableInt& operator=(const SerializableInt& rhs);
+    SerializableString& operator=(const SerializableString& rhs);
 
-    SerializableInt& operator=(SerializableInt&& rhs) noexcept;
+    SerializableString& operator=(SerializableString&& rhs) noexcept;
 
-    bool operator==(const SerializableInt& rhs) const;
+    bool operator==(const SerializableString& rhs) const;
 
-    bool operator!=(const SerializableInt& rhs) const;
+    bool operator!=(const SerializableString& rhs) const;
 
-    bool operator<(const SerializableInt& rhs) const;
+    bool operator<(const SerializableString& rhs) const;
 
-    bool operator>(const SerializableInt& rhs) const;
+    bool operator>(const SerializableString& rhs) const;
 
-    bool operator<=(const SerializableInt& rhs) const;
+    bool operator<=(const SerializableString& rhs) const;
 
-    bool operator>=(const SerializableInt& rhs) const;
+    bool operator>=(const SerializableString& rhs) const;
 
     // region ISerializable
 
@@ -80,4 +80,4 @@ struct ENJINPLATFORMSDK_EXPORT SerializableInt : public ISerializable
 };
 }
 
-#endif //ENJINPLATFORMSDK_SERIALIZABLEINT_HPP
+#endif //ENJINPLATFORMSDK_SERIALIZABLESTRING_HPP
