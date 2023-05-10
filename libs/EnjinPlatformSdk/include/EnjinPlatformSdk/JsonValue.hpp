@@ -325,6 +325,41 @@ public:
 
     bool operator!=(const JsonValue& rhs) const;
 
+    /// \brief Creates a new value from an array.
+    /// \param value The array.
+    /// \return The created value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    static JsonValue FromArray(const std::vector<JsonValue>& value);
+
+    /// \brief Creates a new value from a bool.
+    /// \param value The bool.
+    /// \return The created value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    static JsonValue FromBool(bool value);
+
+    /// \brief Creates a new value from a double.
+    /// \param value The double.
+    /// \return The created value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    static JsonValue FromDouble(double value);
+
+    /// \brief Creates a new value from a float.
+    /// \param value The float.
+    /// \return The created value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    static JsonValue FromFloat(float value);
+
+    /// \brief Creates a new value from a 32-bit integer.
+    /// \param value The integer.
+    /// \return The created value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    static JsonValue FromInt(int32_t value);
+
     /// \brief Creates a new value from a serialized JSON type.
     /// \param json The serialized JSON.
     /// \return The created value.
@@ -333,6 +368,12 @@ public:
     [[nodiscard]]
     static JsonValue FromJson(const std::string& json);
 
+    /// \brief Creates a new value from a string.
+    /// \param value The string.
+    /// \return The created value.
+    [[maybe_unused]]
+    [[nodiscard]]
+    static JsonValue FromString(const std::string& value);
 };
 }
 

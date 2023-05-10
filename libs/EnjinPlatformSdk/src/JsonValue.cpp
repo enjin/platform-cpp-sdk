@@ -901,10 +901,87 @@ bool JsonValue::operator!=(const JsonValue& rhs) const
 }
 
 [[maybe_unused]]
+JsonValue JsonValue::FromArray(const std::vector<JsonValue>& value)
+{
+    Document document(kArrayType);
+    Document::AllocatorType& allocator = document.GetAllocator();
+
+    for (const JsonValue& el : value)
+    {
+        document.PushBack(el._pimpl->document, allocator);
+    }
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromBool(bool value)
+{
+    Document document(value ? kTrueType : kFalseType);
+    document.SetBool(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromDouble(double value)
+{
+    Document document(kNumberType);
+    document.SetDouble(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromFloat(float value)
+{
+    Document document(kNumberType);
+    document.SetDouble(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromInt(const int32_t value)
+{
+    Document document(kNumberType);
+    document.SetInt(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
 JsonValue JsonValue::FromJson(const std::string& json)
 {
     Document document;
     document.Parse(json.c_str());
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromString(const std::string& value)
+{
+    Document document(kStringType);
+    document.SetString(value.c_str(), value.size(), document.GetAllocator());
 
     JsonValue jsonValue;
     jsonValue._pimpl->document = std::move(document);
