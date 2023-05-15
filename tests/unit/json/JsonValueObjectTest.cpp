@@ -804,7 +804,22 @@ TEST_F(JsonValueObjectTest, TryGetStringFieldWhenFieldIsAStringReturnsExpectedVa
     EXPECT_THAT(outString, Eq(expectedString)) << "Expect out string equals expected";
 }
 
-TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsBoolSetsField)
+TEST_F(JsonValueObjectTest, TrySetArrayFieldWhenJsonIsJsonObjectAndValueIsArraySetsField)
+{
+    // Arrange
+    const std::string expectedKey("key");
+    const std::vector<JsonValue> expectedValue = {JsonValue()};
+    JsonValue jsonObject = JsonValue::FromJson("{}");
+
+    // Act
+    const bool result = jsonObject.TrySetArrayField(expectedKey, expectedValue);
+
+    // Assert
+    EXPECT_THAT(result, IsTrue()) << "Expect result is true";
+    EXPECT_THAT(jsonObject.GetArrayField(expectedKey), Eq(expectedValue)) << "Expect object has value";
+}
+
+TEST_F(JsonValueObjectTest, TrySetBoolFieldWhenJsonIsJsonObjectAndValueIsBoolSetsField)
 {
     // Arrange
     const std::string expectedKey("key");
@@ -812,14 +827,14 @@ TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsBoolSetsFie
     JsonValue jsonObject = JsonValue::FromJson("{}");
 
     // Act
-    const bool result = jsonObject.TrySetField(expectedKey, expectedValue);
+    const bool result = jsonObject.TrySetBoolField(expectedKey, expectedValue);
 
     // Assert
     EXPECT_THAT(result, IsTrue()) << "Expect result is true";
     EXPECT_THAT(jsonObject.GetBoolField(expectedKey), Eq(expectedValue)) << "Expect object has value";
 }
 
-TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsDoubleSetsField)
+TEST_F(JsonValueObjectTest, TrySetDoubleFieldWhenJsonIsJsonObjectAndValueIsDoubleSetsField)
 {
     // Arrange
     const std::string expectedKey("key");
@@ -827,14 +842,29 @@ TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsDoubleSetsF
     JsonValue jsonObject = JsonValue::FromJson("{}");
 
     // Act
-    const bool result = jsonObject.TrySetField(expectedKey, expectedValue);
+    const bool result = jsonObject.TrySetDoubleField(expectedKey, expectedValue);
 
     // Assert
     EXPECT_THAT(result, IsTrue()) << "Expect result is true";
     EXPECT_THAT(jsonObject.GetDoubleField(expectedKey), Eq(expectedValue)) << "Expect object has value";
 }
 
-TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsFloatSetsField)
+TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsJsonSetsField)
+{
+    // Arrange
+    const std::string expectedKey("key");
+    const JsonValue expectedValue;
+    JsonValue jsonObject = JsonValue::FromJson("{}");
+
+    // Act
+    const bool result = jsonObject.TrySetField(expectedKey, expectedValue);
+
+    // Assert
+    EXPECT_THAT(result, IsTrue()) << "Expect result is true";
+    EXPECT_THAT(jsonObject.GetField(expectedKey), Eq(expectedValue)) << "Expect object has value";
+}
+
+TEST_F(JsonValueObjectTest, TrySetFloatFieldWhenJsonIsJsonObjectAndValueIsFloatSetsField)
 {
     // Arrange
     const std::string expectedKey("key");
@@ -842,14 +872,14 @@ TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsFloatSetsFi
     JsonValue jsonObject = JsonValue::FromJson("{}");
 
     // Act
-    const bool result = jsonObject.TrySetField(expectedKey, expectedValue);
+    const bool result = jsonObject.TrySetFloatField(expectedKey, expectedValue);
 
     // Assert
     EXPECT_THAT(result, IsTrue()) << "Expect result is true";
     EXPECT_THAT(jsonObject.GetFloatField(expectedKey), Eq(expectedValue)) << "Expect object has value";
 }
 
-TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsIntegerSetsField)
+TEST_F(JsonValueObjectTest, TrySetIntFieldWhenJsonIsJsonObjectAndValueIsIntegerSetsField)
 {
     // Arrange
     const std::string expectedKey("key");
@@ -857,14 +887,14 @@ TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsIntegerSets
     JsonValue jsonObject = JsonValue::FromJson("{}");
 
     // Act
-    const bool result = jsonObject.TrySetField(expectedKey, expectedValue);
+    const bool result = jsonObject.TrySetIntField(expectedKey, expectedValue);
 
     // Assert
     EXPECT_THAT(result, IsTrue()) << "Expect result is true";
     EXPECT_THAT(jsonObject.GetIntField(expectedKey), Eq(expectedValue)) << "Expect object has value";
 }
 
-TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsStringSetsField)
+TEST_F(JsonValueObjectTest, TrySetStringFieldWhenJsonIsJsonObjectAndValueIsStringSetsField)
 {
     // Arrange
     const std::string expectedKey("key");
@@ -872,7 +902,7 @@ TEST_F(JsonValueObjectTest, TrySetFieldWhenJsonIsJsonObjectAndValueIsStringSetsF
     JsonValue jsonObject = JsonValue::FromJson("{}");
 
     // Act
-    const bool result = jsonObject.TrySetField(expectedKey, expectedValue);
+    const bool result = jsonObject.TrySetStringField(expectedKey, expectedValue);
 
     // Assert
     EXPECT_THAT(result, IsTrue()) << "Expect result is true";

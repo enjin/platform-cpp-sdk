@@ -268,6 +268,27 @@ public:
     [[maybe_unused]]
     bool TryGetStringField(const std::string& key, std::string& outString) const;
 
+    /// \brief Tries to set a field on this value-object with the given array of values.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetArrayField(const std::string& key, const std::vector<JsonValue>& value);
+
+    /// \brief Tries to set a field on this value-object with the given boolean.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetBoolField(const std::string& key, bool value);
+
+    /// \brief Tries to set a field on this value-object with the given double.
+    /// \param key The field key.
+    /// \param value The field value.
+    /// \return Whether the field was set.
+    [[maybe_unused]]
+    bool TrySetDoubleField(const std::string& key, double value);
+
     /// \brief Tries to set a field on this value-object with the given value.
     /// \param key The field key.
     /// \param value The field value.
@@ -275,47 +296,26 @@ public:
     [[maybe_unused]]
     bool TrySetField(const std::string& key, const JsonValue& value);
 
-    /// \brief Tries to set a field on this value-object with the given array of values.
-    /// \param key The field key.
-    /// \param value The field value.
-    /// \return Whether the field was set.
-    [[maybe_unused]]
-    bool TrySetField(const std::string& key, const std::vector<JsonValue>& value);
-
-    /// \brief Tries to set a field on this value-object with the given boolean.
-    /// \param key The field key.
-    /// \param value The field value.
-    /// \return Whether the field was set.
-    [[maybe_unused]]
-    bool TrySetField(const std::string& key, bool value);
-
-    /// \brief Tries to set a field on this value-object with the given double.
-    /// \param key The field key.
-    /// \param value The field value.
-    /// \return Whether the field was set.
-    [[maybe_unused]]
-    bool TrySetField(const std::string& key, double value);
-
     /// \brief Tries to set a field on this value-object with the given float.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetField(const std::string& key, float value);
+    bool TrySetFloatField(const std::string& key, float value);
 
     /// \brief Tries to set a field on this value-object with the given 32-bit integer.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetField(const std::string& key, int32_t value);
+    bool TrySetIntField(const std::string& key, int32_t value);
 
     /// \brief Tries to set a field on this value-object with the given string.
     /// \param key The field key.
     /// \param value The field value.
     /// \return Whether the field was set.
     [[maybe_unused]]
-    bool TrySetField(const std::string& key, const std::string& value);
+    bool TrySetStringField(const std::string& key, const std::string& value);
 
     JsonValue& operator=(const JsonValue& rhs);
 
