@@ -1,2 +1,30 @@
+target_sources(${PROJECT_NAME}
+        PRIVATE
+        Account.cpp
+        AccountRequest.cpp
+        AccountVerified.cpp
+        Attribute.cpp
+        Balances.cpp
+        Block.cpp
+        Collection.cpp
+        CollectionAccount.cpp
+        CollectionAccountApproval.cpp
+        Event.cpp
+        EventParam.cpp
+        PalletIdentifier.cpp
+        PendingEvents.cpp
+        Royalty.cpp
+        Token.cpp
+        TokenAccount.cpp
+        TokenAccountApproval.cpp
+        TokenAccountNamedReserve.cpp
+        TokenMintCapType.cpp
+        Transaction.cpp
+        TransactionMethod.cpp
+        TransactionResult.cpp
+        TransactionState.cpp
+        Wallet.cpp
+        WalletLink.cpp)
+
 add_subdirectory(pagination)
 add_subdirectory(scalar)
