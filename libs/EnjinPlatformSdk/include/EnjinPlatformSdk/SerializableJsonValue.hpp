@@ -12,65 +12,56 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#ifndef ENJINPLATFORMSDK_SERIALIZABLEBOOL_HPP
-#define ENJINPLATFORMSDK_SERIALIZABLEBOOL_HPP
+#ifndef ENJINPLATFORMSDK_SERIALIZABLEJSONVALUE_HPP
+#define ENJINPLATFORMSDK_SERIALIZABLEJSONVALUE_HPP
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include <memory>
-#include <string>
 
 namespace enjin::platform::sdk
 {
-struct SerializableBool;
+struct SerializableJsonValue;
 
-/// \brief Definition for a pointer containing a serializable boolean.
-using SerializableBoolPtr [[maybe_unused]] = std::shared_ptr<SerializableBool>;
+/// \brief Definition for a pointer containing a serializable JSON value.
+using SerializableJsonValuePtr [[maybe_unused]] = std::shared_ptr<SerializableJsonValue>;
 
-/// \brief Struct for serializable boolean.
-struct ENJINPLATFORMSDK_EXPORT SerializableBool : public ISerializable
+/// \brief Struct for serializable JSON value.
+struct ENJINPLATFORMSDK_EXPORT SerializableJsonValue : public ISerializable
 {
     /// \brief The value of this instance.
-    bool value;
+    JsonValue value;
 
     /// \brief Constructs an instance of this struct.
     [[maybe_unused]]
-    SerializableBool();
+    SerializableJsonValue();
 
     /// \brief Constructs an instance of this struct with the given value.
     /// \param value The value.
     [[maybe_unused]]
-    explicit SerializableBool(bool value);
+    explicit SerializableJsonValue(JsonValue value);
 
     /// \brief Copy constructor.
     /// \param other The other instance to copy from.
     [[maybe_unused]]
-    SerializableBool(const SerializableBool& other);
+    SerializableJsonValue(const SerializableJsonValue& other);
 
     /// \brief Move constructor.
     /// \param other The other instance to move.
     [[maybe_unused]]
-    SerializableBool(SerializableBool&& other) noexcept;
+    SerializableJsonValue(SerializableJsonValue&& other) noexcept;
 
     /// \brief Struct destructor.
-    ~SerializableBool() override;
+    ~SerializableJsonValue() override;
 
-    SerializableBool& operator=(const SerializableBool& rhs);
+    SerializableJsonValue& operator=(const SerializableJsonValue& rhs);
 
-    SerializableBool& operator=(SerializableBool&& rhs) noexcept;
+    SerializableJsonValue& operator=(SerializableJsonValue&& rhs) noexcept;
 
-    bool operator==(const SerializableBool& rhs) const;
+    bool operator==(const SerializableJsonValue& rhs) const;
 
-    bool operator!=(const SerializableBool& rhs) const;
-
-    bool operator<(const SerializableBool& rhs) const;
-
-    bool operator>(const SerializableBool& rhs) const;
-
-    bool operator<=(const SerializableBool& rhs) const;
-
-    bool operator>=(const SerializableBool& rhs) const;
+    bool operator!=(const SerializableJsonValue& rhs) const;
 
     // region ISerializable
 
@@ -86,4 +77,4 @@ struct ENJINPLATFORMSDK_EXPORT SerializableBool : public ISerializable
 };
 }
 
-#endif //ENJINPLATFORMSDK_SERIALIZABLEBOOL_HPP
+#endif //ENJINPLATFORMSDK_SERIALIZABLEJSONVALUE_HPP

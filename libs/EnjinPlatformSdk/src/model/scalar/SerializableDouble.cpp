@@ -47,7 +47,7 @@ bool SerializableDouble::operator==(const SerializableDouble& rhs) const
 
 bool SerializableDouble::operator!=(const SerializableDouble& rhs) const
 {
-    return !(rhs == *this);
+    return value != rhs.value;
 }
 
 bool SerializableDouble::operator<(const SerializableDouble& rhs) const
@@ -57,17 +57,17 @@ bool SerializableDouble::operator<(const SerializableDouble& rhs) const
 
 bool SerializableDouble::operator>(const SerializableDouble& rhs) const
 {
-    return rhs < *this;
+    return value > rhs.value;
 }
 
 bool SerializableDouble::operator<=(const SerializableDouble& rhs) const
 {
-    return !(rhs < *this);
+    return value <= rhs.value;
 }
 
 bool SerializableDouble::operator>=(const SerializableDouble& rhs) const
 {
-    return !(*this < rhs);
+    return value >= rhs.value;
 }
 
 // region ISerializable

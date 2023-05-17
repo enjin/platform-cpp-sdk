@@ -18,10 +18,16 @@
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
+#include <memory>
 #include <string>
 
 namespace enjin::platform::sdk
 {
+struct IntegerRange;
+
+/// \brief Definition for a pointer containing an integer range.
+using IntegerRangePtr [[maybe_unused]] = std::shared_ptr<IntegerRange>;
+
 /// \brief Represents an inclusive range between two BigInt values.
 struct ENJINPLATFORMSDK_EXPORT IntegerRange : public ISerializable
 {

@@ -5,5 +5,6 @@ target_sources(${PROJECT_NAME}
         SerializableDouble.cpp
         SerializableFloat.cpp
         SerializableInt.cpp
+        SerializableJsonValue.cpp
         SerializableString.cpp
         Upload.cpp)

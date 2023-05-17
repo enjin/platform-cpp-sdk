@@ -18,10 +18,16 @@
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
+#include <memory>
 #include <string>
 
 namespace enjin::platform::sdk
 {
+struct SerializableString;
+
+/// \brief Definition for a pointer containing a serializable string.
+using SerializableStringPtr [[maybe_unused]] = std::shared_ptr<SerializableString>;
+
 /// \brief Struct for serializable string.
 struct ENJINPLATFORMSDK_EXPORT SerializableString : public ISerializable
 {

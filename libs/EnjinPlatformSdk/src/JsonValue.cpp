@@ -22,6 +22,8 @@
 using namespace enjin::platform::sdk;
 using namespace rapidjson;
 
+// region Impl
+
 class JsonValue::Impl
 {
 public:
@@ -617,6 +619,10 @@ public:
     }
 };
 
+// endregion Impl
+
+// region JsonValue
+
 JsonValue::JsonValue()
     : _pimpl(std::make_unique<Impl>())
 {
@@ -988,3 +994,5 @@ JsonValue JsonValue::FromString(const std::string& value)
 
     return jsonValue;
 }
+
+// endregion JsonValue

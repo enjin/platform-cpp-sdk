@@ -18,10 +18,16 @@
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
+#include <memory>
 #include <string>
 
 namespace enjin::platform::sdk
 {
+class SerializableFloat;
+
+/// \brief Definition for a pointer containing a serializable floating-point number.
+using SerializableFloatPtr [[maybe_unused]] = std::shared_ptr<SerializableFloat>;
+
 /// \brief Struct for serializable floating point number.
 struct ENJINPLATFORMSDK_EXPORT SerializableFloat : public ISerializable
 {

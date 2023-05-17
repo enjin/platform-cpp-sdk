@@ -47,7 +47,7 @@ bool SerializableFloat::operator==(const SerializableFloat& rhs) const
 
 bool SerializableFloat::operator!=(const SerializableFloat& rhs) const
 {
-    return !(rhs == *this);
+    return value != rhs.value;
 }
 
 bool SerializableFloat::operator<(const SerializableFloat& rhs) const
@@ -57,17 +57,17 @@ bool SerializableFloat::operator<(const SerializableFloat& rhs) const
 
 bool SerializableFloat::operator>(const SerializableFloat& rhs) const
 {
-    return rhs < *this;
+    return value > rhs.value;
 }
 
 bool SerializableFloat::operator<=(const SerializableFloat& rhs) const
 {
-    return !(rhs < *this);
+    return value <= rhs.value;
 }
 
 bool SerializableFloat::operator>=(const SerializableFloat& rhs) const
 {
-    return !(*this < rhs);
+    return value >= rhs.value;
 }
 
 // region ISerializable

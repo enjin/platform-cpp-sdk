@@ -46,7 +46,7 @@ bool SerializableString::operator==(const SerializableString& rhs) const
 
 bool SerializableString::operator!=(const SerializableString& rhs) const
 {
-    return !(rhs == *this);
+    return value != rhs.value;
 }
 
 bool SerializableString::operator<(const SerializableString& rhs) const
@@ -56,17 +56,17 @@ bool SerializableString::operator<(const SerializableString& rhs) const
 
 bool SerializableString::operator>(const SerializableString& rhs) const
 {
-    return rhs < *this;
+    return value > rhs.value;
 }
 
 bool SerializableString::operator<=(const SerializableString& rhs) const
 {
-    return !(rhs < *this);
+    return value <= rhs.value;
 }
 
 bool SerializableString::operator>=(const SerializableString& rhs) const
 {
-    return !(*this < rhs);
+    return value >= rhs.value;
 }
 
 // region ISerializable

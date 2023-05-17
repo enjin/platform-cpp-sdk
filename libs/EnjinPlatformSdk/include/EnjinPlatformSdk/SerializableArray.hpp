@@ -61,12 +61,12 @@ public:
     /// \brief Copy constructor.
     /// \param other The other instance to copy from.
     [[maybe_unused]]
-    SerializableArray(const SerializableArray& other) = default;
+    SerializableArray(const SerializableArray<T>& other) = default;
 
     /// \brief Move constructor.
     /// \param other The other instance to move.
     [[maybe_unused]]
-    SerializableArray(SerializableArray&& other) noexcept = default;
+    SerializableArray(SerializableArray<T>&& other) noexcept = default;
 
     /// \brief Class destructor.
     ~SerializableArray() override = default;
@@ -131,9 +131,9 @@ public:
         return _array[index];
     }
 
-    SerializableArray& operator=(const SerializableArray& rhs) = default;
+    SerializableArray& operator=(const SerializableArray<T>& rhs) = default;
 
-    SerializableArray& operator=(SerializableArray&& rhs) noexcept = default;
+    SerializableArray& operator=(SerializableArray<T>&& rhs) noexcept = default;
 
     // region ISerializable
 
