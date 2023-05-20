@@ -17,7 +17,9 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/PalletIdentifier.hpp"
 #include <optional>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 using namespace enjin::platform::sdk;
 using namespace testing;
@@ -26,7 +28,11 @@ class PalletIdentifierTest : public Test
 {
 };
 
-class PalletIdentifierValidValueTest : public TestWithParam<PalletIdentifier>
+class PalletIdentifierToStringValidValueTest : public TestWithParam<std::pair<std::string, PalletIdentifier>>
+{
+};
+
+class PalletIdentifierTryGetValidValueTest : public TestWithParam<PalletIdentifier>
 {
 public:
     static JsonValue CreateFakeJsonValue(const std::string& key, const PalletIdentifier value)
@@ -54,6 +60,15 @@ public:
         return json;
     }
 };
+
+TEST_F(PalletIdentifierTest, ToStringWhenGivenInvalidEnumValueThrowsError)
+{
+    // Arrange
+    const auto value = (PalletIdentifier) INT_MAX;
+
+    // Assert
+    ASSERT_THROW(auto s = ToString(value), std::out_of_range);
+}
 
 TEST_F(PalletIdentifierTest, TryGetFieldWhenGivenJsonWithNoFieldReturnsFalseAndResetsOutField)
 {
@@ -109,7 +124,20 @@ TEST_F(PalletIdentifierTest, TryGetFieldWhenGivenJsonWithInvalidStringFieldRetur
     EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that out field was reset";
 }
 
-TEST_P(PalletIdentifierValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
+TEST_P(PalletIdentifierToStringValidValueTest, ToStringWhenGivenValidEnumValueReturnsExpected)
+{
+    // Arrange
+    const std::string expected(GetParam().first);
+    const PalletIdentifier value = GetParam().second;
+
+    // Act
+    const std::string actual = ToString(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_P(PalletIdentifierTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
 {
     // Arrange
     const PalletIdentifier expected = GetParam();
@@ -130,7 +158,13 @@ TEST_P(PalletIdentifierValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFi
 }
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
-                         PalletIdentifierValidValueTest,
+                         PalletIdentifierToStringValidValueTest,
+                         Values(std::pair<std::string, PalletIdentifier>("MARKETPLACE", PalletIdentifier::Marketplace),
+                                std::pair<std::string, PalletIdentifier>("MULTI_TOKENS", PalletIdentifier::MultiTokens),
+                                std::pair<std::string, PalletIdentifier>("FUEL_TANKS", PalletIdentifier::FuelTanks)));
+
+INSTANTIATE_TEST_SUITE_P(MatchValues,
+                         PalletIdentifierTryGetValidValueTest,
                          Values(PalletIdentifier::Marketplace,
                                 PalletIdentifier::MultiTokens,
                                 PalletIdentifier::FuelTanks));

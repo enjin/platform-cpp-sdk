@@ -17,7 +17,9 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TransactionResult.hpp"
 #include <optional>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 using namespace enjin::platform::sdk;
 using namespace testing;
@@ -26,7 +28,11 @@ class TransactionResultTest : public Test
 {
 };
 
-class TransactionResultValidValueTest : public TestWithParam<TransactionResult>
+class TransactionResultToStringValidValueTest : public TestWithParam<std::pair<std::string, TransactionResult>>
+{
+};
+
+class TransactionResultTryGetValidValueTest : public TestWithParam<TransactionResult>
 {
 public:
     static JsonValue CreateFakeJsonValue(const std::string& key, const TransactionResult value)
@@ -50,6 +56,15 @@ public:
         return json;
     }
 };
+
+TEST_F(TransactionResultTest, ToStringWhenGivenInvalidEnumValueThrowsError)
+{
+    // Arrange
+    const auto value = (TransactionResult) INT_MAX;
+
+    // Assert
+    ASSERT_THROW(auto s = ToString(value), std::out_of_range);
+}
 
 TEST_F(TransactionResultTest, TryGetFieldWhenGivenJsonWithNoFieldReturnsFalseAndResetsOutField)
 {
@@ -105,7 +120,20 @@ TEST_F(TransactionResultTest, TryGetFieldWhenGivenJsonWithInvalidStringFieldRetu
     EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that out field was reset";
 }
 
-TEST_P(TransactionResultValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
+TEST_P(TransactionResultToStringValidValueTest, ToStringWhenGivenValidEnumValueReturnsExpected)
+{
+    // Arrange
+    const std::string expected(GetParam().first);
+    const TransactionResult value = GetParam().second;
+
+    // Act
+    const std::string actual = ToString(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_P(TransactionResultTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
 {
     // Arrange
     const TransactionResult expected = GetParam();
@@ -126,6 +154,13 @@ TEST_P(TransactionResultValidValueTest, TryGetFieldWhenGivenJsonWithValidStringF
 }
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
-                         TransactionResultValidValueTest,
+                         TransactionResultToStringValidValueTest,
+                         Values(std::pair<std::string, TransactionResult>("EXTRINSIC_SUCCESS",
+                                                                          TransactionResult::ExtrinsicSuccess),
+                                std::pair<std::string, TransactionResult>("EXTRINSIC_FAILED",
+                                                                          TransactionResult::ExtrinsicFailed)));
+
+INSTANTIATE_TEST_SUITE_P(MatchValues,
+                         TransactionResultTryGetValidValueTest,
                          Values(TransactionResult::ExtrinsicSuccess,
                                 TransactionResult::ExtrinsicFailed));

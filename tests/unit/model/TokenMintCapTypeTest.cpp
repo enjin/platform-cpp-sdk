@@ -17,7 +17,9 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TokenMintCapType.hpp"
 #include <optional>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 using namespace enjin::platform::sdk;
 using namespace testing;
@@ -26,7 +28,11 @@ class TokenMintCapTypeTest : public Test
 {
 };
 
-class TokenMintCapTypeValidValueTest : public TestWithParam<TokenMintCapType>
+class TokenMintCapTypeToStringValidValueTest : public TestWithParam<std::pair<std::string, TokenMintCapType>>
+{
+};
+
+class TokenMintCapTypeTryGetValidValueTest : public TestWithParam<TokenMintCapType>
 {
 public:
     static JsonValue CreateFakeJsonValue(const std::string& key, const TokenMintCapType value)
@@ -50,6 +56,15 @@ public:
         return json;
     }
 };
+
+TEST_F(TokenMintCapTypeTest, ToStringWhenGivenInvalidEnumValueThrowsError)
+{
+    // Arrange
+    const auto value = (TokenMintCapType) INT_MAX;
+
+    // Assert
+    ASSERT_THROW(auto s = ToString(value), std::out_of_range);
+}
 
 TEST_F(TokenMintCapTypeTest, TryGetFieldWhenGivenJsonWithNoFieldReturnsFalseAndResetsOutField)
 {
@@ -105,7 +120,20 @@ TEST_F(TokenMintCapTypeTest, TryGetFieldWhenGivenJsonWithInvalidStringFieldRetur
     EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that out field was reset";
 }
 
-TEST_P(TokenMintCapTypeValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
+TEST_P(TokenMintCapTypeToStringValidValueTest, ToStringWhenGivenValidEnumValueReturnsExpected)
+{
+    // Arrange
+    const std::string expected(GetParam().first);
+    const TokenMintCapType value = GetParam().second;
+
+    // Act
+    const std::string actual = ToString(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_P(TokenMintCapTypeTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
 {
     // Arrange
     const TokenMintCapType expected = GetParam();
@@ -126,6 +154,11 @@ TEST_P(TokenMintCapTypeValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFi
 }
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
-                         TokenMintCapTypeValidValueTest,
+                         TokenMintCapTypeToStringValidValueTest,
+                         Values(std::pair<std::string, TokenMintCapType>("SINGLE_MINT", TokenMintCapType::SingleMint),
+                                std::pair<std::string, TokenMintCapType>("SUPPLY", TokenMintCapType::Supply)));
+
+INSTANTIATE_TEST_SUITE_P(MatchValues,
+                         TokenMintCapTypeTryGetValidValueTest,
                          Values(TokenMintCapType::SingleMint,
                                 TokenMintCapType::Supply));

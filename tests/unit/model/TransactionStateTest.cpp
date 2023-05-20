@@ -17,7 +17,9 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TransactionState.hpp"
 #include <optional>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 using namespace enjin::platform::sdk;
 using namespace testing;
@@ -26,7 +28,11 @@ class TransactionStateTest : public Test
 {
 };
 
-class TransactionStateValidValueTest : public TestWithParam<TransactionState>
+class TransactionStateToStringValidValueTest : public TestWithParam<std::pair<std::string, TransactionState>>
+{
+};
+
+class TransactionStateTryGetValidValueTest : public TestWithParam<TransactionState>
 {
 public:
     static JsonValue CreateFakeJsonValue(const std::string& key, const TransactionState value)
@@ -66,6 +72,15 @@ public:
         return json;
     }
 };
+
+TEST_F(TransactionStateTest, ToStringWhenGivenInvalidEnumValueThrowsError)
+{
+    // Arrange
+    const auto value = (TransactionState) INT_MAX;
+
+    // Assert
+    ASSERT_THROW(auto s = ToString(value), std::out_of_range);
+}
 
 TEST_F(TransactionStateTest, TryGetFieldWhenGivenJsonWithNoFieldReturnsFalseAndResetsOutField)
 {
@@ -121,7 +136,20 @@ TEST_F(TransactionStateTest, TryGetFieldWhenGivenJsonWithInvalidStringFieldRetur
     EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that out field was reset";
 }
 
-TEST_P(TransactionStateValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
+TEST_P(TransactionStateToStringValidValueTest, ToStringWhenGivenValidEnumValueReturnsExpected)
+{
+    // Arrange
+    const std::string expected(GetParam().first);
+    const TransactionState value = GetParam().second;
+
+    // Act
+    const std::string actual = ToString(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_P(TransactionStateTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
 {
     // Arrange
     const TransactionState expected = GetParam();
@@ -142,7 +170,16 @@ TEST_P(TransactionStateValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFi
 }
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
-                         TransactionStateValidValueTest,
+                         TransactionStateToStringValidValueTest,
+                         Values(std::pair<std::string, TransactionState>("ABANDONED", TransactionState::Abandoned),
+                                std::pair<std::string, TransactionState>("PENDING", TransactionState::Pending),
+                                std::pair<std::string, TransactionState>("PROCESSING", TransactionState::Processing),
+                                std::pair<std::string, TransactionState>("BROADCAST", TransactionState::Broadcast),
+                                std::pair<std::string, TransactionState>("EXECUTED", TransactionState::Executed),
+                                std::pair<std::string, TransactionState>("FINALIZED", TransactionState::Finalized)));
+
+INSTANTIATE_TEST_SUITE_P(MatchValues,
+                         TransactionStateTryGetValidValueTest,
                          Values(TransactionState::Abandoned,
                                 TransactionState::Pending,
                                 TransactionState::Processing,

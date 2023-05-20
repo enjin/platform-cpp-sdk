@@ -17,7 +17,9 @@
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TransactionMethod.hpp"
 #include <optional>
+#include <stdexcept>
 #include <string>
+#include <utility>
 
 using namespace enjin::platform::sdk;
 using namespace testing;
@@ -26,7 +28,11 @@ class TransactionMethodTest : public Test
 {
 };
 
-class TransactionMethodValidValueTest : public TestWithParam<TransactionMethod>
+class TransactionMethodToStringValidValueTest : public TestWithParam<std::pair<std::string, TransactionMethod>>
+{
+};
+
+class TransactionMethodTryGetValidValueTest : public TestWithParam<TransactionMethod>
 {
 public:
     static JsonValue CreateFakeJsonValue(const std::string& key, const TransactionMethod value)
@@ -143,6 +149,15 @@ public:
     }
 };
 
+TEST_F(TransactionMethodTest, ToStringWhenGivenInvalidEnumValueThrowsError)
+{
+    // Arrange
+    const auto value = (TransactionMethod) INT_MAX;
+
+    // Assert
+    ASSERT_THROW(auto s = ToString(value), std::out_of_range);
+}
+
 TEST_F(TransactionMethodTest, TryGetFieldWhenGivenJsonWithNoFieldReturnsFalseAndResetsOutField)
 {
     // Arrange
@@ -197,7 +212,20 @@ TEST_F(TransactionMethodTest, TryGetFieldWhenGivenJsonWithInvalidStringFieldRetu
     EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that out field was reset";
 }
 
-TEST_P(TransactionMethodValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
+TEST_P(TransactionMethodToStringValidValueTest, ToStringWhenGivenValidEnumValueReturnsExpected)
+{
+    // Arrange
+    const std::string expected(GetParam().first);
+    const TransactionMethod value = GetParam().second;
+
+    // Act
+    const std::string actual = ToString(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_P(TransactionMethodTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFieldReturnsTrueAndSetsOutField)
 {
     // Arrange
     const TransactionMethod expected = GetParam();
@@ -218,7 +246,58 @@ TEST_P(TransactionMethodValidValueTest, TryGetFieldWhenGivenJsonWithValidStringF
 }
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
-                         TransactionMethodValidValueTest,
+                         TransactionMethodToStringValidValueTest,
+                         Values(std::pair<std::string, TransactionMethod>("ApproveCollection",
+                                                                          TransactionMethod::ApproveCollection),
+                                std::pair<std::string, TransactionMethod>("ApproveToken",
+                                                                          TransactionMethod::ApproveToken),
+                                std::pair<std::string, TransactionMethod>("BatchMint",
+                                                                          TransactionMethod::BatchMint),
+                                std::pair<std::string, TransactionMethod>("BatchSetAttribute",
+                                                                          TransactionMethod::BatchSetAttribute),
+                                std::pair<std::string, TransactionMethod>("BatchTransfer",
+                                                                          TransactionMethod::BatchTransfer),
+                                std::pair<std::string, TransactionMethod>("Burn",
+                                                                          TransactionMethod::Burn),
+                                std::pair<std::string, TransactionMethod>("CreateCollection",
+                                                                          TransactionMethod::CreateCollection),
+                                std::pair<std::string, TransactionMethod>("CreateToken",
+                                                                          TransactionMethod::CreateToken),
+                                std::pair<std::string, TransactionMethod>("Freeze",
+                                                                          TransactionMethod::Freeze),
+                                std::pair<std::string, TransactionMethod>("MintToken",
+                                                                          TransactionMethod::MintToken),
+                                std::pair<std::string, TransactionMethod>("MutateCollection",
+                                                                          TransactionMethod::MutateCollection),
+                                std::pair<std::string, TransactionMethod>("MutateToken",
+                                                                          TransactionMethod::MutateToken),
+                                std::pair<std::string, TransactionMethod>("OperatorTransferToken",
+                                                                          TransactionMethod::OperatorTransferToken),
+                                std::pair<std::string, TransactionMethod>("RemoveAllAttributes",
+                                                                          TransactionMethod::RemoveAllAttributes),
+                                std::pair<std::string, TransactionMethod>("RemoveCollectionAttribute",
+                                                                          TransactionMethod::RemoveCollectionAttribute),
+                                std::pair<std::string, TransactionMethod>("RemoveTokenAttribute",
+                                                                          TransactionMethod::RemoveTokenAttribute),
+                                std::pair<std::string, TransactionMethod>("SetCollectionAttribute",
+                                                                          TransactionMethod::SetCollectionAttribute),
+                                std::pair<std::string, TransactionMethod>("SetTokenAttribute",
+                                                                          TransactionMethod::SetTokenAttribute),
+                                std::pair<std::string, TransactionMethod>("SimpleTransferToken",
+                                                                          TransactionMethod::SimpleTransferToken),
+                                std::pair<std::string, TransactionMethod>("Thaw",
+                                                                          TransactionMethod::Thaw),
+                                std::pair<std::string, TransactionMethod>("TransferAllBalance",
+                                                                          TransactionMethod::TransferAllBalance),
+                                std::pair<std::string, TransactionMethod>("TransferBalance",
+                                                                          TransactionMethod::TransferBalance),
+                                std::pair<std::string, TransactionMethod>("UnapproveCollection",
+                                                                          TransactionMethod::UnapproveCollection),
+                                std::pair<std::string, TransactionMethod>("UnapproveToken",
+                                                                          TransactionMethod::UnapproveToken)));
+
+INSTANTIATE_TEST_SUITE_P(MatchValues,
+                         TransactionMethodTryGetValidValueTest,
                          Values(TransactionMethod::ApproveCollection,
                                 TransactionMethod::ApproveToken,
                                 TransactionMethod::BatchMint,

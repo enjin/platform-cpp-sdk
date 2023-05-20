@@ -33,6 +33,15 @@ enum class TokenMintCapType
     Supply,
 };
 
+/// \brief Returns the string name of the given enum value.
+/// \param value The enum value.
+/// \return The string name.
+/// \throws std::out_of_range Thrown if the given value is out of range.
+[[maybe_unused]]
+[[nodiscard]]
+ENJINPLATFORMSDK_EXPORT
+std::string ToString(TokenMintCapType value);
+
 /// \brief Tries to get the specified field from the given JSON value-object.
 /// \param json The JSON value-object.
 /// \param key The field key.
