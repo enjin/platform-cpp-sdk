@@ -18,7 +18,9 @@
 #include "EnjinPlatformSdk/GraphQlParameterHolder.hpp"
 #include "EnjinPlatformSdk/GraphQlUploadHolder.hpp"
 #include "EnjinPlatformSdk/IGraphQlParameter.hpp"
+#include "EnjinPlatformSdk/JsonValue.hpp"
 #include <stdexcept>
+#include <string>
 #include <utility>
 
 namespace enjin::platform::sdk
@@ -91,6 +93,31 @@ public:
     }
 
     // endregion IGraphQlUploadHolder
+
+    // region ISerializable
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    JsonValue ToJson() const override
+    {
+        JsonValue json = JsonValue::FromJson("{}");
+
+        for (const auto& [k, v] : GraphQlParameterHolder<TParameter>::GetParameters())
+        {
+            json.TrySetField(k, v->ToJson());
+        }
+
+        return json;
+    }
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string ToString() const override
+    {
+        return ToJson().ToString();
+    }
+
+    // endregion ISerializable
 
 protected:
     /// \brief Constructs an instance of this class.
