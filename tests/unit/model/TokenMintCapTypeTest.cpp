@@ -155,7 +155,8 @@ TEST_P(TokenMintCapTypeTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidSt
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          TokenMintCapTypeToStringValidValueTest,
-                         Values(std::pair<std::string, TokenMintCapType>("SINGLE_MINT", TokenMintCapType::SingleMint),
+                         Values(std::pair<std::string, TokenMintCapType>("", TokenMintCapType::None),
+                                std::pair<std::string, TokenMintCapType>("SINGLE_MINT", TokenMintCapType::SingleMint),
                                 std::pair<std::string, TokenMintCapType>("SUPPLY", TokenMintCapType::Supply)));
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,

@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief Enum values representing the quantity setting for a token.
 enum class TokenMintCapType
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Indicates that a token can only be minted once, and cannot be re-minted once burned.
     SingleMint,
 

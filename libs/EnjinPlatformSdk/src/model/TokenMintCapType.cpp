@@ -26,6 +26,9 @@ std::string enjin::platform::sdk::ToString(const TokenMintCapType value)
 {
     switch (value)
     {
+        case TokenMintCapType::None:
+            return {};
+
         case TokenMintCapType::SingleMint:
             return SingleMint;
 
