@@ -23,6 +23,11 @@
 
 namespace enjin::platform::sdk
 {
+struct Upload;
+
+/// \brief Definition for a pointer containing an Upload.
+using UploadPtr [[maybe_unused]] = std::shared_ptr<Upload>;
+
 /// \brief Represents a file to be uploaded in an HTTP request.
 struct ENJINPLATFORMSDK_EXPORT Upload : public ISerializable
 {

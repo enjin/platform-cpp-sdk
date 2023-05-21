@@ -13,10 +13,12 @@
 //  limitations under the License.
 
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/JsonValueType.hpp"
 #include <string>
 #include <utility>
+#include <vector>
 
 using namespace enjin::platform::sdk;
 using namespace testing;
@@ -59,6 +61,89 @@ TEST_F(JsonValueTest, EqualityWhenJsonValuesAreEqualReturnsTrue)
     ASSERT_TRUE(actual);
 }
 
+TEST_F(JsonValueTest, FromArrayReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson("[1,1,1]");
+    const std::vector<JsonValue> value =
+        {
+            JsonValue::FromJson("1"),
+            JsonValue::FromJson("1"),
+            JsonValue::FromJson("1"),
+        };
+
+    // Act
+    const JsonValue actual = JsonValue::FromArray(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_F(JsonValueTest, FromBoolGivenFalseReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson("false");
+    const bool value = false;
+
+    // Act
+    const JsonValue actual = JsonValue::FromBool(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_F(JsonValueTest, FromBoolGivenTrueReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson("true");
+    const bool value = true;
+
+    // Act
+    const JsonValue actual = JsonValue::FromBool(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_F(JsonValueTest, FromDoubleReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson("1.0");
+    const double value = 1.0;
+
+    // Act
+    const JsonValue actual = JsonValue::FromDouble(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_F(JsonValueTest, FromFloatReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson("1.0");
+    const float value = 1;
+
+    // Act
+    const JsonValue actual = JsonValue::FromFloat(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_F(JsonValueTest, FromIntReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson("1");
+    const int32_t value = 1;
+
+    // Act
+    const JsonValue actual = JsonValue::FromInt(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
 TEST_F(JsonValueTest, FromJsonGivenNullJsonReturnsValueThatIsNull)
 {
     // Arrange
@@ -69,6 +154,19 @@ TEST_F(JsonValueTest, FromJsonGivenNullJsonReturnsValueThatIsNull)
 
     // Assert
     ASSERT_TRUE(actual.IsNull());
+}
+
+TEST_F(JsonValueTest, FromStringReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromJson(R"("xyz")");
+    const std::string value("xyz");
+
+    // Act
+    const JsonValue actual = JsonValue::FromString(value);
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
 }
 
 TEST_P(JsonValueFromInvalidJsonTest, FromJsonGivenInvalidJsonReturnsNullJsonValue)

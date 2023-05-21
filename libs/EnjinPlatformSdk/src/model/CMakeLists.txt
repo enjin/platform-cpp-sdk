@@ -1,4 +1,51 @@
 target_sources(${PROJECT_NAME}
         PRIVATE
-        SerializableInt.cpp
-        Upload.cpp)
+        Account.cpp
+        AccountRequest.cpp
+        AccountVerified.cpp
+        Attribute.cpp
+        AttributeInput.cpp
+        Balances.cpp
+        Block.cpp
+        BurnParamsInput.cpp
+        Collection.cpp
+        CollectionAccount.cpp
+        CollectionAccountApproval.cpp
+        CollectionMutationInput.cpp
+        CreateTokenParams.cpp
+        CryptoSignatureType.cpp
+        EncodableTokenIdInput.cpp
+        Erc1155EncoderInput.cpp
+        Event.cpp
+        EventParam.cpp
+        FreezeType.cpp
+        MarketPolicy.cpp
+        MintPolicy.cpp
+        MintRecipient.cpp
+        MintTokenParams.cpp
+        MultiTokenIdInput.cpp
+        MutateRoyaltyInput.cpp
+        OperatorTransferParams.cpp
+        PalletIdentifier.cpp
+        PendingEvents.cpp
+        Royalty.cpp
+        RoyaltyInput.cpp
+        SimpleTransferParams.cpp
+        Token.cpp
+        TokenAccount.cpp
+        TokenAccountApproval.cpp
+        TokenAccountNamedReserve.cpp
+        TokenMarketBehaviorInput.cpp
+        TokenMintCap.cpp
+        TokenMintCapType.cpp
+        TokenMutationInput.cpp
+        Transaction.cpp
+        TransactionMethod.cpp
+        TransactionResult.cpp
+        TransactionState.cpp
+        TransferRecipient.cpp
+        Wallet.cpp
+        WalletLink.cpp)
+
+add_subdirectory(pagination)
+add_subdirectory(scalar)

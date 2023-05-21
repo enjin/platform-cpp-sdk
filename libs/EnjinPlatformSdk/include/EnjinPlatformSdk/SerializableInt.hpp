@@ -18,13 +18,20 @@
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
+#include <memory>
 #include <string>
 
 namespace enjin::platform::sdk
 {
+class SerializableInt;
+
+/// \brief Definition for a pointer containing a serializable 32-bit integer.
+using SerializableIntPtr [[maybe_unused]] = std::shared_ptr<SerializableInt>;
+
 /// \brief Struct for serializable 32-bit integers.
 struct ENJINPLATFORMSDK_EXPORT SerializableInt : public ISerializable
 {
+    /// \brief The value of this instance.
     int32_t value;
 
     /// \brief Constructs an instance of this struct.

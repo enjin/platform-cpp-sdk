@@ -22,6 +22,8 @@
 using namespace enjin::platform::sdk;
 using namespace rapidjson;
 
+// region Impl
+
 class JsonValue::Impl
 {
 public:
@@ -469,6 +471,62 @@ public:
         return true;
     }
 
+    bool TrySetArrayField(const std::string& key, const std::vector<JsonValue>& value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(kArrayType);
+
+        for (const JsonValue& el : value)
+        {
+            Value elValue;
+
+            elValue.CopyFrom(el._pimpl->document, allocator);
+            v.PushBack(elValue.Move(), allocator);
+        }
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetBoolField(const std::string& key, const bool value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
+    bool TrySetDoubleField(const std::string& key, const double value)
+    {
+        if (!IsObject())
+        {
+            return false;
+        }
+
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value k(key.c_str(), allocator);
+        Value v(value);
+
+        document.AddMember(k.Move(), v.Move(), allocator);
+
+        return true;
+    }
+
     bool TrySetField(const std::string& key, const JsonValue& value)
     {
         if (!IsObject())
@@ -493,31 +551,7 @@ public:
         return true;
     }
 
-    bool TrySetField(const std::string& key, const std::vector<JsonValue>& value)
-    {
-        if (!IsObject())
-        {
-            return false;
-        }
-
-        Document::AllocatorType& allocator = document.GetAllocator();
-        Value k(key.c_str(), allocator);
-        Value v(kArrayType);
-
-        for (const JsonValue& el : value)
-        {
-            Value elValue;
-
-            elValue.CopyFrom(el._pimpl->document, allocator);
-            v.PushBack(elValue.Move(), allocator);
-        }
-
-        document.AddMember(k.Move(), v.Move(), allocator);
-
-        return true;
-    }
-
-    bool TrySetField(const std::string& key, const bool value)
+    bool TrySetFloatField(const std::string& key, const float value)
     {
         if (!IsObject())
         {
@@ -533,7 +567,7 @@ public:
         return true;
     }
 
-    bool TrySetField(const std::string& key, const double value)
+    bool TrySetIntField(const std::string& key, const int32_t value)
     {
         if (!IsObject())
         {
@@ -549,39 +583,7 @@ public:
         return true;
     }
 
-    bool TrySetField(const std::string& key, const float value)
-    {
-        if (!IsObject())
-        {
-            return false;
-        }
-
-        Document::AllocatorType& allocator = document.GetAllocator();
-        Value k(key.c_str(), allocator);
-        Value v(value);
-
-        document.AddMember(k.Move(), v.Move(), allocator);
-
-        return true;
-    }
-
-    bool TrySetField(const std::string& key, const int32_t value)
-    {
-        if (!IsObject())
-        {
-            return false;
-        }
-
-        Document::AllocatorType& allocator = document.GetAllocator();
-        Value k(key.c_str(), allocator);
-        Value v(value);
-
-        document.AddMember(k.Move(), v.Move(), allocator);
-
-        return true;
-    }
-
-    bool TrySetField(const std::string& key, const std::string& value)
+    bool TrySetStringField(const std::string& key, const std::string& value)
     {
         if (!IsObject())
         {
@@ -616,6 +618,10 @@ public:
         return !(rhs == *this);
     }
 };
+
+// endregion Impl
+
+// region JsonValue
 
 JsonValue::JsonValue()
     : _pimpl(std::make_unique<Impl>())
@@ -835,45 +841,45 @@ bool JsonValue::TryGetStringField(const std::string& key, std::string& outString
 }
 
 [[maybe_unused]]
+bool JsonValue::TrySetArrayField(const std::string& key, const std::vector<JsonValue>& value)
+{
+    return _pimpl->TrySetArrayField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetBoolField(const std::string& key, bool value)
+{
+    return _pimpl->TrySetBoolField(key, value);
+}
+
+[[maybe_unused]]
+bool JsonValue::TrySetDoubleField(const std::string& key, double value)
+{
+    return _pimpl->TrySetDoubleField(key, value);
+}
+
+[[maybe_unused]]
 bool JsonValue::TrySetField(const std::string& key, const JsonValue& value)
 {
     return _pimpl->TrySetField(key, value);
 }
 
 [[maybe_unused]]
-bool JsonValue::TrySetField(const std::string& key, const std::vector<JsonValue>& value)
+bool JsonValue::TrySetFloatField(const std::string& key, float value)
 {
-    return _pimpl->TrySetField(key, value);
+    return _pimpl->TrySetFloatField(key, value);
 }
 
 [[maybe_unused]]
-bool JsonValue::TrySetField(const std::string& key, bool value)
+bool JsonValue::TrySetIntField(const std::string& key, int32_t value)
 {
-    return _pimpl->TrySetField(key, value);
+    return _pimpl->TrySetIntField(key, value);
 }
 
 [[maybe_unused]]
-bool JsonValue::TrySetField(const std::string& key, double value)
+bool JsonValue::TrySetStringField(const std::string& key, const std::string& value)
 {
-    return _pimpl->TrySetField(key, value);
-}
-
-[[maybe_unused]]
-bool JsonValue::TrySetField(const std::string& key, float value)
-{
-    return _pimpl->TrySetField(key, value);
-}
-
-[[maybe_unused]]
-bool JsonValue::TrySetField(const std::string& key, int32_t value)
-{
-    return _pimpl->TrySetField(key, value);
-}
-
-[[maybe_unused]]
-bool JsonValue::TrySetField(const std::string& key, const std::string& value)
-{
-    return _pimpl->TrySetField(key, value);
+    return _pimpl->TrySetStringField(key, value);
 }
 
 JsonValue& JsonValue::operator=(const JsonValue& rhs)
@@ -901,6 +907,71 @@ bool JsonValue::operator!=(const JsonValue& rhs) const
 }
 
 [[maybe_unused]]
+JsonValue JsonValue::FromArray(const std::vector<JsonValue>& value)
+{
+    Document document(kArrayType);
+    Document::AllocatorType& allocator = document.GetAllocator();
+
+    for (const JsonValue& el : value)
+    {
+        document.PushBack(el._pimpl->document, allocator);
+    }
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromBool(bool value)
+{
+    Document document(value ? kTrueType : kFalseType);
+    document.SetBool(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromDouble(double value)
+{
+    Document document(kNumberType);
+    document.SetDouble(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromFloat(float value)
+{
+    Document document(kNumberType);
+    document.SetDouble(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
+JsonValue JsonValue::FromInt(const int32_t value)
+{
+    Document document(kNumberType);
+    document.SetInt(value);
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+[[maybe_unused]]
 JsonValue JsonValue::FromJson(const std::string& json)
 {
     Document document;
@@ -911,3 +982,17 @@ JsonValue JsonValue::FromJson(const std::string& json)
 
     return jsonValue;
 }
+
+[[maybe_unused]]
+JsonValue JsonValue::FromString(const std::string& value)
+{
+    Document document(kStringType);
+    document.SetString(value.c_str(), value.size(), document.GetAllocator());
+
+    JsonValue jsonValue;
+    jsonValue._pimpl->document = std::move(document);
+
+    return jsonValue;
+}
+
+// endregion JsonValue
