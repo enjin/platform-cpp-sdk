@@ -155,7 +155,8 @@ TEST_P(CryptoSignatureTypeTryGetValidValueTest, TryGetFieldWhenGivenJsonWithVali
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          CryptoSignatureTypeToStringValidValueTest,
-                         Values(std::pair<std::string, CryptoSignatureType>("ED25519", CryptoSignatureType::Ed25519),
+                         Values(std::pair<std::string, CryptoSignatureType>("", CryptoSignatureType::None),
+                                std::pair<std::string, CryptoSignatureType>("ED25519", CryptoSignatureType::Ed25519),
                                 std::pair<std::string, CryptoSignatureType>("SR25519", CryptoSignatureType::Sr25519)));
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,

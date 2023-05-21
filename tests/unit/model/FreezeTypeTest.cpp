@@ -163,7 +163,8 @@ TEST_P(FreezeTypeTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFi
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          FreezeTypeToStringValidValueTest,
-                         Values(std::pair<std::string, FreezeType>("COLLECTION", FreezeType::Collect),
+                         Values(std::pair<std::string, FreezeType>("", FreezeType::None),
+                                std::pair<std::string, FreezeType>("COLLECTION", FreezeType::Collect),
                                 std::pair<std::string, FreezeType>("COLLECTION_ACCOUNT", FreezeType::CollectionAccount),
                                 std::pair<std::string, FreezeType>("TOKEN", FreezeType::Token),
                                 std::pair<std::string, FreezeType>("TOKEN_ACCOUNT", FreezeType::TokenAccount)));

@@ -26,6 +26,9 @@ std::string enjin::platform::sdk::ToString(const CryptoSignatureType value)
 {
     switch (value)
     {
+        case CryptoSignatureType::None:
+            return {};
+
         case CryptoSignatureType::Ed25519:
             return Ed25519;
 

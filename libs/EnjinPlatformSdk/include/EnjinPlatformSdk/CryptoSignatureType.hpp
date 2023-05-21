@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief The type of encryption algorithm used to sign messages.
 enum class CryptoSignatureType
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Indicates the ed25519 encryption algorithm.
     Ed25519,
 

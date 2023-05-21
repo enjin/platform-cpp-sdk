@@ -155,7 +155,9 @@ TEST_P(TransactionResultTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidS
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          TransactionResultToStringValidValueTest,
-                         Values(std::pair<std::string, TransactionResult>("EXTRINSIC_SUCCESS",
+                         Values(std::pair<std::string, TransactionResult>("",
+                                                                          TransactionResult::None),
+                                std::pair<std::string, TransactionResult>("EXTRINSIC_SUCCESS",
                                                                           TransactionResult::ExtrinsicSuccess),
                                 std::pair<std::string, TransactionResult>("EXTRINSIC_FAILED",
                                                                           TransactionResult::ExtrinsicFailed)));

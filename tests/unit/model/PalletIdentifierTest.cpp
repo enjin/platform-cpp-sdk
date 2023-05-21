@@ -159,7 +159,8 @@ TEST_P(PalletIdentifierTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidSt
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          PalletIdentifierToStringValidValueTest,
-                         Values(std::pair<std::string, PalletIdentifier>("MARKETPLACE", PalletIdentifier::Marketplace),
+                         Values(std::pair<std::string, PalletIdentifier>("", PalletIdentifier::None),
+                                std::pair<std::string, PalletIdentifier>("MARKETPLACE", PalletIdentifier::Marketplace),
                                 std::pair<std::string, PalletIdentifier>("MULTI_TOKENS", PalletIdentifier::MultiTokens),
                                 std::pair<std::string, PalletIdentifier>("FUEL_TANKS", PalletIdentifier::FuelTanks)));
 

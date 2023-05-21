@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief Enum values the on-chain pallet identifiers.
 enum class PalletIdentifier
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Pallet identifier for marketplace.
     Marketplace,
 

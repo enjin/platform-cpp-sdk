@@ -27,6 +27,9 @@ std::string enjin::platform::sdk::ToString(const PalletIdentifier value)
 {
     switch (value)
     {
+        case PalletIdentifier::None:
+            return {};
+
         case PalletIdentifier::Marketplace:
             return Marketplace;
 

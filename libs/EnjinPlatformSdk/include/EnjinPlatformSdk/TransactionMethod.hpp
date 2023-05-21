@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief Enum values representing the currently supported transactions.
 enum class TransactionMethod
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Indicates the transaction method is ApproveCollection.
     ApproveCollection,
 

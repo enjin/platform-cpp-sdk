@@ -247,7 +247,9 @@ TEST_P(TransactionMethodTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidS
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          TransactionMethodToStringValidValueTest,
-                         Values(std::pair<std::string, TransactionMethod>("ApproveCollection",
+                         Values(std::pair<std::string, TransactionMethod>("",
+                                                                          TransactionMethod::None),
+                                std::pair<std::string, TransactionMethod>("ApproveCollection",
                                                                           TransactionMethod::ApproveCollection),
                                 std::pair<std::string, TransactionMethod>("ApproveToken",
                                                                           TransactionMethod::ApproveToken),

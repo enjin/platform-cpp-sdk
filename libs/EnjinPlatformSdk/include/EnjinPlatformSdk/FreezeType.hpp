@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief The freezable objects supported on-chain.
 enum class FreezeType
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Represents the Collection type.
     Collect,
 

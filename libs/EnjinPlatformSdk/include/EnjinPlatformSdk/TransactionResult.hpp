@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief Enum values representing the result status of a transaction.
 enum class TransactionResult
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Indicates the transaction result is EXTRINSIC_SUCCESS.
     ExtrinsicSuccess,
 

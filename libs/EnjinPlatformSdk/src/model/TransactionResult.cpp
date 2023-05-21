@@ -26,6 +26,9 @@ std::string enjin::platform::sdk::ToString(const TransactionResult value)
 {
     switch (value)
     {
+        case TransactionResult::None:
+            return {};
+
         case TransactionResult::ExtrinsicSuccess:
             return ExtrinsicSuccess;
 

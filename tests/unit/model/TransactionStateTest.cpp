@@ -171,7 +171,8 @@ TEST_P(TransactionStateTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidSt
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          TransactionStateToStringValidValueTest,
-                         Values(std::pair<std::string, TransactionState>("ABANDONED", TransactionState::Abandoned),
+                         Values(std::pair<std::string, TransactionState>("", TransactionState::None),
+                                std::pair<std::string, TransactionState>("ABANDONED", TransactionState::Abandoned),
                                 std::pair<std::string, TransactionState>("PENDING", TransactionState::Pending),
                                 std::pair<std::string, TransactionState>("PROCESSING", TransactionState::Processing),
                                 std::pair<std::string, TransactionState>("BROADCAST", TransactionState::Broadcast),

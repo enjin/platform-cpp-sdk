@@ -30,6 +30,9 @@ std::string enjin::platform::sdk::ToString(const TransactionState value)
 {
     switch (value)
     {
+        case TransactionState::None:
+            return {};
+
         case TransactionState::Abandoned:
             return Abandoned;
 

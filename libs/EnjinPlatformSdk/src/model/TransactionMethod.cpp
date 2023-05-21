@@ -49,6 +49,9 @@ std::string enjin::platform::sdk::ToString(const TransactionMethod value)
 {
     switch (value)
     {
+        case TransactionMethod::None:
+            return {};
+
         case TransactionMethod::ApproveCollection:
             return ApproveCollection;
 

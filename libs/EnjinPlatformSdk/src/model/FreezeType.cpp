@@ -27,6 +27,9 @@ std::string enjin::platform::sdk::ToString(const FreezeType value)
 {
     switch (value)
     {
+        case FreezeType::None:
+            return {};
+
         case FreezeType::Collect:
             return Collect;
 

@@ -25,6 +25,9 @@ namespace enjin::platform::sdk
 /// \brief Enum values representing the state of a transaction's lifecycle.
 enum class TransactionState
 {
+    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
+    None,
+
     /// \brief Indicates the transaction state is ABANDONED.
     Abandoned,
 
