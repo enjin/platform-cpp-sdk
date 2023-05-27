@@ -14,6 +14,9 @@
 
 #include "EnjinPlatformSdk/PageInfoFragment.hpp"
 
+#include "EnjinPlatformSdk/GraphQlFragment.hpp"
+#include <utility>
+
 using namespace enjin::platform::sdk;
 
 // region Impl
@@ -21,11 +24,6 @@ using namespace enjin::platform::sdk;
 class PageInfoFragment::Impl : public GraphQlFragment<Impl>
 {
 public:
-    static constexpr char HasNextPageName[] = "hasNextPage";
-    static constexpr char HasPreviousPageName[] = "hasPreviousPage";
-    static constexpr char StartCursorName[] = "startCursor";
-    static constexpr char EndCursorName[] = "endCursor";
-
     Impl() = default;
 
     Impl(const Impl& other) = default;
@@ -33,46 +31,6 @@ public:
     Impl(Impl&& other) noexcept = default;
 
     ~Impl() override = default;
-
-    void RemoveHasNextPage()
-    {
-        GraphQlFragment<Impl>::RemoveField(HasNextPageName);
-    }
-
-    void WithHasNextPage()
-    {
-        GraphQlFragment<Impl>::WithField(HasNextPageName);
-    }
-
-    void RemoveHasPreviousPage()
-    {
-        GraphQlFragment<Impl>::RemoveField(HasPreviousPageName);
-    }
-
-    void WithHasPreviousPage()
-    {
-        GraphQlFragment<Impl>::WithField(HasPreviousPageName);
-    }
-
-    void RemoveHasStartCursor()
-    {
-        GraphQlFragment<Impl>::RemoveField(StartCursorName);
-    }
-
-    void WithHasStartCursor()
-    {
-        GraphQlFragment<Impl>::WithField(StartCursorName);
-    }
-
-    void RemoveHasEndCursor()
-    {
-        GraphQlFragment<Impl>::RemoveField(EndCursorName);
-    }
-
-    void WithHasEndCursor()
-    {
-        GraphQlFragment<Impl>::WithField(EndCursorName);
-    }
 
     Impl& operator=(const Impl& rhs) = default;
 
@@ -85,15 +43,13 @@ public:
 
 [[maybe_unused]]
 PageInfoFragment::PageInfoFragment()
-    : GraphQlFragment<PageInfoFragment>(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 PageInfoFragment::PageInfoFragment(const PageInfoFragment& other)
-    : GraphQlFragment<PageInfoFragment>(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -103,69 +59,112 @@ PageInfoFragment::PageInfoFragment(PageInfoFragment&& other) noexcept = default;
 PageInfoFragment::~PageInfoFragment() = default;
 
 [[maybe_unused]]
-PageInfoFragment& PageInfoFragment::RemoveHasNextPage()
+PageInfoFragment& PageInfoFragment::WithHasNextPage(const bool isIncluded)
 {
-    _pimpl->RemoveHasNextPage();
-    return *this;
+    return WithField("hasNextPage", isIncluded);
 }
 
 [[maybe_unused]]
-PageInfoFragment& PageInfoFragment::WithHasNextPage()
+PageInfoFragment& PageInfoFragment::WithHasPreviousPage(const bool isIncluded)
 {
-    _pimpl->WithHasNextPage();
-    return *this;
+    return WithField("hasPreviousPage", isIncluded);
 }
 
 [[maybe_unused]]
-PageInfoFragment& PageInfoFragment::RemoveHasPreviousPage()
+PageInfoFragment& PageInfoFragment::WithHasStartCursor(const bool isIncluded)
 {
-    _pimpl->RemoveHasPreviousPage();
-    return *this;
+    return WithField("startCursor", isIncluded);
 }
 
 [[maybe_unused]]
-PageInfoFragment& PageInfoFragment::WithHasPreviousPage()
+PageInfoFragment& PageInfoFragment::WithHasEndCursor(const bool isIncluded)
 {
-    _pimpl->WithHasPreviousPage();
-    return *this;
-}
-
-[[maybe_unused]]
-PageInfoFragment& PageInfoFragment::RemoveHasStartCursor()
-{
-    _pimpl->RemoveHasStartCursor();
-    return *this;
-}
-
-[[maybe_unused]]
-PageInfoFragment& PageInfoFragment::WithHasStartCursor()
-{
-    _pimpl->WithHasStartCursor();
-    return *this;
-}
-
-[[maybe_unused]]
-PageInfoFragment& PageInfoFragment::RemoveHasEndCursor()
-{
-    _pimpl->RemoveHasEndCursor();
-    return *this;
-}
-
-[[maybe_unused]]
-PageInfoFragment& PageInfoFragment::WithHasEndCursor()
-{
-    _pimpl->WithHasEndCursor();
-    return *this;
+    return WithField("endCursor", isIncluded);
 }
 
 PageInfoFragment& PageInfoFragment::operator=(const PageInfoFragment& rhs)
 {
-    GraphQlFragment<PageInfoFragment>::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
 }
 
 PageInfoFragment& PageInfoFragment::operator=(PageInfoFragment&& rhs) noexcept = default;
+
+// region IGraphQlFragment
+
+[[maybe_unused]]
+std::string PageInfoFragment::CompileFields() const
+{
+    return _pimpl->CompileFields();
+}
+
+[[maybe_unused]]
+bool PageInfoFragment::HasField(const std::string& name) const
+{
+    return _pimpl->HasField(name);
+}
+
+[[maybe_unused]]
+bool PageInfoFragment::HasFields() const
+{
+    return _pimpl->HasFields();
+}
+
+[[maybe_unused]]
+PageInfoFragment& PageInfoFragment::WithField(std::string name, const bool isIncluded)
+{
+    _pimpl->WithField(std::move(name), isIncluded);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PageInfoFragment& PageInfoFragment::WithField(std::string name, GraphQlFragmentPtr fragment)
+{
+    _pimpl->WithField(std::move(name), std::move(fragment));
+
+    return *this;
+}
+
+// endregion IGraphQlFragment
+
+// region IGraphQlParameterHolder
+
+[[maybe_unused]]
+std::string PageInfoFragment::CompileParameters() const
+{
+    return _pimpl->CompileParameters();
+}
+
+[[maybe_unused]]
+const std::map<std::string, SerializablePtr>& PageInfoFragment::GetParameters() const
+{
+    return _pimpl->GetParameters();
+}
+
+[[maybe_unused]]
+bool PageInfoFragment::HasParameters() const
+{
+    return _pimpl->HasParameters();
+}
+
+[[maybe_unused]]
+PageInfoFragment& PageInfoFragment::RemoveParameter(const std::string& key)
+{
+    _pimpl->RemoveParameter(key);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PageInfoFragment& PageInfoFragment::SetParameter(std::string key, SerializablePtr value)
+{
+    _pimpl->SetParameter(std::move(key), std::move(value));
+
+    return *this;
+}
+
+// endregion IGraphQlParameterHolder
 
 // endregion PageInfoFragment

@@ -24,8 +24,6 @@ namespace enjin::platform::sdk
 template<class TEdge>
 class EdgeFragmentBase : public GraphQlFragment<TEdge>
 {
-    static constexpr char CursorName[] = "cursor";
-
 public:
     /// \brief Copy constructor.
     /// \param other The other instance to copy from.
@@ -40,20 +38,13 @@ public:
     /// \brief Class destructor.
     ~EdgeFragmentBase() override = default;
 
-    /// \brief Unsets this fragment from requesting the cursor property.
+    /// \brief Sets whether the edge is to be returned with its cursor property.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    TEdge& RemoveCursor()
+    TEdge& WithCursor(bool isIncluded = true)
     {
-        return GraphQlFragment<TEdge>::RemoveField(CursorName);
-    }
-
-    /// \brief Sets this fragment to request that the cursor property be returned with the edge.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    TEdge& WithCursor()
-    {
-        return GraphQlFragment<TEdge>::WithField(CursorName);
+        return GraphQlFragment<TEdge>::WithField("cursor", isIncluded);
     }
 
     EdgeFragmentBase& operator=(const EdgeFragmentBase<TEdge>& rhs) = default;

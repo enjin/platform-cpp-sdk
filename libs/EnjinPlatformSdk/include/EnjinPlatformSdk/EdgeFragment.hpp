@@ -29,8 +29,6 @@ class EdgeFragment;
 template<class...>
 class EdgeFragment : public EdgeFragmentBase<EdgeFragment<>>
 {
-    static constexpr char NodeName[] = "node";
-
 public:
     /// \brief Constructs an instance of this class.
     [[maybe_unused]]
@@ -39,46 +37,37 @@ public:
     /// \brief Copy constructor.
     /// \param other The other instance to copy from.
     [[maybe_unused]]
-    EdgeFragment(const EdgeFragment<>& other) = default;
+    EdgeFragment(const EdgeFragment& other) = default;
 
     /// \brief Move constructor.
     /// \param other The other instance to move.
     [[maybe_unused]]
-    EdgeFragment(EdgeFragment<>&& other) noexcept = default;
+    EdgeFragment(EdgeFragment&& other) noexcept = default;
 
     /// \brief Class destructor.
     ~EdgeFragment() override = default;
 
-    /// \brief Unsets this fragment from requesting the node property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    EdgeFragment& RemoveNode()
-    {
-        return GraphQlFragment<EdgeFragment>::RemoveField(NodeName);
-    }
-
     /// \brief Sets this fragment to request that the node property be returned with the page info.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    EdgeFragment& WithNode()
+    EdgeFragment& WithNode(bool isIncluded = true)
     {
-        return GraphQlFragment<EdgeFragment>::WithField(NodeName);
+        return GraphQlFragment<EdgeFragment>::WithField("node", isIncluded);
     }
 
-    EdgeFragment& operator=(const EdgeFragment<>& rhs) = default;
+    EdgeFragment& operator=(const EdgeFragment& rhs) = default;
 
-    EdgeFragment& operator=(EdgeFragment<>&& rhs) noexcept = default;
+    EdgeFragment& operator=(EdgeFragment&& rhs) noexcept = default;
 };
 
 /// \brief A fragment for requesting properties of a non-scalar edge returned by the platform.
-/// \tparam TFragment The fragment describing the non-scalar data.
+/// \tparam TFragment The fragment describing the non-scalar data. Must implement IGraphQlFragment<TFragment>.
 template<class TFragment>
 class EdgeFragment<TFragment> : public EdgeFragmentBase<EdgeFragment<TFragment>>
 {
     static_assert(std::is_base_of<IGraphQlFragment<TFragment>, TFragment>::value,
-                  "Type TFragment does not implement IGraphQlFragment<>");
-
-    static constexpr char NodeKey[] = "node";
+                  "Type TFragment does not implement IGraphQlFragment<TFragment>");
 
 public:
     /// \brief Constructs an instance of this class.
@@ -95,21 +84,13 @@ public:
     /// \brief Class destructor.
     ~EdgeFragment() override = default;
 
-    /// \brief Unsets this fragment from requesting the node property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    EdgeFragment& RemoveNode()
-    {
-        return GraphQlFragment<EdgeFragment>::RemoveField(NodeKey);
-    }
-
     /// \brief Sets this fragment to request that the node property be returned with the page info.
     /// \param fragment The fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
     EdgeFragment& WithNode(std::shared_ptr<TFragment> fragment)
     {
-        return GraphQlFragment<EdgeFragment>::WithField(NodeKey, std::move(fragment));
+        return GraphQlFragment<EdgeFragment>::WithField("node", std::move(fragment));
     }
 
     EdgeFragment& operator=(const EdgeFragment<TFragment>& rhs) = default;

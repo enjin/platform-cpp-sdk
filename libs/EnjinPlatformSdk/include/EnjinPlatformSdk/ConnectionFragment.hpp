@@ -31,8 +31,6 @@ class ConnectionFragment;
 template<class...>
 class ConnectionFragment : public ConnectionFragmentBase<ConnectionFragment<>>
 {
-    static constexpr char EdgeName[] = "edge";
-
 public:
     /// \brief Constructs an instance of this class.
     [[maybe_unused]]
@@ -41,46 +39,37 @@ public:
     /// \brief Copy constructor.
     /// \param other The other instance to copy from.
     [[maybe_unused]]
-    ConnectionFragment(const ConnectionFragment<>& other) = default;
+    ConnectionFragment(const ConnectionFragment& other) = default;
 
     /// \brief Move constructor.
     /// \param other The other instance to move.
     [[maybe_unused]]
-    ConnectionFragment(ConnectionFragment<>&& other) noexcept = default;
+    ConnectionFragment(ConnectionFragment&& other) noexcept = default;
 
     /// \brief Class destructor.
     ~ConnectionFragment() override = default;
 
-    /// \brief Unsets this fragment from requesting the edge property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    ConnectionFragment& RemoveEdge()
-    {
-        return GraphQlFragment<ConnectionFragment<>>::RemoveField(EdgeName);
-    }
-
-    /// \brief Sets this fragment to request that the edge property be returned with the connection.
+    /// \brief Sets the scalar edge fragment to be used for getting the edges property of the connection.
+    /// \param fragment The scalar edge fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
     ConnectionFragment& WithEdge(std::shared_ptr<EdgeFragment<>> fragment)
     {
-        return GraphQlFragment<ConnectionFragment<>>::WithField(EdgeName, std::move(fragment));
+        return GraphQlFragment<ConnectionFragment<>>::WithField("edge", std::move(fragment));
     }
 
-    ConnectionFragment& operator=(const ConnectionFragment<>& rhs) = default;
+    ConnectionFragment& operator=(const ConnectionFragment& rhs) = default;
 
-    ConnectionFragment& operator=(ConnectionFragment<>&& rhs) noexcept = default;
+    ConnectionFragment& operator=(ConnectionFragment&& rhs) noexcept = default;
 };
 
 /// \brief A fragment for requesting properties of a non-scalar connection returned by the platform.
-/// \tparam TFragment The fragment describing the non-scalar data.
+/// \tparam TFragment The fragment describing the non-scalar data. Must implement IGraphQlFragment<TFragment>.
 template<class TFragment>
 class ConnectionFragment<TFragment> : public ConnectionFragmentBase<ConnectionFragment<TFragment>>
 {
     static_assert(std::is_base_of<IGraphQlFragment<TFragment>, TFragment>::value,
-                  "Type TFragment does not implement IGraphQlFragment<>");
-
-    static constexpr char EdgeName[] = "edge";
+                  "Type TFragment does not implement IGraphQlFragment<TFragment>");
 
 public:
     /// \brief Constructs an instance of this class.
@@ -100,21 +89,13 @@ public:
     /// \brief Class destructor.
     ~ConnectionFragment() override = default;
 
-    /// \brief Unsets this fragment from requesting the edge property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    ConnectionFragment& RemoveEdge()
-    {
-        return GraphQlFragment<ConnectionFragment<TFragment>>::RemoveField(EdgeName);
-    }
-
-    /// \brief Sets this fragment to request that the edge property be returned with the connection.
+    /// \brief Sets the non-scalar edge fragment to be used for getting the edges property of the connection.
     /// \param fragment The fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
     ConnectionFragment& WithEdge(std::shared_ptr<EdgeFragment<TFragment>> fragment)
     {
-        return GraphQlFragment<ConnectionFragment<TFragment>>::WithField(EdgeName, std::move(fragment));
+        return GraphQlFragment<ConnectionFragment<TFragment>>::WithField("edge", std::move(fragment));
     }
 
     ConnectionFragment& operator=(const ConnectionFragment<TFragment>& rhs) = default;

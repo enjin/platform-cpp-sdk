@@ -41,9 +41,7 @@ public:
 
     MOCK_METHOD(bool, HasFields, (), (const));
 
-    MOCK_METHOD(MockGraphQlFragment&, RemoveField, (const std::string& name), ());
-
-    MOCK_METHOD(MockGraphQlFragment&, WithField, (std::string name), ());
+    MOCK_METHOD(MockGraphQlFragment&, WithField, (std::string name, bool isIncluded), ());
 
     MOCK_METHOD(MockGraphQlFragment&, WithField, (std::string name, GraphQlFragmentPtr fragment), ());
 

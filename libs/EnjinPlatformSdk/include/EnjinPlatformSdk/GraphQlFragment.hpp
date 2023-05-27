@@ -21,7 +21,6 @@
 #include <set>
 #include <sstream>
 #include <string>
-#include <type_traits>
 
 namespace enjin::platform::sdk
 {
@@ -105,20 +104,18 @@ public:
     }
 
     [[maybe_unused]]
-    TFragment& RemoveField(const std::string& name) override
+    TFragment& WithField(std::string name, bool isIncluded) override
     {
         _fragmentFields.erase(name);
-        _scalarFields.erase(name);
 
-        return static_cast<TFragment&>(*this);
-    }
-
-    [[maybe_unused]]
-    TFragment& WithField(std::string name) override
-    {
-        RemoveField(name);
-
-        _scalarFields.emplace(std::move(name));
+        if (isIncluded)
+        {
+            _scalarFields.emplace(std::move(name));
+        }
+        else
+        {
+            _scalarFields.erase(name);
+        }
 
         return static_cast<TFragment&>(*this);
     }
@@ -126,9 +123,13 @@ public:
     [[maybe_unused]]
     TFragment& WithField(std::string name, GraphQlFragmentPtr fragment) override
     {
-        RemoveField(name);
+        _scalarFields.erase(name);
 
-        if (fragment != nullptr)
+        if (fragment == nullptr)
+        {
+            _fragmentFields.erase(name);
+        }
+        else
         {
             _fragmentFields.emplace(std::move(name), std::move(fragment));
         }
@@ -177,6 +178,7 @@ public:
 
 protected:
     /// \brief Constructs an instance of this class.
+    [[maybe_unused]]
     GraphQlFragment() = default;
 };
 }

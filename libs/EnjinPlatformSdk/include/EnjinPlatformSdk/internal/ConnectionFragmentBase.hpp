@@ -28,9 +28,6 @@ namespace enjin::platform::sdk
 template<class TConnection>
 class ConnectionFragmentBase : public GraphQlFragment<TConnection>
 {
-    static constexpr char PageInfoKey[] = "pageInfo";
-    static constexpr char TotalCountKey[] = "totalCount";
-
 public:
     /// \brief Constructs an instance of this class.
     [[maybe_unused]]
@@ -67,36 +64,22 @@ public:
         return GraphQlFragment<TConnection>::SetParameter("first", std::move(first));
     }
 
-    /// \brief Unsets this fragment from requesting the pageInfo property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    TConnection& RemovePageInfo()
-    {
-        return GraphQlFragment<TConnection>::RemoveField(PageInfoKey);
-    }
-
-    /// \brief Sets this fragment to request that the pageInfo property be returned with the connection.
+    /// \brief Sets the page info fragment to be used for getting the pageInfo property of the connection.
+    /// \param fragment The page info fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
     TConnection& WithPageInfo(PageInfoFragmentPtr fragment)
     {
-        return GraphQlFragment<TConnection>::WithField(PageInfoKey, std::move(fragment));
+        return GraphQlFragment<TConnection>::WithField("pageInfo", std::move(fragment));
     }
 
-    /// \brief Unsets this fragment from requesting the totalCount property.
+    /// \brief Sets whether the connection is to be returned with its totalCount property.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    TConnection& RemoveTotalCount()
+    TConnection& WithTotalCount(bool isIncluded = true)
     {
-        return GraphQlFragment<TConnection>::RemoveField(TotalCountKey);
-    }
-
-    /// \brief Sets this fragment to request that the totalCount property be returned with the connection.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    TConnection& WithTotalCount()
-    {
-        return GraphQlFragment<TConnection>::WithField(TotalCountKey);
+        return GraphQlFragment<TConnection>::WithField("totalCount", isIncluded);
     }
 
     ConnectionFragmentBase& operator=(const ConnectionFragmentBase<TConnection>& rhs) = default;

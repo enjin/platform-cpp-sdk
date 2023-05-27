@@ -16,7 +16,7 @@
 #define ENJINPLATFORMSDK_PAGEINFOFRAGMENT_HPP
 
 #include "enjinplatformsdk_export.h"
-#include "EnjinPlatformSdk/GraphQlFragment.hpp"
+#include "EnjinPlatformSdk/IGraphQlFragment.hpp"
 #include <memory>
 
 namespace enjin::platform::sdk
@@ -27,7 +27,7 @@ class PageInfoFragment;
 using PageInfoFragmentPtr [[maybe_unused]] = std::shared_ptr<PageInfoFragment>;
 
 /// \brief A fragment for requesting properties of a PageInfo returned by the platform.
-class ENJINPLATFORMSDK_EXPORT PageInfoFragment : public GraphQlFragment<PageInfoFragment>
+class ENJINPLATFORMSDK_EXPORT PageInfoFragment : public IGraphQlFragment<PageInfoFragment>
 {
     /// \brief The implementation of this class.
     class Impl;
@@ -52,49 +52,77 @@ public:
     /// \brief Class destructor.
     ~PageInfoFragment() override;
 
-    /// \brief Unsets this fragment from requesting the hasNextPage property.
+    /// \brief Sets whether the page info is to be returned with its hasNextPage property.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    PageInfoFragment& RemoveHasNextPage();
+    PageInfoFragment& WithHasNextPage(bool isIncluded = true);
 
-    /// \brief Sets this fragment to request that the hasNextPage property be returned with the page info.
+    /// \brief Sets whether the page info is to be returned with its hasPreviousPage property.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    PageInfoFragment& WithHasNextPage();
+    PageInfoFragment& WithHasPreviousPage(bool isIncluded = true);
 
-    /// \brief Unsets this fragment from requesting the hasPreviousPage property.
+    /// \brief Sets whether the page info is to be returned with its startCursor property.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    PageInfoFragment& RemoveHasPreviousPage();
+    PageInfoFragment& WithHasStartCursor(bool isIncluded = true);
 
-    /// \brief Sets this fragment to request that the hasPreviousPage property be returned with the page info.
+    /// \brief Sets whether the page info is to be returned with its endCursor property.
+    /// \param isIncluded Whether the field is included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    PageInfoFragment& WithHasPreviousPage();
-
-    /// \brief Unsets this fragment from requesting the hasStartCursor property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    PageInfoFragment& RemoveHasStartCursor();
-
-    /// \brief Sets this fragment to request that the hasStartCursor property be returned with the page info.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    PageInfoFragment& WithHasStartCursor();
-
-    /// \brief Unsets this fragment from requesting the hasEndCursor property.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    PageInfoFragment& RemoveHasEndCursor();
-
-    /// \brief Sets this fragment to request that the hasEndCursor property be returned with the page info.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    PageInfoFragment& WithHasEndCursor();
+    PageInfoFragment& WithHasEndCursor(bool isIncluded = true);
 
     PageInfoFragment& operator=(const PageInfoFragment& rhs);
 
     PageInfoFragment& operator=(PageInfoFragment&& rhs) noexcept;
+
+    // region IGraphQlFragment
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string CompileFields() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasField(const std::string& name) const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasFields() const override;
+
+    [[maybe_unused]]
+    PageInfoFragment& WithField(std::string name, bool isIncluded) override;
+
+    [[maybe_unused]]
+    PageInfoFragment& WithField(std::string name, GraphQlFragmentPtr fragment) override;
+
+    // endregion IGraphQlFragment
+
+    // region IGraphQlParameterHolder
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string CompileParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameters() const override;
+
+    [[maybe_unused]]
+    PageInfoFragment& RemoveParameter(const std::string& key) override;
+
+    [[maybe_unused]]
+    PageInfoFragment& SetParameter(std::string key, SerializablePtr value) override;
+
+    // endregion IGraphQlParameterHolder
 };
 }
 

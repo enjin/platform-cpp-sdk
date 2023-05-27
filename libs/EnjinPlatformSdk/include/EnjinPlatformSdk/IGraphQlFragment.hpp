@@ -18,7 +18,6 @@
 #include "EnjinPlatformSdk/IGraphQlParameterHolder.hpp"
 #include <memory>
 #include <string>
-#include <type_traits>
 
 namespace enjin::platform::sdk
 {
@@ -68,17 +67,12 @@ public:
     /// \brief Class destructor.
     ~IGraphQlFragment() override = default;
 
-    /// \brief Removes the given field from this fragment.
-    /// \param name The name of the field.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    virtual TFragment& RemoveField(const std::string& name) = 0;
-
     /// \brief Sets this fragment to request the scalar field with the given name be returned in the response type.
     /// \param name The name of the field.
+    /// \param isIncluded Whether the field ought to be included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    virtual TFragment& WithField(std::string name) = 0;
+    virtual TFragment& WithField(std::string name, bool isIncluded) = 0;
 
     /// \brief Sets whether this fragment is to request the fragment field with the given name be returned in the
     /// response type.
