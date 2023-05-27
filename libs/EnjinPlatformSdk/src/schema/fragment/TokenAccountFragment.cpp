@@ -41,15 +41,6 @@ public:
 
 // region TokenAccountFragment
 
-constexpr char BalanceName[] = "balance";
-constexpr char ReservedBalanceName[] = "reservedBalance";
-constexpr char IsFrozenName[] = "isFrozen";
-constexpr char CollectionName[] = "collection";
-constexpr char WalletName[] = "wallet";
-constexpr char TokenName[] = "token";
-constexpr char ApprovalsName[] = "approvals";
-constexpr char NamedReservesName[] = "namedReserves";
-
 [[maybe_unused]]
 TokenAccountFragment::TokenAccountFragment()
     : _pimpl(std::make_unique<Impl>())
