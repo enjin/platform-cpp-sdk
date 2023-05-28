@@ -44,13 +44,13 @@ protected:
     }
 };
 
-TEST_F(ScalarGraphQlRequestTest, ToStringReturnsExpected)
+TEST_F(ScalarGraphQlRequestTest, CompileReturnsExpected)
 {
     // Arrange
     const std::string expected("query { result: Request }");
 
     // Act
-    const std::string actual = classUnderTest->ToString();
+    const std::string actual = classUnderTest->Compile();
 
     // Assert
     ASSERT_EQ(actual, expected);
