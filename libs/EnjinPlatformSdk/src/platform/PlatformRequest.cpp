@@ -299,16 +299,16 @@ PlatformRequest::PlatformRequestBuilder::AddOperation(std::string query,
 }
 
 [[maybe_unused]]
-PlatformRequest PlatformRequest::PlatformRequestBuilder::Build() const
+PlatformRequestPtr PlatformRequest::PlatformRequestBuilder::Build() const
 {
     if (_operations.empty())
     {
         throw std::logic_error("Cannot build request with no operations");
     }
 
-    PlatformRequest request(_operations);
-    request._path = _path.value_or("");
-    request._headers = _headers;
+    std::shared_ptr<PlatformRequest> request = std::shared_ptr<PlatformRequest>(new PlatformRequest(_operations));
+    request->_path = _path.value_or("");
+    request->_headers = _headers;
 
     return request;
 }

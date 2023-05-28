@@ -50,11 +50,15 @@ public:
     /// \brief Class destructor.
     ~GraphQlRequest() override = default;
 
-    /// \brief Returns the query string of this request.
-    /// \return The query string for this request.
+    GraphQlRequest<TRequest>& operator=(const GraphQlRequest<TRequest>& rhs) = default;
+
+    GraphQlRequest<TRequest>& operator=(GraphQlRequest<TRequest>&& rhs) noexcept = default;
+
+    // region IGraphQlRequest
+
     [[maybe_unused]]
     [[nodiscard]]
-    std::string ToString() const
+    std::string Compile() const override
     {
         std::stringstream ss;
 
@@ -64,9 +68,7 @@ public:
         return ss.str();
     }
 
-    GraphQlRequest<TRequest>& operator=(const GraphQlRequest<TRequest>& rhs) = default;
-
-    GraphQlRequest<TRequest>& operator=(GraphQlRequest<TRequest>&& rhs) noexcept = default;
+    // endregion IGraphQlRequest
 
 protected:
     /// \brief Initializes an instance of this class.
@@ -100,26 +102,6 @@ public:
 
     /// \brief Class destructor.
     ~GraphQlRequest() override = default;
-
-    /// \brief Returns the query string of this request.
-    /// \return The query string for this request.
-    /// \throws std::runtime If this request has no attached fragment.
-    [[maybe_unused]]
-    [[nodiscard]]
-    std::string ToString() const
-    {
-        if (!HasFragment())
-        {
-            throw std::runtime_error("Cannot serialize request without a fragment");
-        }
-
-        std::stringstream ss;
-
-        GraphQlRequestBase<TRequest>::AppendHeader(ss);
-        ss << " { " << static_cast<IGraphQlFragment<>&>(*_fragment).CompileFields() << " } }";
-
-        return ss.str();
-    }
 
     GraphQlRequest& operator=(const GraphQlRequest<TRequest, TFragment>& rhs) = default;
 
@@ -178,6 +160,26 @@ public:
 
     // region IGraphQlRequest
 
+    /// \brief Returns the query string of this request.
+    /// \return The query string for this request.
+    /// \throws std::runtime If this request has no attached fragment.
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string Compile() const override
+    {
+        if (!HasFragment())
+        {
+            throw std::runtime_error("Cannot serialize request without a fragment");
+        }
+
+        std::stringstream ss;
+
+        GraphQlRequestBase<TRequest>::AppendHeader(ss);
+        ss << " { " << static_cast<IGraphQlFragment<>&>(*_fragment).CompileFields() << " } }";
+
+        return ss.str();
+    }
+
     [[maybe_unused]]
     [[nodiscard]]
     std::string GetName() const override
@@ -187,9 +189,9 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
-    JsonValue GetVariablesJson() const override
+    const std::map<std::string, SerializablePtr>& GetVariablesWithoutTypes() const override
     {
-        return GraphQlRequestBase<TRequest>::GetVariablesJson();
+        return GraphQlRequestBase<TRequest>::GetVariablesWithoutTypes();
     }
 
     [[maybe_unused]]

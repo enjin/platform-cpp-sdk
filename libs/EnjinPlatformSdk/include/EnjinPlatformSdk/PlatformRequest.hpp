@@ -134,12 +134,12 @@ public:
                                              std::map<std::string, SerializablePtr> variables,
                                              std::map<std::string, Upload&> uploads);
 
-        /// \brief Build an instance of a platform request using the set values.
-        /// \return The request instance.
+        /// \brief Build an instance of a platform request wrapped in a pointer using the set values.
+        /// \return The pointer for the request.
         /// \throws std::logic_error Thrown if no operations have been added at the time this member-function is called.
         [[maybe_unused]]
         [[nodiscard]]
-        PlatformRequest Build() const;
+        PlatformRequestPtr Build() const;
 
         /// \brief Sets the relative path of the URI to be used for the request.
         /// \param path The The relative path.

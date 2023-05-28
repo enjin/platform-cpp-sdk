@@ -42,9 +42,9 @@ public:
     /// \param result The result for the response.
     [[maybe_unused]]
     PlatformResponse(int statusCode, std::map<std::string, std::string> headers, std::optional<TResult> result)
-        : _statusCode(statusCode),
-          _headers(std::move(headers)),
-          _result(std::move(result))
+        : _headers(std::move(headers)),
+          _result(std::move(result)),
+          _statusCode(statusCode)
     {
     }
 
