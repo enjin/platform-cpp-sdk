@@ -1,3 +1,16 @@
 target_sources(${PROJECT_NAME}
         PRIVATE
-        GetAccountVerified.cpp)
+        GetAccountVerified.cpp
+        GetBlocks.cpp
+        GetCollection.cpp
+        GetCollections.cpp
+        GetLinkingCode.cpp
+        GetPendingEvents.cpp
+        GetPendingWallets.cpp
+        GetToken.cpp
+        GetTokens.cpp
+        GetTransaction.cpp
+        GetTransactions.cpp
+        GetWallet.cpp
+        RequestAccount.cpp
+        VerifyMessage.cpp)

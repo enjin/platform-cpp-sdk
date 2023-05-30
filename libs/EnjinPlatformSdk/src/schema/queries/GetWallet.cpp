@@ -12,41 +12,53 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#include "EnjinPlatformSdk/GetAccountVerified.hpp"
+#include "EnjinPlatformSdk/GetWallet.hpp"
 
 #include "EnjinPlatformSdk/CoreTypes.hpp"
 #include "EnjinPlatformSdk/GraphQlRequestType.hpp"
 #include <utility>
 
 using namespace enjin::platform::sdk;
-using RequestType = GraphQlRequest<GetAccountVerified, AccountVerifiedFragment>;
+using RequestType = GraphQlRequest<GetWallet, WalletFragment>;
 
 [[maybe_unused]]
-GetAccountVerified::GetAccountVerified()
-    : RequestType("GetAccountVerified", GraphQlRequestType::Query)
+GetWallet::GetWallet()
+    : RequestType("GetWallet", GraphQlRequestType::Query)
 {
 }
 
 [[maybe_unused]]
-GetAccountVerified::GetAccountVerified(const GetAccountVerified& other) = default;
+GetWallet::GetWallet(const GetWallet& other) = default;
 
 [[maybe_unused]]
-GetAccountVerified::GetAccountVerified(GetAccountVerified&& other) noexcept = default;
+GetWallet::GetWallet(GetWallet&& other) noexcept = default;
 
-GetAccountVerified::~GetAccountVerified() = default;
+GetWallet::~GetWallet() = default;
 
 [[maybe_unused]]
-GetAccountVerified& GetAccountVerified::SetVerificationId(SerializableStringPtr verificationId)
+GetWallet& GetWallet::SetId(SerializableIntPtr id)
+{
+    return RequestType::SetVariable("id", CoreTypes::Int, std::move(id));
+}
+
+[[maybe_unused]]
+GetWallet& GetWallet::SetExternalId(SerializableStringPtr externalId)
+{
+    return RequestType::SetVariable("externalId", CoreTypes::String, std::move(externalId));
+}
+
+[[maybe_unused]]
+GetWallet& GetWallet::SetVerificationId(SerializableStringPtr verificationId)
 {
     return RequestType::SetVariable("verificationId", CoreTypes::String, std::move(verificationId));
 }
 
 [[maybe_unused]]
-GetAccountVerified& GetAccountVerified::SetAccount(SerializableStringPtr account)
+GetWallet& GetWallet::SetAccount(SerializableStringPtr account)
 {
     return RequestType::SetVariable("account", CoreTypes::String, std::move(account));
 }
 
-GetAccountVerified& GetAccountVerified::operator=(const GetAccountVerified& rhs) = default;
+GetWallet& GetWallet::operator=(const GetWallet& rhs) = default;
 
-GetAccountVerified& GetAccountVerified::operator=(GetAccountVerified&& rhs) noexcept = default;
+GetWallet& GetWallet::operator=(GetWallet&& rhs) noexcept = default;
