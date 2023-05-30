@@ -28,7 +28,7 @@ namespace enjin::platform::sdk
 /// \tparam TFragment The fragment type. Must extend this class.
 template<class TFragment>
 class GraphQlFragment : public GraphQlParameterHolder<TFragment>,
-                        public IGraphQlFragment<TFragment>
+                        virtual public IGraphQlFragment<TFragment>
 {
     std::map<std::string, GraphQlFragmentPtr> _fragmentFields;
     std::set<std::string> _scalarFields;
@@ -138,43 +138,6 @@ public:
     }
 
     // endregion IGraphQlFragment
-
-    // region IGraphQlParameterHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    std::string CompileParameters() const override
-    {
-        return GraphQlParameterHolder<TFragment>::CompileParameters();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::map<std::string, SerializablePtr>& GetParameters() const override
-    {
-        return GraphQlParameterHolder<TFragment>::GetParameters();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasParameters() const override
-    {
-        return GraphQlParameterHolder<TFragment>::HasParameters();
-    }
-
-    [[maybe_unused]]
-    TFragment& RemoveParameter(const std::string& key) override
-    {
-        return GraphQlParameterHolder<TFragment>::RemoveParameter(key);
-    }
-
-    [[maybe_unused]]
-    TFragment& SetParameter(std::string key, SerializablePtr value) override
-    {
-        return GraphQlParameterHolder<TFragment>::SetParameter(std::move(key), std::move(value));
-    }
-
-    // endregion IGraphQlParameterHolder
 
 protected:
     /// \brief Constructs an instance of this class.

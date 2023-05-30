@@ -26,7 +26,7 @@ namespace enjin::platform::sdk
 /// \brief Abstract class implementation for GraphQL inputs which hold parameters.
 /// \tparam THolder The type of the parameter holder. Must extend this class.
 template<class THolder>
-class GraphQlParameterHolder : public IGraphQlParameterHolder<THolder>
+class GraphQlParameterHolder : virtual public IGraphQlParameterHolder<THolder>
 {
     std::map<std::string, SerializablePtr> _parameters;
 

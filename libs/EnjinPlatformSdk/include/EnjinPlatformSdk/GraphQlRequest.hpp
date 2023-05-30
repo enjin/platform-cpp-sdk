@@ -85,7 +85,7 @@ protected:
 /// \tparam TFragment The type of the fragment. Must implement IGraphQlFragment.
 template<class TRequest, class TFragment>
 class GraphQlRequest<TRequest, TFragment> : public GraphQlRequestBase<TRequest>,
-                                            public IGraphQlRequest<TRequest, TFragment>
+                                            virtual public IGraphQlRequest<TRequest, TFragment>
 {
     std::shared_ptr<TFragment> _fragment;
 
@@ -182,30 +182,9 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
-    std::string GetName() const override
-    {
-        return GraphQlRequestBase<TRequest>::GetName();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::map<std::string, SerializablePtr>& GetVariablesWithoutTypes() const override
-    {
-        return GraphQlRequestBase<TRequest>::GetVariablesWithoutTypes();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
     bool HasFragment() const override
     {
         return _fragment != nullptr;
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasVariables() const override
-    {
-        return GraphQlRequestBase<TRequest>::HasVariables();
     }
 
     [[maybe_unused]]
@@ -215,24 +194,7 @@ public:
         return static_cast<TRequest&>(*this);
     }
 
-    [[maybe_unused]]
-    TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) override
-    {
-        return GraphQlRequestBase<TRequest>::SetVariable(std::move(name), std::move(type), std::move(value));
-    }
-
     // endregion IGraphQlRequest
-
-    // region IGraphQlUploadHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::set<std::string>& GetUploadParameterPaths() const override
-    {
-        return GraphQlRequestBase<TRequest>::GetUploadParameterPaths();
-    }
-
-    // endregion IGraphQlUploadHolder
 
 protected:
     /// \brief Initializes an instance of this class.

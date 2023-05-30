@@ -55,7 +55,7 @@ public:
 /// \brief Interface for setting parameters for GraphQL inputs which hold parameters.
 /// \tparam THolder The type of the parameter holder. Must implement this interface.
 template<class THolder>
-class IGraphQlParameterHolder<THolder> : public IGraphQlParameterHolder<>
+class IGraphQlParameterHolder<THolder> : virtual public IGraphQlParameterHolder<>
 {
 public:
     /// \brief Class destructor.

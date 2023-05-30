@@ -34,7 +34,7 @@ namespace enjin::platform::sdk
 template<class TRequest>
 class GraphQlRequestBase : public GraphQlParameterHolder<TRequest>,
                            public GraphQlUploadHolder,
-                           public IGraphQlRequest<TRequest>
+                           virtual public IGraphQlRequest<TRequest>
 {
     std::string _name;
     GraphQlRequestType _type;
@@ -106,17 +106,6 @@ public:
     }
 
     // endregion IGraphQlRequest
-
-    // region IGraphQlUploadHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::set<std::string>& GetUploadParameterPaths() const override
-    {
-        return GraphQlUploadHolder::GetUploadParameterPaths();
-    }
-
-    // endregion IGraphQlUploadHolder
 
 protected:
     /// \brief Base constructor to be used by GraphQL requests.

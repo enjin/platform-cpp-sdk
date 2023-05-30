@@ -23,7 +23,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Abstract class implementation for GraphQL types which hold parameters for file uploads.
-class ENJINPLATFORMSDK_EXPORT GraphQlUploadHolder : public IGraphQlUploadHolder
+class ENJINPLATFORMSDK_EXPORT GraphQlUploadHolder : virtual public IGraphQlUploadHolder
 {
     std::set<std::string> _uploadPaths;
 
