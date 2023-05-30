@@ -17,8 +17,15 @@
 
 #include "EnjinPlatformSdk/ISerializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
+#include "EnjinPlatformSdk/SerializableBool.hpp"
+#include "EnjinPlatformSdk/SerializableDouble.hpp"
+#include "EnjinPlatformSdk/SerializableFloat.hpp"
+#include "EnjinPlatformSdk/SerializableInt.hpp"
+#include "EnjinPlatformSdk/SerializableJsonValue.hpp"
+#include "EnjinPlatformSdk/SerializableString.hpp"
 #include <initializer_list>
 #include <iterator>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -27,10 +34,49 @@
 
 namespace enjin::platform::sdk
 {
+template<class...>
+class SerializableArray;
+
+/// \brief Defines a serializable array containing serializable boolean values.
+using SerializableBoolArray [[maybe_unused]] = SerializableArray<SerializableBool>;
+
+/// \brief Defines a pointer for a serializable boolean value array.
+using SerializableBoolArrayPtr [[maybe_unused]] = std::shared_ptr<SerializableBoolArray>;
+
+/// \brief Defines a serializable array containing serializable double-precision floating-point values.
+using SerializableDoubleArray [[maybe_unused]] = SerializableArray<SerializableDouble>;
+
+/// \brief Defines a pointer for a serializable double-precision floating-point value array.
+using SerializableDoubleArrayPtr [[maybe_unused]] = std::shared_ptr<SerializableDoubleArray>;
+
+/// \brief Defines a serializable array containing serializable floating-point values.
+using SerializableFloatArray [[maybe_unused]] = SerializableArray<SerializableFloat>;
+
+/// \brief Defines a pointer for a serializable floating-point value array.
+using SerializableFloatArrayPtr [[maybe_unused]] = std::shared_ptr<SerializableFloatArray>;
+
+/// \brief Defines a serializable array containing serializable 32-bit integer values.
+using SerializableIntArray [[maybe_unused]] = SerializableArray<SerializableInt>;
+
+/// \brief Defines a pointer for a serializable 32-bit integer array.
+using SerializableIntArrayPtr [[maybe_unused]] = std::shared_ptr<SerializableIntArray>;
+
+/// \brief Defines a serializable array containing serializable JSON values.
+using SerializableJsonValueArray [[maybe_unused]] = SerializableArray<SerializableJsonValue>;
+
+/// \brief Defines a pointer for a serializable JSON value array.
+using SerializableJsonValueArrayPtr [[maybe_unused]] = std::shared_ptr<SerializableJsonValueArray>;
+
+/// \brief Defines a serializable array containing serializable string values.
+using SerializableStringArray [[maybe_unused]] = SerializableArray<SerializableString>;
+
+/// \brief Defines a pointer for a serializable string array.
+using SerializableStringArrayPtr [[maybe_unused]] = std::shared_ptr<SerializableStringArray>;
+
 /// \brief Class for holding a collection of serializable type and being serializable itself.
 /// \tparam T The type held by this array. Must implement ISerializable.
 template<class T>
-class SerializableArray : public ISerializable
+class SerializableArray<T> : public ISerializable
 {
     static_assert(std::is_base_of<ISerializable, T>::value,
                   "Type T does not implement ISerializable");
