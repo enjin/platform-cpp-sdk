@@ -12,42 +12,42 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#ifndef ENJINPLATFORMSDK_HASENCODABLETOKENID_HPP
-#define ENJINPLATFORMSDK_HASENCODABLETOKENID_HPP
+#ifndef ENJINPLATFORMSDK_HASSKIPVALIDATION_HPP
+#define ENJINPLATFORMSDK_HASSKIPVALIDATION_HPP
 
-#include "EnjinPlatformSdk/EncodableTokenIdInput.hpp"
 #include "EnjinPlatformSdk/IGraphQlParameterHolder.hpp"
+#include "EnjinPlatformSdk/SerializableBool.hpp"
 #include <type_traits>
 #include <utility>
 
 namespace enjin::platform::sdk
 {
-/// \brief Abstract class to be inherited by a GraphQL parameter holder to set an encodable token ID.
+/// \brief Abstract class to be inherited by a GraphQL parameter holder to set the skipValidation flag.
 /// \tparam THolder The type of the parameter setter. Must extend this class and implement IGraphQlParameterHolder.
 template<class THolder>
-class HasEncodableTokenId
+class HasSkipValidation
 {
 public:
     /// \brief Class destructor.
-    ~HasEncodableTokenId() = default;
+    ~HasSkipValidation() = default;
 
-    /// \brief Sets the token ID.
-    /// \param tokenId The token ID.
+    /// \brief Sets whether to skip all validation rules, use with caution.
+    /// \param skipValidation Whether to skip all validation rules.
     /// \return This parameter holder for chaining.
     [[maybe_unused]]
-    THolder& SetTokenId(EncodableTokenIdInputPtr tokenId)
+    THolder& SetSkipValidation(SerializableBoolPtr skipValidation)
     {
         static_assert(std::is_base_of<IGraphQlParameterHolder<THolder>, THolder>::value,
                       "Type THolder does not implement IGraphQlParameterHolder<THolder>");
 
-        return static_cast<THolder&>(*this).SetParameter("tokenId", std::move(tokenId));
+        return static_cast<THolder&>(*this).SetParameter("skipValidation", std::move(skipValidation));
     }
 
 protected:
     /// \brief Constructs an instance of this class.
     [[maybe_unused]]
-    HasEncodableTokenId() = default;
+    HasSkipValidation() = default;
 };
 }
 
-#endif //ENJINPLATFORMSDK_HASENCODABLETOKENID_HPP
+#endif //ENJINPLATFORMSDK_HASSKIPVALIDATION_HPP
