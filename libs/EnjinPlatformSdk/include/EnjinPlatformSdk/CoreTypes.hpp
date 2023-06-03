@@ -20,7 +20,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Contains fields describing variable types used in the platform's Core API.
-class ENJINPLATFORMSDK_EXPORT CoreTypes
+class ENJINPLATFORMSDK_EXPORT CoreTypes final
 {
 public:
     // AttributeInput

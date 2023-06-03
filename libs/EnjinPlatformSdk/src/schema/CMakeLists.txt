@@ -1,6 +1,7 @@
 target_sources(${PROJECT_NAME}
         PRIVATE
-        CoreSchema.cpp)
+        CoreMutations.cpp
+        CoreQueries.cpp)
 
 add_subdirectory(fragments)
 add_subdirectory(mutations)
