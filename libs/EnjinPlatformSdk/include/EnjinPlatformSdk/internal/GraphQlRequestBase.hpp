@@ -34,17 +34,17 @@ namespace enjin::platform::sdk
 template<class TRequest>
 class GraphQlRequestBase : public GraphQlParameterHolder<TRequest>,
                            public GraphQlUploadHolder,
-                           public IGraphQlRequest<TRequest>
+                           virtual public IGraphQlRequest<TRequest>
 {
-    const std::string _name;
-    const GraphQlRequestType _type;
+    std::string _name;
+    GraphQlRequestType _type;
     std::string _resultHeader;
     std::string _typeName;
     std::map<std::string, std::pair<std::string, SerializablePtr>> _variables;
+    std::map<std::string, SerializablePtr> _variablesWithoutTypes;
 
     static constexpr char ColonSeparator[] = ": ";
     static constexpr char CommaSeparator[] = ", ";
-    static constexpr char EmptyObject[] = "{}";
 
 public:
     GraphQlRequestBase() = delete;
@@ -75,16 +75,9 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
-    JsonValue GetVariablesJson() const override
+    const std::map<std::string, SerializablePtr>& GetVariablesWithoutTypes() const override
     {
-        JsonValue json = JsonValue::FromJson(EmptyObject);
-
-        for (const auto& [k, v] : _variables)
-        {
-            json.TrySetField(k, v.second->ToJson());
-        }
-
-        return json;
+        return _variablesWithoutTypes;
     }
 
     [[maybe_unused]]
@@ -99,9 +92,12 @@ public:
         if (value == nullptr)
         {
             _variables.erase(name);
+            _variablesWithoutTypes.erase(name);
         }
         else
         {
+            _variablesWithoutTypes.emplace(name, value);
+
             std::pair<std::string, SerializablePtr> pair(std::move(type), std::move(value));
             _variables.emplace(std::move(name), std::move(pair));
         }
@@ -110,17 +106,6 @@ public:
     }
 
     // endregion IGraphQlRequest
-
-    // region IGraphQlUploadHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::set<std::string>& GetUploadParameterPaths() const override
-    {
-        return GraphQlUploadHolder::GetUploadParameterPaths();
-    }
-
-    // endregion IGraphQlUploadHolder
 
 protected:
     /// \brief Base constructor to be used by GraphQL requests.

@@ -29,7 +29,6 @@ using namespace enjin::platform::sdk;
 using namespace testing;
 using RequestBuilder = PlatformRequest::PlatformRequestBuilder;
 using UploadArray = std::shared_ptr<SerializableArray<Upload>>;
-using UploadPtr = std::shared_ptr<Upload>;
 
 class PlatformRequestTest : public Test,
                             public TestDataTestSuite
@@ -42,7 +41,7 @@ TEST_F(PlatformRequestTest, BuildRequestWithoutAddingOperationsThrowsError)
     RequestBuilder builder = PlatformRequest::Builder();
 
     // Assert
-    ASSERT_THROW(const PlatformRequest request = builder.Build(), std::logic_error);
+    ASSERT_THROW(const PlatformRequestPtr request = builder.Build(), std::logic_error);
 }
 
 TEST_F(PlatformRequestTest, BuildRequestWithNoVariablesReturnsRequestWithNoVariablesField)
@@ -55,11 +54,11 @@ TEST_F(PlatformRequestTest, BuildRequestWithNoVariablesReturnsRequestWithNoVaria
         .AddOperation(query, variables);
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    ASSERT_THAT(actual.GetBody().has_value(), IsTrue()) << "Assert request has content body";
-    ASSERT_THAT(actual.GetBody().value(), Eq(expected)) << "Assert content body equals expected";
+    ASSERT_THAT(actual->GetBody().has_value(), IsTrue()) << "Assert request has content body";
+    ASSERT_THAT(actual->GetBody().value(), Eq(expected)) << "Assert content body equals expected";
 }
 
 TEST_F(PlatformRequestTest, BuildBatchRequestWithNoVariablesReturnsRequestWithNoVariablesField)
@@ -73,11 +72,11 @@ TEST_F(PlatformRequestTest, BuildBatchRequestWithNoVariablesReturnsRequestWithNo
         .AddOperation(query, variables);
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    ASSERT_THAT(actual.GetBody().has_value(), IsTrue()) << "Assert request has content body";
-    ASSERT_THAT(actual.GetBody().value(), Eq(expected)) << "Assert content body equals expected";
+    ASSERT_THAT(actual->GetBody().has_value(), IsTrue()) << "Assert request has content body";
+    ASSERT_THAT(actual->GetBody().value(), Eq(expected)) << "Assert content body equals expected";
 }
 
 TEST_F(PlatformRequestTest, BuildBatchRequestWithVariablesReturnsRequestWithExpectedVariablesField)
@@ -92,11 +91,11 @@ TEST_F(PlatformRequestTest, BuildBatchRequestWithVariablesReturnsRequestWithExpe
         .AddOperation(query, variables2);
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    ASSERT_THAT(actual.GetBody().has_value(), IsTrue()) << "Assert request has content body";
-    ASSERT_THAT(actual.GetBody().value(), Eq(expected)) << "Assert content body equals expected";
+    ASSERT_THAT(actual->GetBody().has_value(), IsTrue()) << "Assert request has content body";
+    ASSERT_THAT(actual->GetBody().value(), Eq(expected)) << "Assert content body equals expected";
 }
 
 TEST_F(PlatformRequestTest, BuildRequestWithSingleFileVariableReturnsRequestWithExpectedForms)
@@ -122,10 +121,10 @@ TEST_F(PlatformRequestTest, BuildRequestWithSingleFileVariableReturnsRequestWith
     ASSERT_THAT(upload->file.is_open(), IsTrue()) << "Assume upload file is open";
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual.GetMultipartFormData();
+    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual->GetMultipartFormData();
     ASSERT_THAT(formsOptional.has_value(), IsTrue()) << "Assert request has multipart forms";
 
     const std::vector<MultipartFormData>& forms = formsOptional.value();
@@ -169,10 +168,10 @@ TEST_F(PlatformRequestTest, BuildRequestWithFileListVariableReturnsRequestWithEx
     ASSERT_THAT(files->operator[](1).file.is_open(), IsTrue()) << "Assume upload file '1' is open";
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual.GetMultipartFormData();
+    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual->GetMultipartFormData();
     ASSERT_THAT(formsOptional.has_value(), IsTrue()) << "Assert request has multipart forms";
 
     const std::vector<MultipartFormData>& forms = formsOptional.value();
@@ -223,10 +222,10 @@ TEST_F(PlatformRequestTest, BuildBatchRequestWithFileVariablesReturnsRequestWith
     ASSERT_THAT(upload1->file.is_open(), IsTrue()) << "Assume upload file '1' is open";
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual.GetMultipartFormData();
+    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual->GetMultipartFormData();
     ASSERT_THAT(formsOptional.has_value(), IsTrue()) << "Assert request has multipart forms";
 
     const std::vector<MultipartFormData>& forms = formsOptional.value();
@@ -292,10 +291,10 @@ TEST_F(PlatformRequestTest, BuildBatchRequestWithFileListVariablesReturnsRequest
     ASSERT_THAT(files1->operator[](1).file.is_open(), IsTrue()) << "Assume upload file '3' is open";
 
     // Act
-    const PlatformRequest actual = builder.Build();
+    const PlatformRequestPtr actual = builder.Build();
 
     // Assert
-    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual.GetMultipartFormData();
+    const std::optional<std::vector<MultipartFormData>>& formsOptional = actual->GetMultipartFormData();
     ASSERT_THAT(formsOptional.has_value(), IsTrue()) << "Assert request has multipart forms";
 
     const std::vector<MultipartFormData>& forms = formsOptional.value();

@@ -22,7 +22,7 @@
 
 namespace enjin::platform::sdk
 {
-/// \brief Abstract class to be inherited by a GraphQL parameter to set an encodable token ID.
+/// \brief Abstract class to be inherited by a GraphQL parameter holder to set an encodable token ID.
 /// \tparam THolder The type of the parameter setter. Must extend this class and implement IGraphQlParameterHolder.
 template<class THolder>
 class HasEncodableTokenId
@@ -33,7 +33,7 @@ public:
 
     /// \brief Sets the token ID.
     /// \param tokenId The token ID.
-    /// \return This parameter for chaining.
+    /// \return This parameter holder for chaining.
     [[maybe_unused]]
     THolder& SetTokenId(EncodableTokenIdInputPtr tokenId)
     {
@@ -45,6 +45,7 @@ public:
 
 protected:
     /// \brief Constructs an instance of this class.
+    [[maybe_unused]]
     HasEncodableTokenId() = default;
 };
 }

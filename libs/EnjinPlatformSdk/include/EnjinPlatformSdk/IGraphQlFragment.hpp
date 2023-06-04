@@ -18,7 +18,6 @@
 #include "EnjinPlatformSdk/IGraphQlParameterHolder.hpp"
 #include <memory>
 #include <string>
-#include <type_traits>
 
 namespace enjin::platform::sdk
 {
@@ -30,7 +29,7 @@ using GraphQlFragmentPtr [[maybe_unused]] = std::shared_ptr<IGraphQlFragment<>>;
 
 /// \brief Interface for GraphQL fragments.
 template<class...>
-class IGraphQlFragment : public IGraphQlParameterHolder<>
+class IGraphQlFragment : virtual public IGraphQlParameterHolder<>
 {
 public:
     /// \brief Class destructor.
@@ -61,24 +60,19 @@ public:
 /// \brief Interface for GraphQL fragments with settable fields.
 /// \tparam TFragment The fragment type. Must implement this interface.
 template<class TFragment>
-class IGraphQlFragment<TFragment> : public IGraphQlParameterHolder<TFragment>,
-                                    public IGraphQlFragment<>
+class IGraphQlFragment<TFragment> : virtual public IGraphQlParameterHolder<TFragment>,
+                                    virtual public IGraphQlFragment<>
 {
 public:
     /// \brief Class destructor.
     ~IGraphQlFragment() override = default;
 
-    /// \brief Removes the given field from this fragment.
-    /// \param name The name of the field.
-    /// \return This fragment for chaining.
-    [[maybe_unused]]
-    virtual TFragment& RemoveField(const std::string& name) = 0;
-
     /// \brief Sets this fragment to request the scalar field with the given name be returned in the response type.
     /// \param name The name of the field.
+    /// \param isIncluded Whether the field ought to be included.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    virtual TFragment& WithField(std::string name) = 0;
+    virtual TFragment& WithField(std::string name, bool isIncluded) = 0;
 
     /// \brief Sets whether this fragment is to request the fragment field with the given name be returned in the
     /// response type.

@@ -23,7 +23,7 @@
 
 namespace enjin::platform::sdk
 {
-class SerializableDouble;
+struct SerializableDouble;
 
 /// \brief Definition for a pointer containing a serializable double-precision floating-point number.
 using SerializableDoublePtr [[maybe_unused]] = std::shared_ptr<SerializableDouble>;

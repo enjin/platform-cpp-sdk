@@ -38,6 +38,17 @@ public:
     {
         GraphQlRequestBase<GraphQlRequestBaseImpl>::AppendHeader(ss);
     }
+
+    // region IGraphQlRequest
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string Compile() const override
+    {
+        return {};
+    }
+
+    // endregion IGraphQlRequest
 };
 
 class GraphQlRequestBaseTest : public Test
@@ -123,22 +134,22 @@ TEST_F(GraphQlRequestBaseTest, AppendHeadersWhenRequestHasVariablesAndParameters
     ASSERT_EQ(ss.str(), expected);
 }
 
-TEST_F(GraphQlRequestBaseTest, GetVariablesJsonWhenRequestHasNoVariablesReturnsExpected)
+TEST_F(GraphQlRequestBaseTest, GetVariablesWithoutTypesWhenRequestHasNoVariablesReturnsExpected)
 {
     // Arrange
-    const JsonValue expected = JsonValue::FromJson("{}");
+    const std::map<std::string, SerializablePtr> expected;
 
     // Act
-    const JsonValue actual = classUnderTest->GetVariablesJson();
+    const std::map<std::string, SerializablePtr> actual = classUnderTest->GetVariablesWithoutTypes();
 
     // Assert
-    ASSERT_EQ(actual, expected);
+    ASSERT_THAT(actual, Eq(expected));
 }
 
-TEST_F(GraphQlRequestBaseTest, GetVariablesJsonWhenRequestHasVariablesReturnsExpected)
+TEST_F(GraphQlRequestBaseTest, GetVariablesWithoutTypesWhenRequestHasVariablesReturnsExpected)
 {
     // Arrange - Data
-    const JsonValue expected = JsonValue::FromJson(R"({"var":"value"})");
+    const std::map<std::string, SerializablePtr> expected = {{"var", mockVariableValue}};
     classUnderTest->SetVariable("var", "String!", mockVariableValue);
 
     // Arrange - Stubbing
@@ -146,10 +157,10 @@ TEST_F(GraphQlRequestBaseTest, GetVariablesJsonWhenRequestHasVariablesReturnsExp
         .WillRepeatedly(Return(JsonValue::FromJson(R"("value")")));
 
     // Act
-    const JsonValue actual = classUnderTest->GetVariablesJson();
+    const std::map<std::string, SerializablePtr> actual = classUnderTest->GetVariablesWithoutTypes();
 
     // Assert
-    ASSERT_EQ(actual, expected);
+    ASSERT_THAT(actual, Eq(expected));
 }
 
 TEST_F(GraphQlRequestBaseTest, HasVariablesWhenRequestHasNoVariablesReturnsFalse)

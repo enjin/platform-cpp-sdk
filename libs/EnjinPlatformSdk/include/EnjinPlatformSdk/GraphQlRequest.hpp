@@ -50,11 +50,15 @@ public:
     /// \brief Class destructor.
     ~GraphQlRequest() override = default;
 
-    /// \brief Returns the query string of this request.
-    /// \return The query string for this request.
+    GraphQlRequest<TRequest>& operator=(const GraphQlRequest<TRequest>& rhs) = default;
+
+    GraphQlRequest<TRequest>& operator=(GraphQlRequest<TRequest>&& rhs) noexcept = default;
+
+    // region IGraphQlRequest
+
     [[maybe_unused]]
     [[nodiscard]]
-    std::string ToString() const
+    std::string Compile() const override
     {
         std::stringstream ss;
 
@@ -64,9 +68,7 @@ public:
         return ss.str();
     }
 
-    GraphQlRequest<TRequest>& operator=(const GraphQlRequest<TRequest>& rhs) = default;
-
-    GraphQlRequest<TRequest>& operator=(GraphQlRequest<TRequest>&& rhs) noexcept = default;
+    // endregion IGraphQlRequest
 
 protected:
     /// \brief Initializes an instance of this class.
@@ -83,7 +85,7 @@ protected:
 /// \tparam TFragment The type of the fragment. Must implement IGraphQlFragment.
 template<class TRequest, class TFragment>
 class GraphQlRequest<TRequest, TFragment> : public GraphQlRequestBase<TRequest>,
-                                            public IGraphQlRequest<TRequest, TFragment>
+                                            virtual public IGraphQlRequest<TRequest, TFragment>
 {
     std::shared_ptr<TFragment> _fragment;
 
@@ -100,26 +102,6 @@ public:
 
     /// \brief Class destructor.
     ~GraphQlRequest() override = default;
-
-    /// \brief Returns the query string of this request.
-    /// \return The query string for this request.
-    /// \throws std::runtime If this request has no attached fragment.
-    [[maybe_unused]]
-    [[nodiscard]]
-    std::string ToString() const
-    {
-        if (!HasFragment())
-        {
-            throw std::runtime_error("Cannot serialize request without a fragment");
-        }
-
-        std::stringstream ss;
-
-        GraphQlRequestBase<TRequest>::AppendHeader(ss);
-        ss << " { " << static_cast<IGraphQlFragment<>&>(*_fragment).CompileFields() << " } }";
-
-        return ss.str();
-    }
 
     GraphQlRequest& operator=(const GraphQlRequest<TRequest, TFragment>& rhs) = default;
 
@@ -178,18 +160,24 @@ public:
 
     // region IGraphQlRequest
 
+    /// \brief Returns the query string of this request.
+    /// \return The query string for this request.
+    /// \throws std::runtime If this request has no attached fragment.
     [[maybe_unused]]
     [[nodiscard]]
-    std::string GetName() const override
+    std::string Compile() const override
     {
-        return GraphQlRequestBase<TRequest>::GetName();
-    }
+        if (!HasFragment())
+        {
+            throw std::runtime_error("Cannot serialize request without a fragment");
+        }
 
-    [[maybe_unused]]
-    [[nodiscard]]
-    JsonValue GetVariablesJson() const override
-    {
-        return GraphQlRequestBase<TRequest>::GetVariablesJson();
+        std::stringstream ss;
+
+        GraphQlRequestBase<TRequest>::AppendHeader(ss);
+        ss << " { " << static_cast<IGraphQlFragment<>&>(*_fragment).CompileFields() << " } }";
+
+        return ss.str();
     }
 
     [[maybe_unused]]
@@ -200,37 +188,13 @@ public:
     }
 
     [[maybe_unused]]
-    [[nodiscard]]
-    bool HasVariables() const override
-    {
-        return GraphQlRequestBase<TRequest>::HasVariables();
-    }
-
-    [[maybe_unused]]
     TRequest& SetFragment(std::shared_ptr<TFragment> fragment) override
     {
         _fragment = std::move(fragment);
         return static_cast<TRequest&>(*this);
     }
 
-    [[maybe_unused]]
-    TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) override
-    {
-        return GraphQlRequestBase<TRequest>::SetVariable(std::move(name), std::move(type), std::move(value));
-    }
-
     // endregion IGraphQlRequest
-
-    // region IGraphQlUploadHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::set<std::string>& GetUploadParameterPaths() const override
-    {
-        return GraphQlRequestBase<TRequest>::GetUploadParameterPaths();
-    }
-
-    // endregion IGraphQlUploadHolder
 
 protected:
     /// \brief Initializes an instance of this class.

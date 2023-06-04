@@ -30,40 +30,13 @@ namespace enjin::platform::sdk
 template<class TParameter>
 class GraphQlParameter : public GraphQlParameterHolder<TParameter>,
                          public GraphQlUploadHolder,
-                         public IGraphQlParameter<TParameter>
+                         virtual public IGraphQlParameter<TParameter>
 {
 public:
     /// \brief Class destructor.
     ~GraphQlParameter() override = default;
 
     // region IGraphQlParameterHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    std::string CompileParameters() const override
-    {
-        return GraphQlParameterHolder<TParameter>::CompileParameters();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::map<std::string, SerializablePtr>& GetParameters() const override
-    {
-        return GraphQlParameterHolder<TParameter>::GetParameters();
-    }
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    bool HasParameters() const override
-    {
-        return GraphQlParameterHolder<TParameter>::HasParameters();
-    }
-
-    [[maybe_unused]]
-    TParameter& RemoveParameter(const std::string& key) override
-    {
-        return GraphQlParameterHolder<TParameter>::RemoveParameter(key);
-    }
 
     /// \brief Sets parameter to be stored by this parameter.
     /// \param key The parameter key.
@@ -82,17 +55,6 @@ public:
     }
 
     // endregion IGraphQlParameterHolder
-
-    // region IGraphQlUploadHolder
-
-    [[maybe_unused]]
-    [[nodiscard]]
-    const std::set<std::string>& GetUploadParameterPaths() const override
-    {
-        return GraphQlUploadHolder::GetUploadParameterPaths();
-    }
-
-    // endregion IGraphQlUploadHolder
 
     // region ISerializable
 

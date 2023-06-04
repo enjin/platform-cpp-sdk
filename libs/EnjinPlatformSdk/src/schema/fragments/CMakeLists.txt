@@ -1,0 +1,24 @@
+target_sources(${PROJECT_NAME}
+        PRIVATE
+        AccountFragment.cpp
+        AccountRequestFragment.cpp
+        AccountVerifiedFragment.cpp
+        AttributeFragment.cpp
+        BalancesFragment.cpp
+        BlockFragment.cpp
+        CollectionAccountApprovalFragment.cpp
+        CollectionAccountFragment.cpp
+        CollectionFragment.cpp
+        EventFragment.cpp
+        EventParamFragment.cpp
+        PendingEventsFragment.cpp
+        RoyaltyFragment.cpp
+        TokenAccountApprovalFragment.cpp
+        TokenAccountFragment.cpp
+        TokenAccountNamedReserveFragment.cpp
+        TokenFragment.cpp
+        TransactionFragment.cpp
+        WalletFragment.cpp
+        WalletLinkFragment.cpp)
+
+add_subdirectory(pagination)

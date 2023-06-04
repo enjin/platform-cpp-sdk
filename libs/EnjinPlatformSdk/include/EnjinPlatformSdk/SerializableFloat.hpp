@@ -23,7 +23,7 @@
 
 namespace enjin::platform::sdk
 {
-class SerializableFloat;
+struct SerializableFloat;
 
 /// \brief Definition for a pointer containing a serializable floating-point number.
 using SerializableFloatPtr [[maybe_unused]] = std::shared_ptr<SerializableFloat>;

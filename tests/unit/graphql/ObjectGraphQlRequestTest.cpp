@@ -55,6 +55,60 @@ protected:
     }
 };
 
+TEST_F(ObjectGraphQlRequestTest, CompileWhenRequestDoesNotHaveFragmentThrowsError)
+{
+    // Assumptions
+    ASSERT_FALSE(classUnderTest->HasFragment()) << "Assume request does not have fragment";
+
+    // Assert
+    ASSERT_THROW(const std::string s = classUnderTest->Compile(), std::runtime_error) << "Assert error is thrown";
+}
+
+TEST_F(ObjectGraphQlRequestTest, CompileWhenRequestHasFragmentAndHasNoVariablesOrParametersReturnsExpected)
+{
+    // Arrange - Data
+    const std::string expected(R"(query { result: Request { field } })");
+    classUnderTest->SetFragment(mockFragment);
+
+    // Arrange - Stubbing
+    EXPECT_CALL(*mockFragment, CompileFields())
+        .WillRepeatedly(Return("field"));
+
+    // Assumptions
+    ASSERT_TRUE(classUnderTest->HasFragment()) << "Assume request has fragment";
+
+    // Act
+    const std::string actual = classUnderTest->Compile();
+
+    // Assert
+    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
+}
+
+TEST_F(ObjectGraphQlRequestTest, CompileWhenRequestHasFragmentAndFragmentHasParametersReturnsExpected)
+{
+    // Arrange - Data
+    const std::string expected(R"(query { result: Request(param: "value") { field } })");
+    classUnderTest->SetFragment(mockFragment);
+
+    // Arrange - Stubbing
+    EXPECT_CALL(*mockFragment, CompileFields())
+        .WillRepeatedly(Return("field"));
+    EXPECT_CALL(*mockFragment, CompileParameters())
+        .WillRepeatedly(Return(R"(param: "value")"));
+    EXPECT_CALL(*mockFragment, HasParameters())
+        .WillRepeatedly(Return(true));
+
+    // Assumptions
+    ASSERT_TRUE(classUnderTest->HasFragment()) << "Assume request has fragment";
+    ASSERT_TRUE(classUnderTest->HasParameters()) << "Assume request has parameters";
+
+    // Act
+    const std::string actual = classUnderTest->Compile();
+
+    // Assert
+    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
+}
+
 TEST_F(ObjectGraphQlRequestTest, HasFragmentWhenRequestDoesNotHaveFragmentReturnsFalse)
 {
     // Act
@@ -74,58 +128,4 @@ TEST_F(ObjectGraphQlRequestTest, HasFragmentWhenRequestHasFragmentReturnsTrue)
 
     // Assert
     ASSERT_TRUE(actual);
-}
-
-TEST_F(ObjectGraphQlRequestTest, ToStringWhenRequestDoesNotHaveFragmentThrowsError)
-{
-    // Assumptions
-    ASSERT_FALSE(classUnderTest->HasFragment()) << "Assume request does not have fragment";
-
-    // Assert
-    ASSERT_THROW(const std::string s = classUnderTest->ToString(), std::runtime_error) << "Assert error is thrown";
-}
-
-TEST_F(ObjectGraphQlRequestTest, ToStringWhenRequestHasFragmentAndHasNoVariablesOrParametersReturnsExpected)
-{
-    // Arrange - Data
-    const std::string expected(R"(query { result: Request { field } })");
-    classUnderTest->SetFragment(mockFragment);
-
-    // Arrange - Stubbing
-    EXPECT_CALL(*mockFragment, CompileFields())
-        .WillRepeatedly(Return("field"));
-
-    // Assumptions
-    ASSERT_TRUE(classUnderTest->HasFragment()) << "Assume request has fragment";
-
-    // Act
-    const std::string actual = classUnderTest->ToString();
-
-    // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
-}
-
-TEST_F(ObjectGraphQlRequestTest, ToStringWhenRequestHasFragmentAndFragmentHasParametersReturnsExpected)
-{
-    // Arrange - Data
-    const std::string expected(R"(query { result: Request(param: "value") { field } })");
-    classUnderTest->SetFragment(mockFragment);
-
-    // Arrange - Stubbing
-    EXPECT_CALL(*mockFragment, CompileFields())
-        .WillRepeatedly(Return("field"));
-    EXPECT_CALL(*mockFragment, CompileParameters())
-        .WillRepeatedly(Return(R"(param: "value")"));
-    EXPECT_CALL(*mockFragment, HasParameters())
-        .WillRepeatedly(Return(true));
-
-    // Assumptions
-    ASSERT_TRUE(classUnderTest->HasFragment()) << "Assume request has fragment";
-    ASSERT_TRUE(classUnderTest->HasParameters()) << "Assume request has parameters";
-
-    // Act
-    const std::string actual = classUnderTest->ToString();
-
-    // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
 }

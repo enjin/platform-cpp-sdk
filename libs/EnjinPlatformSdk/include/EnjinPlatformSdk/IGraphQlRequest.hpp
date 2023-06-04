@@ -18,7 +18,7 @@
 #include "EnjinPlatformSdk/IGraphQlFragment.hpp"
 #include "EnjinPlatformSdk/IGraphQlUploadHolder.hpp"
 #include "EnjinPlatformSdk/ISerializable.hpp"
-#include "EnjinPlatformSdk/JsonValue.hpp"
+#include <map>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -31,11 +31,17 @@ class IGraphQlRequest;
 
 /// \brief Interface for GraphQL requests.
 template<class...>
-class IGraphQlRequest : public IGraphQlUploadHolder
+class IGraphQlRequest : virtual public IGraphQlUploadHolder
 {
 public:
     /// \brief Class destructor.
     ~IGraphQlRequest() override = default;
+
+    /// \brief Returns the query string of this request.
+    /// \return The query string for this request.
+    [[maybe_unused]]
+    [[nodiscard]]
+    virtual std::string Compile() const = 0;
 
     /// \brief Returns the name of this request.
     /// \return The name.
@@ -43,11 +49,11 @@ public:
     [[nodiscard]]
     virtual std::string GetName() const = 0;
 
-    /// \brief Returns a JSON value-object representing the variables for this request.
-    /// \return The JSON value-object.
+    /// \brief Returns the variables mapping for this request without their types.
+    /// \return The variables mapping.
     [[maybe_unused]]
     [[nodiscard]]
-    virtual JsonValue GetVariablesJson() const = 0;
+    virtual const std::map<std::string, SerializablePtr>& GetVariablesWithoutTypes() const = 0;
 
     /// \brief Determines whether this request has variables.
     /// \return Whether this request has variables.
@@ -59,7 +65,7 @@ public:
 /// \brief Interface for GraphQL requests with a settable variables for the operation.
 /// \tparam TRequest The type of the request. Must implement this interface.
 template<class TRequest>
-class IGraphQlRequest<TRequest> : public IGraphQlRequest<>
+class IGraphQlRequest<TRequest> : virtual public IGraphQlRequest<>
 {
 public:
     /// \brief Class destructor.
@@ -78,7 +84,7 @@ public:
 /// \tparam TRequest The type of the request. Must implement this interface.
 /// \tparam TFragment The type of the fragment. Must implement IGraphQlFragment.
 template<class TRequest, class TFragment>
-class IGraphQlRequest<TRequest, TFragment> : public IGraphQlRequest<TRequest>
+class IGraphQlRequest<TRequest, TFragment> : virtual public IGraphQlRequest<TRequest>
 {
     static_assert(std::is_base_of<IGraphQlFragment<>, TFragment>::value,
                   "Type TFragment does not implement IGraphQlFragment<>");
