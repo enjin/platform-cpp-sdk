@@ -21,7 +21,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Abstract base class for JSON deserializable types to extend from.
-class ENJINPLATFORMSDK_EXPORT JsonDeserializableBase : public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT JsonDeserializableBase : virtual public IJsonDeserializable
 {
     bool _hasBeenDeserialized = false;
 
