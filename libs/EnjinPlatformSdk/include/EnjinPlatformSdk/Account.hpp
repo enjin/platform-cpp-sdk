@@ -16,8 +16,8 @@
 #define ENJINPLATFORMSDK_ACCOUNT_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -25,7 +25,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a substrate account.
-class ENJINPLATFORMSDK_EXPORT Account : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Account : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

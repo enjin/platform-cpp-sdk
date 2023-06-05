@@ -17,6 +17,7 @@
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/CollectionAccount.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/Wallet.hpp"
 #include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
@@ -34,7 +35,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models the wallet that has been approved to use the collection account.
-class ENJINPLATFORMSDK_EXPORT CollectionAccountApproval : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT CollectionAccountApproval : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

@@ -16,8 +16,8 @@
 #define ENJINPLATFORMSDK_ACCOUNTREQUEST_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -25,7 +25,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a request to verify an account.
-class ENJINPLATFORMSDK_EXPORT AccountRequest : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT AccountRequest : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

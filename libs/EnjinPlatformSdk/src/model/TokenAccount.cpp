@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/TokenAccount.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -116,15 +117,13 @@ public:
 
 [[maybe_unused]]
 TokenAccount::TokenAccount()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 TokenAccount::TokenAccount(const TokenAccount& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -183,7 +182,6 @@ const std::optional<std::vector<TokenAccountNamedReserve>>& TokenAccount::GetNam
 
 TokenAccount& TokenAccount::operator=(const TokenAccount& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -196,7 +194,6 @@ TokenAccount& TokenAccount::operator=(TokenAccount&& rhs) noexcept = default;
 [[maybe_unused]]
 void TokenAccount::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

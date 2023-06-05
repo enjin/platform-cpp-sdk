@@ -17,12 +17,12 @@
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/Collection.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/Token.hpp"
 #include "EnjinPlatformSdk/TokenAccountApproval.hpp"
 #include "EnjinPlatformSdk/TokenAccountNamedReserve.hpp"
 #include "EnjinPlatformSdk/Wallet.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -45,7 +45,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a token account, which stores the balances of tokens.
-class ENJINPLATFORMSDK_EXPORT TokenAccount : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT TokenAccount : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

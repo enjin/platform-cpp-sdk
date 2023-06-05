@@ -16,10 +16,10 @@
 #define ENJINPLATFORMSDK_TOKENACCOUNTAPPROVAL_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TokenAccount.hpp"
 #include "EnjinPlatformSdk/Wallet.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -35,7 +35,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a wallet that has been approved to use a token account.
-class ENJINPLATFORMSDK_EXPORT TokenAccountApproval : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT TokenAccountApproval : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

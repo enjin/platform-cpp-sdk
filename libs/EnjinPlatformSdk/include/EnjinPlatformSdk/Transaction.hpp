@@ -18,12 +18,12 @@
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/Connection.hpp"
 #include "EnjinPlatformSdk/Event.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TransactionMethod.hpp"
 #include "EnjinPlatformSdk/TransactionResult.hpp"
 #include "EnjinPlatformSdk/TransactionState.hpp"
 #include "EnjinPlatformSdk/Wallet.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -39,7 +39,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models an Efinity transaction.
-class ENJINPLATFORMSDK_EXPORT Transaction : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Transaction : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

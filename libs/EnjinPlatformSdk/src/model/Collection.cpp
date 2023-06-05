@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/Collection.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -140,15 +141,13 @@ public:
 
 [[maybe_unused]]
 Collection::Collection()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 Collection::Collection(const Collection& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -225,7 +224,6 @@ const std::optional<Connection<Token>>& Collection::GetTokens() const
 
 Collection& Collection::operator=(const Collection& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -238,7 +236,6 @@ Collection& Collection::operator=(Collection&& rhs) noexcept = default;
 [[maybe_unused]]
 void Collection::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

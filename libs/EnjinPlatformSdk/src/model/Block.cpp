@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/Block.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -101,15 +102,13 @@ public:
 
 [[maybe_unused]]
 Block::Block()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 Block::Block(const Block& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -156,7 +155,6 @@ const std::optional<std::string>& Block::GetException() const
 
 Block& Block::operator=(const Block& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -169,7 +167,6 @@ Block& Block::operator=(Block&& rhs) noexcept = default;
 [[maybe_unused]]
 void Block::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

@@ -19,11 +19,11 @@
 #include "EnjinPlatformSdk/Attribute.hpp"
 #include "EnjinPlatformSdk/Collection.hpp"
 #include "EnjinPlatformSdk/Connection.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/Royalty.hpp"
 #include "EnjinPlatformSdk/TokenAccount.hpp"
 #include "EnjinPlatformSdk/TokenMintCapType.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -44,7 +44,7 @@ class TokenAccount;
 // endregion Forward declarations
 
 /// \brief Models a token on the blockchain.
-class ENJINPLATFORMSDK_EXPORT Token : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Token : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

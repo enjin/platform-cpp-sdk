@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/Event.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -92,15 +93,13 @@ public:
 
 [[maybe_unused]]
 Event::Event()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 Event::Event(const Event& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -142,7 +141,6 @@ const std::optional<std::vector<EventParam>>& Event::GetParams() const
 [[maybe_unused]]
 Event& Event::operator=(const Event& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -155,7 +153,6 @@ Event& Event::operator=(Event&& rhs) noexcept = default;
 [[maybe_unused]]
 void Event::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 
