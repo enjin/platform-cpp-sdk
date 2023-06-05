@@ -17,8 +17,8 @@
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/Account.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -26,7 +26,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models the verification status of an account.
-class ENJINPLATFORMSDK_EXPORT AccountVerified : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT AccountVerified : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

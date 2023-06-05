@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/Attribute.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -68,15 +69,13 @@ public:
 
 [[maybe_unused]]
 Attribute::Attribute()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 Attribute::Attribute(const Attribute& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -99,7 +98,6 @@ const std::optional<std::string>& Attribute::GetValue() const
 
 Attribute& Attribute::operator=(const Attribute& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -112,7 +110,6 @@ Attribute& Attribute::operator=(Attribute&& rhs) noexcept = default;
 [[maybe_unused]]
 void Attribute::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

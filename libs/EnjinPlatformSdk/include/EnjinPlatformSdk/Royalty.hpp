@@ -16,6 +16,7 @@
 #define ENJINPLATFORMSDK_ROYALTY_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/Wallet.hpp"
 #include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
@@ -31,7 +32,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a royalty policy.
-class ENJINPLATFORMSDK_EXPORT Royalty : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Royalty : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

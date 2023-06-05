@@ -17,8 +17,8 @@
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/EventParam.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -33,7 +33,7 @@ class EventParam;
 // endregion Forward declarations
 
 /// \brief Models an Efinity event.
-class ENJINPLATFORMSDK_EXPORT Event : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Event : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

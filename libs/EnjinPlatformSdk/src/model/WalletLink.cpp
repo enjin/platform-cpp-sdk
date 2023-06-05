@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/WalletLink.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -60,15 +61,13 @@ public:
 
 [[maybe_unused]]
 WalletLink::WalletLink()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 WalletLink::WalletLink(const WalletLink& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -85,7 +84,6 @@ const std::optional<std::string>& WalletLink::GetCode() const
 
 WalletLink& WalletLink::operator=(const WalletLink& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -98,7 +96,6 @@ WalletLink& WalletLink::operator=(WalletLink&& rhs) noexcept = default;
 [[maybe_unused]]
 void WalletLink::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

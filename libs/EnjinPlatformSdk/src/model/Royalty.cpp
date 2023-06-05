@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/Royalty.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -68,15 +69,13 @@ public:
 
 [[maybe_unused]]
 Royalty::Royalty()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 Royalty::Royalty(const Royalty& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -99,7 +98,6 @@ const std::optional<double>& Royalty::GetPercentage() const
 
 Royalty& Royalty::operator=(const Royalty& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -112,7 +110,6 @@ Royalty& Royalty::operator=(Royalty&& rhs) noexcept = default;
 [[maybe_unused]]
 void Royalty::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

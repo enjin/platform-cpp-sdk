@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/TokenAccountApproval.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -84,20 +85,18 @@ public:
 
 [[maybe_unused]]
 TokenAccountApproval::TokenAccountApproval()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 TokenAccountApproval::TokenAccountApproval(const TokenAccountApproval& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
 [[maybe_unused]]
-TokenAccountApproval::TokenAccountApproval(TokenAccountApproval&& other)  noexcept = default;
+TokenAccountApproval::TokenAccountApproval(TokenAccountApproval&& other) noexcept = default;
 
 TokenAccountApproval::~TokenAccountApproval() = default;
 
@@ -127,7 +126,6 @@ const std::optional<Wallet>& TokenAccountApproval::GetWallet() const
 
 TokenAccountApproval& TokenAccountApproval::operator=(const TokenAccountApproval& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -140,7 +138,6 @@ TokenAccountApproval& TokenAccountApproval::operator=(TokenAccountApproval&& rhs
 [[maybe_unused]]
 void TokenAccountApproval::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

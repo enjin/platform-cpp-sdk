@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/Account.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -68,15 +69,13 @@ public:
 
 [[maybe_unused]]
 Account::Account()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 Account::Account(const Account& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -99,7 +98,6 @@ const std::optional<std::string>& Account::GetAddress() const
 
 Account& Account::operator=(const Account& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -112,7 +110,6 @@ Account& Account::operator=(Account&& rhs) noexcept = default;
 [[maybe_unused]]
 void Account::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

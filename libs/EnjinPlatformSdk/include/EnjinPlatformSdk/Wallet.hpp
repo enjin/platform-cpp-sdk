@@ -21,11 +21,11 @@
 #include "EnjinPlatformSdk/Collection.hpp"
 #include "EnjinPlatformSdk/CollectionAccountApproval.hpp"
 #include "EnjinPlatformSdk/Connection.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/TokenAccount.hpp"
 #include "EnjinPlatformSdk/TokenAccountApproval.hpp"
 #include "EnjinPlatformSdk/Transaction.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -53,7 +53,7 @@ class Transaction;
 // endregion Forward declarations
 
 /// \brief Models a blockchain wallet.
-class ENJINPLATFORMSDK_EXPORT Wallet : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Wallet : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

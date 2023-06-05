@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/TokenAccountNamedReserve.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -68,15 +69,13 @@ public:
 
 [[maybe_unused]]
 TokenAccountNamedReserve::TokenAccountNamedReserve()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 TokenAccountNamedReserve::TokenAccountNamedReserve(const TokenAccountNamedReserve& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -99,7 +98,6 @@ const std::optional<std::string>& TokenAccountNamedReserve::GetAmount() const
 
 TokenAccountNamedReserve& TokenAccountNamedReserve::operator=(const TokenAccountNamedReserve& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -112,7 +110,6 @@ TokenAccountNamedReserve& TokenAccountNamedReserve::operator=(TokenAccountNamedR
 [[maybe_unused]]
 void TokenAccountNamedReserve::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

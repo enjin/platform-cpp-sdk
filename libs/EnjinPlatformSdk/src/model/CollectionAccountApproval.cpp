@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/CollectionAccountApproval.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -77,15 +78,13 @@ public:
 
 [[maybe_unused]]
 CollectionAccountApproval::CollectionAccountApproval()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 CollectionAccountApproval::CollectionAccountApproval(const CollectionAccountApproval& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -114,7 +113,6 @@ const std::optional<Wallet>& CollectionAccountApproval::GetWallet() const
 
 CollectionAccountApproval& CollectionAccountApproval::operator=(const CollectionAccountApproval& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -126,7 +124,6 @@ CollectionAccountApproval& CollectionAccountApproval::operator=(CollectionAccoun
 
 void CollectionAccountApproval::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

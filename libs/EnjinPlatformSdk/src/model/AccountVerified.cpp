@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/AccountVerified.hpp"
 
 #include "EnjinPlatformSdk/JsonUtil.hpp"
+#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 
 using namespace enjin::platform::sdk;
 
@@ -68,15 +69,13 @@ public:
 
 [[maybe_unused]]
 AccountVerified::AccountVerified()
-    : JsonDeserializableBase(),
-      _pimpl(std::make_unique<Impl>())
+    : _pimpl(std::make_unique<Impl>())
 {
 }
 
 [[maybe_unused]]
 AccountVerified::AccountVerified(const AccountVerified& other)
-    : JsonDeserializableBase(other),
-      _pimpl(std::make_unique<Impl>(*other._pimpl))
+    : _pimpl(std::make_unique<Impl>(*other._pimpl))
 {
 }
 
@@ -99,7 +98,6 @@ const std::optional<Account>& AccountVerified::GetAccount() const
 
 AccountVerified& AccountVerified::operator=(const AccountVerified& rhs)
 {
-    JsonDeserializableBase::operator=(rhs);
     _pimpl = std::make_unique<Impl>(*rhs._pimpl);
 
     return *this;
@@ -112,7 +110,6 @@ AccountVerified& AccountVerified::operator=(AccountVerified&& rhs) noexcept = de
 [[maybe_unused]]
 void AccountVerified::Deserialize(const JsonValue& json)
 {
-    JsonDeserializableBase::Deserialize(json);
     _pimpl->Deserialize(json);
 }
 

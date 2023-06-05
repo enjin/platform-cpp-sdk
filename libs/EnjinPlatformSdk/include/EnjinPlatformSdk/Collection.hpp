@@ -19,11 +19,11 @@
 #include "EnjinPlatformSdk/Attribute.hpp"
 #include "EnjinPlatformSdk/CollectionAccount.hpp"
 #include "EnjinPlatformSdk/Connection.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/Royalty.hpp"
 #include "EnjinPlatformSdk/Token.hpp"
 #include "EnjinPlatformSdk/Wallet.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -46,7 +46,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a collection on the platform.
-class ENJINPLATFORMSDK_EXPORT Collection : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT Collection : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

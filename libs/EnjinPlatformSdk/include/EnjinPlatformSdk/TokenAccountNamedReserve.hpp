@@ -16,9 +16,9 @@
 #define ENJINPLATFORMSDK_TOKENACCOUNTNAMEDRESERVE_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/PalletIdentifier.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
 #include <memory>
 #include <optional>
 #include <string>
@@ -26,7 +26,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a pallet that has reserved some tokens and the amount.
-class ENJINPLATFORMSDK_EXPORT TokenAccountNamedReserve : public JsonDeserializableBase
+class ENJINPLATFORMSDK_EXPORT TokenAccountNamedReserve : virtual public IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;
