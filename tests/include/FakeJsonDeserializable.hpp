@@ -16,15 +16,18 @@
 #define ENJINPLATFORMSDK_FAKEJSONDESERIALIZABLE_HPP
 
 #include "EnjinPlatformSdk/JsonValue.hpp"
-#include "EnjinPlatformSdk/internal/JsonDeserializableBase.hpp"
+#include "EnjinPlatformSdk/IJsonDeserializable.hpp"
+#include <memory>
 #include <optional>
 
 namespace enjin::platform::sdk
 {
 /// \brief Fake JSON deserializable class for testing.
-class FakeJsonDeserializable : public JsonDeserializableBase
+class FakeJsonDeserializable : virtual public IJsonDeserializable
 {
-    std::optional<bool> _field;
+    class Impl;
+
+    std::unique_ptr<Impl> _pimpl;
 
 public:
     /// \brief Constructs an instance of this class.

@@ -76,6 +76,7 @@ protected:
 TEST_F(PlatformClientTest, SendRequestClientSetsExpectedUserAgentHeader)
 {
     // Arrange - Data
+    const std::future_status expectedStatus = std::future_status::ready;
     const std::string expectedKey("User-Agent");
     const std::string expectedValue = classUnderTest->GetUserAgent();
     const std::string responseBody(R"({"data": {"result": true}})");
@@ -99,23 +100,20 @@ TEST_F(PlatformClientTest, SendRequestClientSetsExpectedUserAgentHeader)
                                .WithBody(responseBody));
 
     // Arrange - Expectations
-    mockServer.NextMessage([this, expectedKey, expectedValue](const IPlatformRequest& request)
-                           {
-                               IncrementCallCount();
+    mockServer.NextMessage([this, expectedKey, expectedValue](const IPlatformRequest& request) {
+        IncrementCallCount();
 
-                               const std::map<std::string, std::string>& headers = request.GetHeaders();
-                               ASSERT_THAT(headers.find(expectedKey), Not(Eq(headers.end())))
-                                                   << "Assert request contains expected header key";
-                               ASSERT_THAT(headers.at(expectedKey), Eq(expectedValue))
-                                                   << "Assert request contains expected header value";
-                           });
+        const std::map<std::string, std::string>& headers = request.GetHeaders();
+        ASSERT_THAT(headers.find(expectedKey), Not(Eq(headers.end()))) << "Assert request contains expected header key";
+        ASSERT_THAT(headers.at(expectedKey), Eq(expectedValue)) << "Assert request contains expected header value";
+    });
     SetExpectedCallCount(1);
 
     // Act
     auto future = classUnderTest->SendRequest<GraphQlResponse<bool>>(mockRequest);
 
     // Assert
-    ASSERT_THAT(future.wait_for(Timeout), Eq(std::future_status::ready)) << "Assert future is ready";
+    ASSERT_THAT(future.wait_for(Timeout), Eq(expectedStatus)) << "Assert future is ready";
 
     // Verify
     Verify();
@@ -148,16 +146,13 @@ TEST_F(PlatformClientTest, SendRequestWhenClientIsAuthenticatedSendsRequestWithA
                                .WithBody(responseBody));
 
     // Arrange - Expectations
-    mockServer.NextMessage([this, expectedKey, expectedValue](const IPlatformRequest& request)
-                           {
-                               IncrementCallCount();
+    mockServer.NextMessage([this, expectedKey, expectedValue](const IPlatformRequest& request) {
+        IncrementCallCount();
 
-                               const std::map<std::string, std::string>& headers = request.GetHeaders();
-                               ASSERT_THAT(headers.find(expectedKey), Not(Eq(headers.end())))
-                                                   << "Assert request contains expected header key";
-                               ASSERT_THAT(headers.at(expectedKey), Eq(expectedValue))
-                                                   << "Assert request contains expected header value";
-                           });
+        const std::map<std::string, std::string>& headers = request.GetHeaders();
+        ASSERT_THAT(headers.find(expectedKey), Not(Eq(headers.end()))) << "Assert request contains expected header key";
+        ASSERT_THAT(headers.at(expectedKey), Eq(expectedValue)) << "Assert request contains expected header value";
+    });
     SetExpectedCallCount(1);
 
     // Act
