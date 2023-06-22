@@ -25,13 +25,13 @@ namespace enjin::platform::sdk
 class MockSerializable;
 
 /// \brief Definition for a nice mock of ISerializable.
-using NiceMockSerializable = testing::NiceMock<MockSerializable>;
+using NiceMockSerializable [[maybe_unused]] = testing::NiceMock<MockSerializable>;
 
 /// \brief Definition for a pointer containing a nice mock of ISerializable.
-using MockSerializablePtr = std::shared_ptr<NiceMockSerializable>;
+using MockSerializablePtr [[maybe_unused]] = std::shared_ptr<NiceMockSerializable>;
 
 /// \brief Mock class for ISerializable.
-class MockSerializable : public ISerializable
+class MockSerializable : virtual public ISerializable
 {
 public:
     // region ISerializable

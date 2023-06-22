@@ -24,13 +24,13 @@ namespace enjin::platform::sdk
 class MockGraphQlFragment;
 
 /// \brief Definition for a nice mock of IGraphQlFragment.
-using NiceMockGraphQlFragment = testing::NiceMock<MockGraphQlFragment>;
+using NiceMockGraphQlFragment [[maybe_unused]] = testing::NiceMock<MockGraphQlFragment>;
 
 /// \brief Definition for a pointer containing a nice mock of IGraphQlFragment.
-using MockGraphQlFragmentPtr = std::shared_ptr<NiceMockGraphQlFragment>;
+using MockGraphQlFragmentPtr [[maybe_unused]] = std::shared_ptr<NiceMockGraphQlFragment>;
 
 /// \brief Mock class for IGraphQlFragment.
-class MockGraphQlFragment : public IGraphQlFragment<MockGraphQlFragment>
+class MockGraphQlFragment : virtual public IGraphQlFragment<MockGraphQlFragment>
 {
 public:
     // region IGraphQlFragment

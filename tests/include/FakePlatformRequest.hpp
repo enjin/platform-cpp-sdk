@@ -25,7 +25,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Class representing a fake platform request.
-class FakePlatformRequest : public IPlatformRequest
+class FakePlatformRequest : virtual public IPlatformRequest
 {
 public:
     /// \brief The body of this request.

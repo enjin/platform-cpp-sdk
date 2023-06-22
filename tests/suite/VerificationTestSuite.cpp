@@ -31,7 +31,7 @@ void VerificationTestSuite::IncrementCallCount()
     std::lock_guard<std::mutex> guard(_countMutex);
 
     _callCounter++;
-//    _cv.notify_all();
+    _cv.notify_all();
 }
 
 [[maybe_unused]]

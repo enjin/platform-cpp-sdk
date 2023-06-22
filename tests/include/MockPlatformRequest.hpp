@@ -29,13 +29,13 @@ namespace enjin::platform::sdk
 class MockPlatformRequest;
 
 /// \brief Definition for a nice mock of IPlatformRequest.
-using NiceMockPlatformRequest = testing::NiceMock<MockPlatformRequest>;
+using NiceMockPlatformRequest [[maybe_unused]] = testing::NiceMock<MockPlatformRequest>;
 
 /// \brief Definition for a pointer containing a nice mock of IPlatformRequest.
-using MockPlatformRequestPtr = std::shared_ptr<NiceMockPlatformRequest>;
+using MockPlatformRequestPtr [[maybe_unused]] = std::shared_ptr<NiceMockPlatformRequest>;
 
 /// \brief Mock class for IPlatformRequest.
-class MockPlatformRequest : public IPlatformRequest
+class MockPlatformRequest : virtual public IPlatformRequest
 {
 public:
     // region IPlatformRequest
