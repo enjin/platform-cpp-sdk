@@ -42,6 +42,11 @@ else ()
             PRIVATE
             OpenSSL::SSL
             OpenSSL::Crypto)
+
+    # IXWebSocket
+    target_link_libraries(${PROJECT_NAME}
+            PRIVATE
+            ixwebsocket::ixwebsocket)
 endif ()
 
 ####################################################################################################################

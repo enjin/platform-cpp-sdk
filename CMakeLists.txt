@@ -32,6 +32,7 @@ else ()
     include("cmake/FindRapidJSON.cmake")
     include("cmake/FindCppHttpLib.cmake")
     include("cmake/FindOpenSSL.cmake")
+    include("cmake/FindIXWebSocket.cmake")
 endif ()
 
 # Setup output directories before creating any targets

@@ -17,3 +17,4 @@ class EnjinPlatformSDK(ConanFile):
         self.requires("rapidjson/1.1.0")
         self.requires("cpp-httplib/0.11.3")
         self.options["cpp-httplib"].with_openssl = True
+        self.requires("ixwebsocket/11.4.3")

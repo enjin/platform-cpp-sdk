@@ -49,6 +49,14 @@ else ()
 
     # RapidJSON
     target_include_directories(${TESTS_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
+
+    # cpp-httplib
+    target_link_libraries(${TESTS_NAME} PRIVATE httplib::httplib)
+
+    # IXWebSocket
+    target_link_libraries(${TESTS_NAME}
+            PRIVATE
+            ixwebsocket::ixwebsocket)
 endif ()
 
 ####################################################################################################################
