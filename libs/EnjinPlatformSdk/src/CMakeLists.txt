@@ -12,5 +12,6 @@ target_sources(${PROJECT_NAME}
 add_subdirectory(graphql)
 add_subdirectory(model)
 add_subdirectory(platform)
+add_subdirectory(pusher)
 add_subdirectory(schema)
 add_subdirectory(util)

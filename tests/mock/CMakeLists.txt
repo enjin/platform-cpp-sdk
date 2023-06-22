@@ -1,8 +1,10 @@
 target_sources(${TESTS_NAME}
         PRIVATE
         MockHttpServer.cpp
+        MockWebSocketServer.cpp
         Request.cpp
         RequestMessage.cpp
         Response.cpp
         ResponseMessage.cpp
-        ResponseProvider.cpp)
+        ResponseProvider.cpp
+        WebSocketMessage.cpp)
