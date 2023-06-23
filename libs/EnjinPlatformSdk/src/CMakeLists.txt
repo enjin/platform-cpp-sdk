@@ -9,6 +9,7 @@ target_sources(${PROJECT_NAME}
         JsonUtil.cpp
         JsonValue.cpp)
 
+add_subdirectory(event)
 add_subdirectory(graphql)
 add_subdirectory(model)
 add_subdirectory(platform)
