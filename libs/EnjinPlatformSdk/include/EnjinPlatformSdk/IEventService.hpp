@@ -6,8 +6,8 @@
 #include "EnjinPlatformSdk/IEventListenerRegistration.hpp"
 #include <functional>
 #include <future>
+#include <set>
 #include <string>
-#include <vector>
 
 namespace enjin::platform::sdk
 {
@@ -39,35 +39,40 @@ public:
     /// \brief Registers a listener for this service. The listener may accept all events.
     /// \param listener The listener.
     /// \return The registration for the listener.
+    /// \throws std::invalid_argument If listener is a null-pointer.
     [[maybe_unused]]
     [[nodiscard]]
-    virtual EventListenerRegistrationPtr RegisterListener(EventListenerPtr listener);
+    virtual EventListenerRegistrationPtr RegisterListener(EventListenerPtr listener) = 0;
 
     /// \brief Registers a listener for this service that is configured to filter out the specified events.
     /// \param listener The listener.
     /// \param events The events to filter out.
     /// \return The registration for the listener.
+    /// \throws std::invalid_argument If listener is a null-pointer.
     [[maybe_unused]]
     [[nodiscard]]
     virtual EventListenerRegistrationPtr RegisterListenerExcludingEvents(EventListenerPtr listener,
-                                                                         std::vector<std::string> events);
+                                                                         std::set<std::string> events) = 0;
 
     /// \brief Registers a listener for this service that is configured to filter for the specified events.
     /// \param listener The listener.
     /// \param events The events to filter for.
     /// \return The registration for the listener.
+    /// \throws std::invalid_argument If listener is a null-pointer.
     [[maybe_unused]]
     [[nodiscard]]
     virtual EventListenerRegistrationPtr RegisterListenerIncludingEvents(EventListenerPtr listener,
-                                                                         std::vector<std::string> events);
+                                                                         std::set<std::string> events) = 0;
 
     /// \brief Registers a listener for this service that is configured to filter for events against the given matcher.
     /// \param listener The listener.
     /// \param matcher The event matcher.
     /// \return The registration for the listener.
+    /// \throws std::invalid_argument If listener is a null-pointer.
     [[maybe_unused]]
     [[nodiscard]]
-    virtual EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener, EventMatcher matcher);
+    virtual EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener,
+                                                                     EventMatcher matcher) = 0;
 
     /// \brief Sets the handler for when this service connects to a server.
     /// \param handler The handler.

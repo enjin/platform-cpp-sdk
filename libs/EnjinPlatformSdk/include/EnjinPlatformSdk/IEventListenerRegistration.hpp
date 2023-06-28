@@ -40,7 +40,7 @@ public:
     /// \return Whether this registration is still a active.
     [[maybe_unused]]
     [[nodiscard]]
-    virtual bool IsRegistered() const;
+    virtual bool IsRegistered() const = 0;
 };
 }
 
