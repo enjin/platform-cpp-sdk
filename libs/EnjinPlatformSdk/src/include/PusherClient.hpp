@@ -59,12 +59,10 @@ public:
     void Bind(const std::string& eventName, SubscriptionListenerPtr listener) override;
 
     [[maybe_unused]]
-    [[nodiscard]]
-    std::future<void> Connect() override;
+    std::future<void> ConnectAsync() override;
 
     [[maybe_unused]]
-    [[nodiscard]]
-    std::future<void> Disconnect() override;
+    std::future<void> DisconnectAsync() override;
 
     [[maybe_unused]]
     [[nodiscard]]
@@ -83,13 +81,16 @@ public:
     bool IsSubscriptionPending(const std::string& channelName) const override;
 
     [[maybe_unused]]
-    void Subscribe(const std::string& channelName) override;
+    std::future<void> SubscribeAsync(std::string channelName) override;
 
     [[maybe_unused]]
     void Unbind(const std::string& eventName) override;
 
     [[maybe_unused]]
-    void Unsubscribe(const std::string& channelName) override;
+    std::future<void> UnsubscribeAllAsync() override;
+
+    [[maybe_unused]]
+    std::future<void> UnsubscribeAsync(std::string channelName) override;
 
     // endregion IPusherClient
 };

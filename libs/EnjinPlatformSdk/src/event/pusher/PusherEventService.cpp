@@ -54,14 +54,14 @@ public:
         _client->Bind(eventName, std::move(listener));
     }
 
-    std::future<void> Connect() override
+    std::future<void> ConnectAsync() override
     {
-        return _client->Connect();
+        return _client->ConnectAsync();
     }
 
-    std::future<void> Disconnect() override
+    std::future<void> DisconnectAsync() override
     {
-        return _client->Disconnect();
+        return _client->DisconnectAsync();
     }
 
     [[nodiscard]]
@@ -88,9 +88,9 @@ public:
         return _client->IsSubscriptionPending(channelName);
     }
 
-    void Subscribe(const std::string& channelName) override
+    std::future<void> SubscribeAsync(std::string channelName) override
     {
-        _client->Subscribe(channelName);
+        return _client->SubscribeAsync(channelName);
     }
 
     void Unbind(const std::string& eventName) override
@@ -98,9 +98,14 @@ public:
         _client->Unbind(eventName);
     }
 
-    void Unsubscribe(const std::string& channelName) override
+    std::future<void> UnsubscribeAllAsync() override
     {
-        _client->Unsubscribe(channelName);
+        return _client->UnsubscribeAllAsync();
+    }
+
+    std::future<void> UnsubscribeAsync(std::string channelName) override
+    {
+        return _client->UnsubscribeAsync(channelName);
     }
 
     // endregion IPusherClient

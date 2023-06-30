@@ -36,7 +36,7 @@ public:
     // Mocks
     inline static std::unique_ptr<MockWebSocketServer> mockServer;
 
-    inline static const std::chrono::milliseconds WaitTime = std::chrono::milliseconds(500);
+    inline static const std::chrono::milliseconds WaitTime = std::chrono::milliseconds(1000);
 
 protected:
     void SetUp() override
@@ -96,8 +96,8 @@ TEST_F(PusherClientReconnectionTest, Receives4000ErrorCodeDoesNotAttemptToReconn
     const PusherConnectionState expectedConnState = PusherConnectionState::Disconnected;
     const int code = 4000;
     const std::string reason;
-    classUnderTest->Connect().get();
     mockServer->NextMessage([](const WebSocketMessage&) { /* Consumes initial open message */ });
+    classUnderTest->ConnectAsync().get();
 
     // Arrange - Expectations
     mockServer->NextMessage([this](const WebSocketMessage&) {
@@ -123,8 +123,8 @@ TEST_F(PusherClientReconnectionTest, Receives4100ErrorCodeReconnectsToServer)
     const PusherConnectionState expectedConnState = PusherConnectionState::Connected;
     const int code = 4100;
     const std::string reason;
-    classUnderTest->Connect().get();
     mockServer->NextMessage([](const WebSocketMessage&) { /* Consumes initial open message */ });
+    classUnderTest->ConnectAsync().get();
 
     // Arrange - Expectations
     mockServer->NextMessage([this](const WebSocketMessage&) {

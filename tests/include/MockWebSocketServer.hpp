@@ -4,6 +4,7 @@
 #include "IMockWebSocketServer.hpp"
 #include "WebSocketMessage.hpp"
 #include "WebSocketMessageType.hpp"
+#include <chrono>
 #include <functional>
 #include <memory>
 #include <string>
@@ -45,15 +46,19 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
-    WebSocketMessageHandler GetNextMessageHandler() override;
-
-    [[maybe_unused]]
-    [[nodiscard]]
     std::string GetHost() const override;
 
     [[maybe_unused]]
     [[nodiscard]]
     int GetPort() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasQueuedMessageHandlers() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasUnhandledMessages() const override;
 
     [[maybe_unused]]
     IMockWebSocketServer& IgnoreMessageType(WebSocketMessageType type) override;
@@ -73,6 +78,9 @@ public:
 
     [[maybe_unused]]
     void Shutdown() override;
+
+    [[maybe_unused]]
+    void WaitForQueuedMessageHandlers(std::chrono::milliseconds timeout) override;
 
     // endregion IMockWebSocketServer
 };
