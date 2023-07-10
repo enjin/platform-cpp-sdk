@@ -15,6 +15,7 @@
 #include "EnjinPlatformSdk/PlatformClient.hpp"
 
 #include "httplib.h"
+#include "HttpLoggingHandler.hpp"
 #include "EnjinPlatformSdk/MultipartFormData.hpp"
 #include <map>
 #include <memory>
@@ -24,6 +25,7 @@
 
 // Do not use httplib namespace to avoid ambiguous references
 using namespace enjin::platform::sdk;
+using PlatformClientBuilder = PlatformClient::PlatformClientBuilder;
 
 // region Impl
 
@@ -34,6 +36,7 @@ class PlatformClient::Impl
     const std::string _userAgent;
 
     std::unique_ptr<httplib::Client> _client;
+    std::unique_ptr<HttpLoggingHandler> _httpLoggingHandler;
 
     // Mutexes
     mutable std::mutex _authTokenMutex;
@@ -41,13 +44,23 @@ class PlatformClient::Impl
     static constexpr char MediaType[] = "application/json";
 
 public:
-    Impl(std::string baseAddress, std::string userAgent)
+    Impl(std::string baseAddress, std::string userAgent, LoggerPtr logger, const HttpLogLevel httpLogLevel)
         : _baseAddress(std::move(baseAddress)),
           _userAgent(std::move(userAgent))
     {
         _client = std::make_unique<httplib::Client>(_baseAddress);
         _client->set_follow_location(true);
         _client->set_keep_alive(true);
+
+        if (logger != nullptr && httpLogLevel != HttpLogLevel::None)
+        {
+            _httpLoggingHandler = std::make_unique<HttpLoggingHandler>(std::move(logger), httpLogLevel);
+
+            _client->set_logger([this](const httplib::Request& req, const httplib::Response& res) {
+                _httpLoggingHandler->LogRequest(req);
+                _httpLoggingHandler->LogResponse(res);
+            });
+        }
     }
 
     ~Impl()
@@ -85,23 +98,18 @@ public:
     {
         const std::string path = request->GetPath();
         const httplib::Headers headers = CreateHeaders(request);
-        Result result;
 
-        if (request->GetMultipartFormData().has_value())
-        {
-            httplib::Result r = _client->Post(path, headers, CreateFormItems(request));
-            SetResultFields(r, result);
-        }
-        else
-        {
-            httplib::Result r = _client->Post(path, headers, request->GetBody().value(), MediaType);
-            SetResultFields(r, result);
-        }
+        httplib::Result httpResult = request->GetMultipartFormData().has_value()
+                                     ? _client->Post(path, headers, CreateFormItems(request))
+                                     : _client->Post(path, headers, request->GetBody().value(), MediaType);
 
-        return result;
+        return ConvertResult(httpResult);
     }
 
 private:
+    /// \brief Creates cpp-httplib request headers from the given platform request and the authorization token if set.
+    /// \param request The platform request.
+    /// \return The request headers.
     httplib::Headers CreateHeaders(const PlatformRequestPtr& request)
     {
         httplib::Headers headers;
@@ -128,6 +136,26 @@ private:
         return headers;
     }
 
+    /// \brief Converts a cpp-httplib result into a platform result.
+    /// \param httpResult The cpp-httplib result.
+    /// \return The platform result.
+    static Result ConvertResult(const httplib::Result& httpResult)
+    {
+        Result platformResult;
+        platformResult.status = httpResult->status;
+        platformResult.body = httpResult->body;
+
+        for (const auto& [k, v] : httpResult->headers)
+        {
+            platformResult.headers.emplace(k, v);
+        }
+
+        return platformResult;
+    }
+
+    /// \brief Creates the cpp-httplib multipart form-data items from the given platform request.
+    /// \param request The platform request.
+    /// \return The multipart form-data items.
     static httplib::MultipartFormDataItems CreateFormItems(const PlatformRequestPtr& request)
     {
         httplib::MultipartFormDataItems items;
@@ -145,17 +173,6 @@ private:
 
         return items;
     }
-
-    static void SetResultFields(const httplib::Result& httpResult, Result& outResult)
-    {
-        outResult.status = httpResult->status;
-        outResult.body = httpResult->body;
-
-        for (const auto& [k, v] : httpResult->headers)
-        {
-            outResult.headers.emplace(k, v);
-        }
-    }
 };
 
 // endregion Impl
@@ -163,8 +180,14 @@ private:
 // region PlatformClient
 
 [[maybe_unused]]
-PlatformClient::PlatformClient(std::string baseAddress, std::string userAgent)
-    : _pimpl(std::make_unique<Impl>(std::move(baseAddress), std::move(userAgent)))
+PlatformClient::PlatformClient(std::string baseAddress,
+                               std::string userAgent,
+                               LoggerPtr logger,
+                               const HttpLogLevel httpLogLevel)
+    : _pimpl(std::make_unique<Impl>(std::move(baseAddress),
+                                    std::move(userAgent),
+                                    std::move(logger),
+                                    httpLogLevel))
 {
 }
 
@@ -207,7 +230,7 @@ PlatformClient& PlatformClient::operator=(PlatformClient&& rhs) noexcept = defau
 // Static
 
 [[maybe_unused]]
-PlatformClient::PlatformClientBuilder PlatformClient::Builder()
+PlatformClientBuilder PlatformClient::Builder()
 {
     return {};
 }
@@ -216,12 +239,12 @@ PlatformClient::PlatformClientBuilder PlatformClient::Builder()
 
 // region PlatformClientBuilder
 
-PlatformClient::PlatformClientBuilder::PlatformClientBuilder() = default;
+PlatformClientBuilder::PlatformClientBuilder() = default;
 
-PlatformClient::PlatformClientBuilder::~PlatformClientBuilder() = default;
+PlatformClientBuilder::~PlatformClientBuilder() = default;
 
 [[maybe_unused]]
-std::unique_ptr<PlatformClient> PlatformClient::PlatformClientBuilder::Build() const
+std::unique_ptr<PlatformClient> PlatformClientBuilder::Build() const
 {
     if (!_baseAddress.has_value())
     {
@@ -243,18 +266,35 @@ std::unique_ptr<PlatformClient> PlatformClient::PlatformClientBuilder::Build() c
 #endif
     }
 
-    return std::unique_ptr<PlatformClient>(new PlatformClient(_baseAddress.value(), userAgentStream.str()));
+    return std::unique_ptr<PlatformClient>(new PlatformClient(_baseAddress.value(),
+                                                              userAgentStream.str(),
+                                                              _logger.value_or(nullptr),
+                                                              _httpLogLevel.value_or(HttpLogLevel::None)));
 }
 
 [[maybe_unused]]
-PlatformClient::PlatformClientBuilder& PlatformClient::PlatformClientBuilder::SetBaseAddress(std::string baseAddress)
+PlatformClientBuilder& PlatformClientBuilder::SetBaseAddress(std::string baseAddress)
 {
     _baseAddress = std::move(baseAddress);
     return *this;
 }
 
 [[maybe_unused]]
-PlatformClient::PlatformClientBuilder& PlatformClient::PlatformClientBuilder::SetUserAgent(std::string userAgent)
+PlatformClientBuilder& PlatformClientBuilder::SetHttpLogLevel(const HttpLogLevel httpLogLevel)
+{
+    _httpLogLevel = httpLogLevel;
+    return *this;
+}
+
+[[maybe_unused]]
+PlatformClientBuilder& PlatformClientBuilder::SetLogger(LoggerPtr logger)
+{
+    _logger = std::move(logger);
+    return *this;
+}
+
+[[maybe_unused]]
+PlatformClientBuilder& PlatformClientBuilder::SetUserAgent(std::string userAgent)
 {
     _userAgent = std::move(userAgent);
     return *this;

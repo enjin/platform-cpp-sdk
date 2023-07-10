@@ -16,7 +16,9 @@
 #define ENJINPLATFORMSDK_PLATFORMCLIENT_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/HttpLogLevel.hpp"
 #include "EnjinPlatformSdk/IJsonDeserializable.hpp"
+#include "EnjinPlatformSdk/ILogger.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include "EnjinPlatformSdk/PlatformRequest.hpp"
 #include "EnjinPlatformSdk/PlatformResponse.hpp"
@@ -94,23 +96,22 @@ public:
         static_assert(std::is_base_of<IJsonDeserializable, TResult>::value,
                       "Type T does not implement IJsonDeserializable");
 
-        return std::async([this, request = std::move(request)]()
-                          {
-                              Result result = SendRequestHelper(request);
+        return std::async([this, request = std::move(request)]() {
+            Result result = SendRequestHelper(request);
 
-                              TResult t;
-                              t.Deserialize(JsonValue::FromJson(result.body));
+            TResult t;
+            t.Deserialize(JsonValue::FromJson(result.body));
 
-                              return std::shared_ptr<IPlatformResponse<TResult>>(
-                                  new PlatformResponse<TResult>(result.status, result.headers, std::move(t)));
-                          });
+            return std::shared_ptr<IPlatformResponse<TResult>>(
+                new PlatformResponse<TResult>(result.status, result.headers, std::move(t)));
+        });
     }
 
     PlatformClient& operator=(const PlatformClient&) = delete;
 
     PlatformClient& operator=(PlatformClient&& rhs) noexcept;
 
-    /// \brief Creates a builder instance to be used for creating an instance this class.
+    /// \brief Creates a builder instance to be used for creating an instance of this class.
     /// \return The builder instance.
     [[maybe_unused]]
     static PlatformClientBuilder Builder();
@@ -119,6 +120,8 @@ public:
     class ENJINPLATFORMSDK_EXPORT PlatformClientBuilder final
     {
         std::optional<std::string> _baseAddress;
+        std::optional<HttpLogLevel> _httpLogLevel;
+        std::optional<LoggerPtr> _logger;
         std::optional<std::string> _userAgent;
 
     public:
@@ -137,6 +140,18 @@ public:
         /// \return This builder for chaining.
         [[maybe_unused]]
         PlatformClientBuilder& SetBaseAddress(std::string baseAddress);
+
+        /// \brief Sets the HTTP log level for the client to use when processing HTTP traffic.
+        /// \param httpLogLevel The HTTP log level.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PlatformClientBuilder& SetHttpLogLevel(HttpLogLevel httpLogLevel);
+
+        /// \brief Sets the logger
+        /// \param logger The logger.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PlatformClientBuilder& SetLogger(LoggerPtr logger);
 
         /// \brief Sets the value of the User-Agent header that the client will use when sending requests to the
         /// platform.
@@ -159,7 +174,9 @@ private:
     /// \brief Constructs an instance of this class.
     /// \param baseAddress The base address for the client.
     /// \param userAgent The User-Agent value for the client.
-    PlatformClient(std::string baseAddress, std::string userAgent);
+    /// \param logger The logger for the client.
+    /// \param httpLogLevel The HTTP log level for HTTP traffic.
+    PlatformClient(std::string baseAddress, std::string userAgent, LoggerPtr logger, HttpLogLevel httpLogLevel);
 
     /// \brief Helper class for sending requests to the platform.
     /// \param request The platform request.
