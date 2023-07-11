@@ -24,12 +24,14 @@ public:
     /// \brief Logs a message at the given log level.
     /// \param logLevel The log level.
     /// \param message The message.
+    [[maybe_unused]]
     virtual void Log(LogLevel logLevel, const std::string& message) = 0;
 
     /// \brief Logs an exception and message at the given log level.
     /// \param logLevel The log level.
     /// \param e The exception.
     /// \param message The message.
+    [[maybe_unused]]
     virtual void Log(LogLevel logLevel, const std::exception& e, const std::string& message) = 0;
 };
 }
