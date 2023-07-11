@@ -54,12 +54,6 @@ public:
     HttpLoggingHandler& operator=(const HttpLoggingHandler& rhs);
 
     HttpLoggingHandler& operator=(HttpLoggingHandler&& rhs) noexcept;
-
-private:
-    /// \brief Converts the given string to all uppercase.
-    /// \param s The string.
-    /// \return The converted string.
-    static std::string ToUpper(std::string s);
 };
 }
 

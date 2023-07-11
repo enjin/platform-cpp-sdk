@@ -1,8 +1,6 @@
 #include "HttpLoggingHandler.hpp"
 
-#include <algorithm>
-#include <cctype>
-#include <functional>
+#include "StringUtil.hpp"
 #include <sstream>
 #include <stdexcept>
 #include <utility>
@@ -36,7 +34,7 @@ void HttpLoggingHandler::LogRequest(const httplib::Request& request)
     std::stringstream ss;
 
     // Essential info
-    const std::string method = ToUpper(request.method);
+    const std::string method = StringUtil::ToUpper(request.method);
     const std::string& uri = request.path;
     const size_t contentLength = request.content_length_;
 
@@ -121,12 +119,3 @@ void HttpLoggingHandler::LogResponse(const httplib::Response& response)
 HttpLoggingHandler& HttpLoggingHandler::operator=(const HttpLoggingHandler& rhs) = default;
 
 HttpLoggingHandler& HttpLoggingHandler::operator=(HttpLoggingHandler&& rhs) noexcept = default;
-
-// Static
-
-std::string HttpLoggingHandler::ToUpper(std::string s)
-{
-    std::transform(s.begin(), s.end(), s.begin(), std::ptr_fun<int, int>(std::toupper));
-
-    return s;
-}
