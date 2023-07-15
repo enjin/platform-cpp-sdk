@@ -88,6 +88,56 @@ public:
         return _client->IsSubscriptionPending(channelName);
     }
 
+    void RemoveOnConnectedHandler() override
+    {
+        _client->RemoveOnConnectedHandler();
+    }
+
+    void RemoveOnConnectionStateChangedHandler() override
+    {
+        _client->RemoveOnConnectionStateChangedHandler();
+    }
+
+    void RemoveOnDisconnectedHandler() override
+    {
+        _client->RemoveOnDisconnectedHandler();
+    }
+
+    void RemoveOnErrorHandler() override
+    {
+        _client->RemoveOnErrorHandler();
+    }
+
+    void RemoveOnSubscribedHandler() override
+    {
+        _client->RemoveOnSubscribedHandler();
+    }
+
+    void SetOnConnectedHandler(PusherHandler handler) override
+    {
+        _client->SetOnConnectedHandler(std::move(handler));
+    }
+
+    void SetOnConnectionStateChangedHandler(PusherConnectionStateHandler handler) override
+    {
+        _client->SetOnConnectionStateChangedHandler(std::move(handler));
+    }
+
+    void SetOnDisconnectedHandler(PusherHandler handler) override
+    {
+        _client->SetOnDisconnectedHandler(std::move(handler));
+    }
+
+    void SetOnErrorHandler(PusherErrorHandler handler) override
+    {
+        _client->SetOnErrorHandler(std::move(handler));
+    }
+
+    void SetOnSubscribedHandler(PusherSubscribedHandler handler) override
+    {
+        _client->SetOnSubscribedHandler(std::move(handler));
+    }
+
     std::future<void> SubscribeAsync(std::string channelName) override
     {
         return _client->SubscribeAsync(channelName);

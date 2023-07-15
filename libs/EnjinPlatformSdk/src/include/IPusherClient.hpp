@@ -9,6 +9,18 @@
 
 namespace pusher
 {
+/// \brief Definition for a function wrapper which receives a PusherConnectionState.
+typedef std::function<void(PusherConnectionState)> PusherConnectionStateHandler;
+
+/// \brief Definition for a function wrapper which receives an exception.
+typedef std::function<void(const std::exception&)> PusherErrorHandler;
+
+/// \brief Definition for a function wrapper which receives no arguments.
+typedef std::function<void()> PusherHandler;
+
+/// \brief Definition for a function wrapper which receives a string.
+typedef std::function<void(const std::string&)> PusherSubscribedHandler;
+
 /// \brief Interface for Pusher clients.
 class IPusherClient
 {
@@ -60,6 +72,51 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     virtual bool IsSubscriptionPending(const std::string& channelName) const = 0;
+
+    /// \brief Unsets the handler for when this client connects to a server.
+    [[maybe_unused]]
+    virtual void RemoveOnConnectedHandler() = 0;
+
+    /// \brief Unsets the handler for when the connection state of this client changes.
+    [[maybe_unused]]
+    virtual void RemoveOnConnectionStateChangedHandler() = 0;
+
+    /// \brief Unsets the handler for when this client is disconnected.
+    [[maybe_unused]]
+    virtual void RemoveOnDisconnectedHandler() = 0;
+
+    /// \brief Unsets the handler for when this client encounters an error.
+    [[maybe_unused]]
+    virtual void RemoveOnErrorHandler() = 0;
+
+    /// \brief Unsets the handler for when this client successfully subscribes to a channel.
+    [[maybe_unused]]
+    virtual void RemoveOnSubscribedHandler() = 0;
+
+    /// \brief Sets the handler for when this client connects to a server.
+    /// \param handler The handler.
+    [[maybe_unused]]
+    virtual void SetOnConnectedHandler(PusherHandler handler) = 0;
+
+    /// \brief Sets the handler for when the connection state of this client changes.
+    /// \param handler The handler.
+    [[maybe_unused]]
+    virtual void SetOnConnectionStateChangedHandler(PusherConnectionStateHandler handler) = 0;
+
+    /// \brief Sets the handler for when this client is disconnected.
+    /// \param handler The handler.
+    [[maybe_unused]]
+    virtual void SetOnDisconnectedHandler(PusherHandler handler) = 0;
+
+    /// \brief Sets the handler for when this client encounters an error.
+    /// \param handler The handler.
+    [[maybe_unused]]
+    virtual void SetOnErrorHandler(PusherErrorHandler handler) = 0;
+
+    /// \brief Sets the handler for when this client successfully subscribes to a channel.
+    /// \param handler The handler.
+    [[maybe_unused]]
+    virtual void SetOnSubscribedHandler(PusherSubscribedHandler handler) = 0;
 
     /// \brief Subscribes this client to the given channel to start receiving events for it.
     /// \param channelName The name of the channel.

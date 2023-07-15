@@ -3,17 +3,14 @@
 
 #include "enjinplatformsdk_export.h"
 #include "IPusherClient.hpp"
+#include "PusherConnectionState.hpp"
 #include "PusherOptions.hpp"
+#include <functional>
 #include <memory>
+#include <stdexcept>
 
 namespace pusher
 {
-/// \brief Definition for a function wrapper which receives a PusherConnectionState.
-using PusherClientConnectionHandler = std::function<void(PusherConnectionState)>;
-
-/// \brief Definition for a function wrapper which receives an exception.
-using PusherClientErrorHandler = std::function<void(const std::exception&)>;
-
 /// \brief Pusher client for subscribing to Pusher channels and binding to events.
 class ENJINPLATFORMSDK_EXPORT PusherClient : virtual public IPusherClient
 {
@@ -30,17 +27,6 @@ public:
     /// \param options The Pusher options.
     [[maybe_unused]]
     PusherClient(const std::string& key, const PusherOptions& options);
-
-    /// \brief Constructs an instance of this class with the given application key, options, and handlers.
-    /// \param key The application key.
-    /// \param options The Pusher options.
-    /// \param onConnectionHandler The handler for when connection state changes.
-    /// \param onErrorHandler The handler for when errors occur within the client.
-    [[maybe_unused]]
-    PusherClient(const std::string& key,
-                 const PusherOptions& options,
-                 PusherClientConnectionHandler onConnectionHandler,
-                 PusherClientErrorHandler onErrorHandler);
 
     PusherClient(const PusherClient& other) = delete;
 
@@ -79,6 +65,36 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     bool IsSubscriptionPending(const std::string& channelName) const override;
+
+    [[maybe_unused]]
+    void RemoveOnConnectedHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnConnectionStateChangedHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnDisconnectedHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnErrorHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnSubscribedHandler() override;
+
+    [[maybe_unused]]
+    void SetOnConnectedHandler(PusherHandler handler) override;
+
+    [[maybe_unused]]
+    void SetOnConnectionStateChangedHandler(PusherConnectionStateHandler handler) override;
+
+    [[maybe_unused]]
+    void SetOnDisconnectedHandler(PusherHandler handler) override;
+
+    [[maybe_unused]]
+    void SetOnErrorHandler(PusherErrorHandler handler) override;
+
+    [[maybe_unused]]
+    void SetOnSubscribedHandler(PusherSubscribedHandler handler) override;
 
     [[maybe_unused]]
     std::future<void> SubscribeAsync(std::string channelName) override;
