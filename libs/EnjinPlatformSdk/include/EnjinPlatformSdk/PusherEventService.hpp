@@ -76,6 +76,18 @@ public:
     EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener, EventMatcher matcher) override;
 
     [[maybe_unused]]
+    void RemoveOnConnectedHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnConnectionStateChangedHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnDisconnectedHandler() override;
+
+    [[maybe_unused]]
+    void RemoveOnSubscribedHandler() override;
+
+    [[maybe_unused]]
     void SetOnConnectedHandler(std::function<void()> handler) override;
 
     [[maybe_unused]]

@@ -53,6 +53,14 @@ public:
                 (EventListenerPtr listener, EventMatcher matcher),
                 ());
 
+    MOCK_METHOD(void, RemoveOnConnectedHandler, (), ());
+
+    MOCK_METHOD(void, RemoveOnConnectionStateChangedHandler, (), ());
+
+    MOCK_METHOD(void, RemoveOnDisconnectedHandler, (), ());
+
+    MOCK_METHOD(void, RemoveOnSubscribedHandler, (), ());
+
     MOCK_METHOD(void, SetOnConnectedHandler, (std::function<void()> handler), ());
 
     MOCK_METHOD(void, SetOnConnectionStateChangedHandler, (std::function<void(ConnectionState)> handler), ());

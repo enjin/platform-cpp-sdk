@@ -7,13 +7,17 @@
 #include "PusherListener.hpp"
 #include "PusherOptions.hpp"
 #include "EnjinPlatformSdk/EventListenerRegistration.hpp"
+#include <algorithm>
+#include <chrono>
 #include <mutex>
+#include <optional>
 #include <stdexcept>
 #include <utility>
 #include <vector>
 
 using namespace enjin::platform::sdk;
 using namespace pusher;
+using Milliseconds = std::chrono::milliseconds;
 using PusherEventServiceBuilder = PusherEventService::PusherEventServiceBuilder;
 using RegistrationPtr = std::shared_ptr<EventListenerRegistration>;
 
@@ -169,10 +173,18 @@ class PusherEventService::Impl : virtual public IPusherEventServiceImpl
 {
     std::unique_ptr<PusherWrapper> _client;
     PusherListener _listener;
-    std::vector<RegistrationPtr> _registrations;
+    std::vector<RegistrationPtr> _regs;
+
+    std::optional<std::function<void()>> _onConnectionHandler;
+    std::optional<std::function<void(ConnectionState)>> _onConnectionStateChangedHandler;
+    std::optional<std::function<void()>> _onDisconnectedHandler;
+    std::optional<std::function<void()>> _onSubscribedHandler;
 
     // Mutexes
-    mutable std::mutex _registrationsMutex;
+    mutable std::mutex _handlersMutex;
+    mutable std::mutex _regsMutex;
+
+    static constexpr Milliseconds DisconnectTimout = Milliseconds(20000); // 20 seconds
 
 public:
     Impl() = delete;
@@ -190,7 +202,10 @@ public:
     Impl(Impl&& other) noexcept = delete;
 
     /// \brief Class destructor.
-    ~Impl() override = default;
+    ~Impl() override
+    {
+        Impl::DisconnectAsync().wait_for(DisconnectTimout);
+    }
 
     Impl& operator=(const Impl& rhs) = delete;
 
@@ -200,12 +215,12 @@ public:
 
     std::future<void> ConnectAsync() override
     {
-        return std::future<void>();
+        return _client->ConnectAsync();
     }
 
     std::future<void> DisconnectAsync() override
     {
-        return std::future<void>();
+        return _client->DisconnectAsync();
     }
 
     bool IsConnected() const override
@@ -239,58 +254,94 @@ public:
         return RegisterListener(std::move(listener), std::move(matcher));
     }
 
+    void RemoveOnConnectedHandler() override
+    {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
+
+        _onConnectionHandler.reset();
+    }
+
+    void RemoveOnConnectionStateChangedHandler() override
+    {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
+
+        _onConnectionStateChangedHandler.reset();
+    }
+
+    void RemoveOnDisconnectedHandler() override
+    {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
+
+        _onDisconnectedHandler.reset();
+    }
+
+    void RemoveOnSubscribedHandler() override
+    {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
+
+        _onSubscribedHandler.reset();
+    }
+
     void SetOnConnectedHandler(std::function<void()> handler) override
     {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
 
+        _onConnectionHandler = std::move(handler);
     }
 
     void SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler) override
     {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
 
+        _onConnectionStateChangedHandler = std::move(handler);
     }
 
     void SetOnDisconnectedHandler(std::function<void()> handler) override
     {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
 
+        _onDisconnectedHandler = std::move(handler);
     }
 
     void SetOnSubscribedHandler(std::function<void()> handler) override
     {
+        std::lock_guard<std::mutex> guard(_handlersMutex);
 
+        _onSubscribedHandler = std::move(handler);
     }
 
     std::future<void> SubscribeAsync(const std::string& channelName) override
     {
-        return std::future<void>();
+        return _client->SubscribeAsync(channelName);
     }
 
     void UnregisterAllListeners() override
     {
-        std::lock_guard<std::mutex> guard(_registrationsMutex);
+        std::lock_guard<std::mutex> guard(_regsMutex);
 
-        for (const RegistrationPtr& reg : _registrations)
+        for (const RegistrationPtr& reg : _regs)
         {
             reg->SetIsRegistered(false);
         }
 
-        _registrations.clear();
+        _regs.clear();
     }
 
     void UnregisterListener(const IEventListener& listener) override
     {
-        std::lock_guard<std::mutex> guard(_registrationsMutex);
+        std::lock_guard<std::mutex> guard(_regsMutex);
 
         UnregisterListenerImpl(listener);
     }
 
     std::future<void> UnsubscribeAllAsync() override
     {
-        return std::future<void>();
+        return _client->UnsubscribeAllAsync();
     }
 
     std::future<void> UnsubscribeAsync(const std::string& channelName) override
     {
-        return std::future<void>();
+        return _client->UnsubscribeAsync(channelName);
     }
 
     // endregion IEventService
@@ -299,9 +350,9 @@ public:
 
     std::vector<EventListenerRegistrationPtr> GetRegistrations() const override
     {
-        std::lock_guard<std::mutex> guard(_registrationsMutex);
+        std::lock_guard<std::mutex> guard(_regsMutex);
 
-        return std::vector<EventListenerRegistrationPtr>(_registrations.begin(), _registrations.end());
+        return {_regs.begin(), _regs.end()};
     }
 
     // endregion IPusherEventServiceImpl
@@ -319,7 +370,7 @@ private:
             throw std::invalid_argument("Listener must not be a null-pointer");
         }
 
-        std::lock_guard<std::mutex> guard(_registrationsMutex);
+        std::lock_guard<std::mutex> guard(_regsMutex);
 
         UnregisterListenerImpl(*listener);
 
@@ -327,7 +378,7 @@ private:
         rawPtr->SetIsRegistered(true);
 
         RegistrationPtr reg = std::shared_ptr<EventListenerRegistration>(rawPtr);
-        _registrations.push_back(reg);
+        _regs.push_back(reg);
 
         return reg;
     }
@@ -337,16 +388,16 @@ private:
     /// \param listener The reference to the listener.
     void UnregisterListenerImpl(const IEventListener& listener)
     {
-        for (auto iter = _registrations.begin(); iter != _registrations.end(); ++iter)
-        {
-            const RegistrationPtr& reg = *iter;
-            if (reg->GetListener().get() == &listener)
+        _regs.erase(std::remove_if(_regs.begin(), _regs.end(), [&](const RegistrationPtr& reg) {
+            if (reg->GetListener().get() != &listener)
             {
-                reg->SetIsRegistered(false);
-
-                _registrations.erase(iter--);
+                return false;
             }
-        }
+
+            reg->SetIsRegistered(false);
+
+            return true;
+        }), _regs.end());
     }
 };
 
@@ -419,6 +470,33 @@ EventListenerRegistrationPtr PusherEventService::RegisterListenerWithMatcher(Eve
                                                                              EventMatcher matcher)
 {
     return _pimpl->RegisterListenerWithMatcher(std::move(listener), std::move(matcher));
+}
+
+[[maybe_unused]]
+void PusherEventService::RemoveOnConnectedHandler()
+{
+    _pimpl->RemoveOnConnectedHandler();
+}
+
+[[maybe_unused]]
+void PusherEventService::RemoveOnConnectionStateChangedHandler()
+{
+
+    _pimpl->RemoveOnConnectionStateChangedHandler();
+}
+
+[[maybe_unused]]
+void PusherEventService::RemoveOnDisconnectedHandler()
+{
+
+    _pimpl->RemoveOnDisconnectedHandler();
+}
+
+[[maybe_unused]]
+void PusherEventService::RemoveOnSubscribedHandler()
+{
+
+    _pimpl->RemoveOnSubscribedHandler();
 }
 
 [[maybe_unused]]

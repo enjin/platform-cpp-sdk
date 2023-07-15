@@ -54,7 +54,7 @@ TEST_F(PusherListenerTest, OnEventWhenEventServiceHasRegisteredListenerWithPassi
     const EventMatcher fakeMatcher = [](const std::string&) { return true; };
     const MockEventListenerPtr mockListener = std::make_shared<NiceMockEventListener>();
     const MockEventListenerRegistrationPtr mockRegistration = std::make_shared<NiceMockEventListenerRegistration>();
-    const EventListenerPtr stubListener = mockListener; // Needed to avoid segmentation fault when stubbing
+    const EventListenerPtr stubListener = mockListener; // Used to avoid seg-fault caused by GTest cast when stubbing
     const std::vector<EventListenerRegistrationPtr> registrations = {mockRegistration};
 
     // Arrange - Stubbing
@@ -82,7 +82,7 @@ TEST_F(PusherListenerTest, OnEventWhenEventServiceHasRegisteredListenerWithNonPa
     const EventMatcher fakeMatcher = [](const std::string&) { return false; };
     const MockEventListenerPtr mockListener = std::make_shared<NiceMockEventListener>();
     const MockEventListenerRegistrationPtr mockRegistration = std::make_shared<NiceMockEventListenerRegistration>();
-    const EventListenerPtr stubListener = mockListener; // Needed to avoid segmentation fault when stubbing
+    const EventListenerPtr stubListener = mockListener; // Used to avoid seg-fault caused by GTest cast when stubbing
     const std::vector<EventListenerRegistrationPtr> registrations = {mockRegistration};
 
     // Arrange - Stubbing

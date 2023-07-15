@@ -74,6 +74,22 @@ public:
     virtual EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener,
                                                                      EventMatcher matcher) = 0;
 
+    /// \brief Unsets the handler for when this service connects to a server.
+    [[maybe_unused]]
+    virtual void RemoveOnConnectedHandler() = 0;
+
+    /// \brief Unsets the handler for when the connection state of this service changes.
+    [[maybe_unused]]
+    virtual void RemoveOnConnectionStateChangedHandler() = 0;
+
+    /// \brief Unsets the handler for when this service is disconnected.
+    [[maybe_unused]]
+    virtual void RemoveOnDisconnectedHandler() = 0;
+
+    /// \brief Unsets the handler for when this service successfully subscribes to a channel.
+    [[maybe_unused]]
+    virtual void RemoveOnSubscribedHandler() = 0;
+
     /// \brief Sets the handler for when this service connects to a server.
     /// \param handler The handler.
     [[maybe_unused]]
