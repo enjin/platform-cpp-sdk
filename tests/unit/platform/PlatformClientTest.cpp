@@ -42,8 +42,8 @@ public:
     std::unique_ptr<PlatformClient> classUnderTest;
 
     // Mocks
-    MockHttpServer mockServer;
     MockPlatformRequestPtr mockRequest;
+    MockHttpServer mockServer;
 
     inline static const std::string ContentType = std::string("Content-Type");
     inline static const std::string MediaType = std::string("application/json");
@@ -53,14 +53,16 @@ public:
 protected:
     void SetUp() override
     {
+        Test::SetUp();
+
         mockRequest = std::make_shared<NiceMockPlatformRequest>();
         mockServer.Start();
 
         // Default stubs for mock request
-        EXPECT_CALL(*mockRequest, GetPath())
-            .WillRepeatedly(ReturnRef(MediaType));
-        EXPECT_CALL(*mockRequest, GetPath())
-            .WillRepeatedly(ReturnRef(Path));
+        ON_CALL(*mockRequest, GetContentType())
+            .WillByDefault(Const(ReturnRef(MediaType)));
+        ON_CALL(*mockRequest, GetPath())
+            .WillByDefault(Const(ReturnRef(Path)));
 
         classUnderTest = PlatformClient::Builder()
             .SetBaseAddress(mockServer.GetUri().value())
@@ -69,6 +71,8 @@ protected:
 
     void TearDown() override
     {
+        Test::TearDown();
+
         mockServer.Stop();
     }
 };

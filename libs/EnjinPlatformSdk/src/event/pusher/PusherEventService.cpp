@@ -7,6 +7,7 @@
 #include "PusherListener.hpp"
 #include "PusherOptions.hpp"
 #include "EnjinPlatformSdk/EventListenerRegistration.hpp"
+#include "EnjinPlatformSdk/LogLevel.hpp"
 #include <algorithm>
 #include <chrono>
 #include <mutex>
@@ -457,6 +458,18 @@ PusherConnectionStateHandler CreateConnStateHandler(std::function<void(Connectio
     };
 }
 
+PusherErrorHandler CreateErrorHandler(LoggerPtr logger)
+{
+    if (logger == nullptr)
+    {
+        return [](const std::exception&) {};
+    }
+
+    return [logger = std::move(logger)](const std::exception& e) {
+        logger->Log(LogLevel::Error, e, "Error in PusherEventService");
+    };
+}
+
 PusherSubscribedHandler CreateSubHandler(std::function<void(const std::string&)> innerHandler)
 {
     if (!innerHandler)
@@ -502,7 +515,7 @@ std::unique_ptr<PusherEventService> PusherEventServiceBuilder::Build() const
     PusherHandler disconnectedHandler = CreateConnHandler(_disconnectedHandler);
     PusherConnectionStateHandler connStateHandler = CreateConnStateHandler(_connStateHandler);
     PusherSubscribedHandler subHandler = CreateSubHandler(_subHandler);
-    PusherErrorHandler errHandler = [](const std::exception&) {};
+    PusherErrorHandler errHandler = CreateErrorHandler(_logger);
 
     std::unique_ptr<PusherWrapper> client = std::make_unique<PusherWrapper>(_key.value(),
                                                                             options,
@@ -543,6 +556,14 @@ PusherEventServiceBuilder& PusherEventServiceBuilder::SetHost(std::string host)
 PusherEventServiceBuilder& PusherEventServiceBuilder::SetKey(std::string key)
 {
     _key = std::move(key);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PusherEventServiceBuilder& PusherEventServiceBuilder::SetLogger(LoggerPtr logger)
+{
+    _logger = std::move(logger);
 
     return *this;
 }
