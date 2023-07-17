@@ -111,7 +111,7 @@ TEST_F(PusherClientReconnectionTest, Receives4000ErrorCodeDoesNotAttemptToReconn
     std::this_thread::sleep_for(WaitTime);
 
     // Assert
-    ASSERT_THAT(classUnderTest->GetState(), Eq(expectedConnState));
+    EXPECT_THAT(classUnderTest->GetState(), Eq(expectedConnState));
 
     // Verify
     Verify();
@@ -130,7 +130,7 @@ TEST_F(PusherClientReconnectionTest, Receives4100ErrorCodeReconnectsToServer)
     mockServer->NextMessage([this](const WebSocketMessage&) {
         IncrementCallCount();
     });
-    SetExpectedCallCount(0);
+    SetExpectedCallCount(1);
 
     // Act
     mockServer->Close(code, reason);
@@ -138,7 +138,7 @@ TEST_F(PusherClientReconnectionTest, Receives4100ErrorCodeReconnectsToServer)
     std::this_thread::sleep_for(WaitTime);
 
     // Assert
-    ASSERT_THAT(classUnderTest->GetState(), Eq(expectedConnState));
+    EXPECT_THAT(classUnderTest->GetState(), Eq(expectedConnState));
 
     // Verify
     Verify();

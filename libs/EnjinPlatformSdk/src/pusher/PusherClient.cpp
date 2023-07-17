@@ -414,13 +414,6 @@ private:
 
             return;
         }
-
-        if (code >= 4100 && code < 4200)
-        {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-
-        SetState(PusherConnectionState::Reconnecting);
     }
 
     /// \brief Handles a close message.
