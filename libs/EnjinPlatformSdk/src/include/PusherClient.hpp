@@ -3,16 +3,25 @@
 
 #include "enjinplatformsdk_export.h"
 #include "IPusherClient.hpp"
+#include "PusherConnectionState.hpp"
 #include "PusherOptions.hpp"
+#include <functional>
 #include <memory>
+#include <stdexcept>
 
 namespace pusher
 {
 /// \brief Definition for a function wrapper which receives a PusherConnectionState.
-using PusherClientConnectionHandler = std::function<void(PusherConnectionState)>;
+typedef std::function<void(PusherConnectionState)> PusherConnectionStateHandler;
 
 /// \brief Definition for a function wrapper which receives an exception.
-using PusherClientErrorHandler = std::function<void(const std::exception&)>;
+typedef std::function<void(const std::exception&)> PusherErrorHandler;
+
+/// \brief Definition for a function wrapper which receives no arguments.
+typedef std::function<void()> PusherHandler;
+
+/// \brief Definition for a function wrapper which receives a string.
+typedef std::function<void(const std::string&)> PusherSubscribedHandler;
 
 /// \brief Pusher client for subscribing to Pusher channels and binding to events.
 class ENJINPLATFORMSDK_EXPORT PusherClient : virtual public IPusherClient
@@ -25,33 +34,41 @@ class ENJINPLATFORMSDK_EXPORT PusherClient : virtual public IPusherClient
 public:
     PusherClient() = delete;
 
-    /// \brief Constructs an instance of this class with the given application key and options.
+    /// \brief Constructs an instance of this class.
     /// \param key The application key.
     /// \param options The Pusher options.
     [[maybe_unused]]
     PusherClient(const std::string& key, const PusherOptions& options);
 
-    /// \brief Constructs an instance of this class with the given application key, options, and handlers.
+    /// \brief Constructs an instance of this class.
     /// \param key The application key.
     /// \param options The Pusher options.
-    /// \param onConnectionHandler The handler for when connection state changes.
-    /// \param onErrorHandler The handler for when errors occur within the client.
+    /// \param onConnectedHandler The handler for when the client connects.
+    /// \param onConnectionStateChangedHandler The handler for when the connection state of the client changes.
+    /// \param onDisconnectedHandler The handler for when the client disconnects.
+    /// \param onErrorHandler The handler for when the client encounters an error.
+    /// \param onSubscribedHandler The handler for when the client subscribes to a channel.
     [[maybe_unused]]
     PusherClient(const std::string& key,
                  const PusherOptions& options,
-                 PusherClientConnectionHandler onConnectionHandler,
-                 PusherClientErrorHandler onErrorHandler);
+                 PusherHandler onConnectedHandler,
+                 PusherConnectionStateHandler onConnectionStateChangedHandler,
+                 PusherHandler onDisconnectedHandler,
+                 PusherErrorHandler onErrorHandler,
+                 PusherSubscribedHandler onSubscribedHandler);
 
     PusherClient(const PusherClient& other) = delete;
 
-    PusherClient(PusherClient&& other) noexcept = delete;
+    /// \brief Move constructor.
+    /// \param other The other instance to move.
+    PusherClient(PusherClient&& other) noexcept;
 
     /// \brief Class destructor.
     ~PusherClient() override;
 
     PusherClient& operator=(const PusherClient& rhs) = delete;
 
-    PusherClient& operator=(PusherClient&& rhs) noexcept = delete;
+    PusherClient& operator=(PusherClient&& rhs) noexcept;
 
     // region IPusherClient
 
@@ -59,12 +76,10 @@ public:
     void Bind(const std::string& eventName, SubscriptionListenerPtr listener) override;
 
     [[maybe_unused]]
-    [[nodiscard]]
-    std::future<void> Connect() override;
+    std::future<void> ConnectAsync() override;
 
     [[maybe_unused]]
-    [[nodiscard]]
-    std::future<void> Disconnect() override;
+    std::future<void> DisconnectAsync() override;
 
     [[maybe_unused]]
     [[nodiscard]]
@@ -83,13 +98,16 @@ public:
     bool IsSubscriptionPending(const std::string& channelName) const override;
 
     [[maybe_unused]]
-    void Subscribe(const std::string& channelName) override;
+    std::future<void> SubscribeAsync(std::string channelName) override;
 
     [[maybe_unused]]
     void Unbind(const std::string& eventName) override;
 
     [[maybe_unused]]
-    void Unsubscribe(const std::string& channelName) override;
+    std::future<void> UnsubscribeAllAsync() override;
+
+    [[maybe_unused]]
+    std::future<void> UnsubscribeAsync(std::string channelName) override;
 
     // endregion IPusherClient
 };

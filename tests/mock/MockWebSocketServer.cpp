@@ -19,10 +19,13 @@
 #include "ixwebsocket/IXWebSocketCloseConstants.h"
 #include "ixwebsocket/IXWebSocketMessage.h"
 #include "ixwebsocket/IXWebSocketServer.h"
+#include <chrono>
+#include <condition_variable>
 #include <mutex>
 #include <set>
 #include <stdexcept>
 #include <queue>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -33,6 +36,8 @@
 #endif
 
 // Do not use ix namespace to avoid ambiguous references
+using Clock = std::chrono::high_resolution_clock;
+using Milliseconds = std::chrono::milliseconds;
 
 // region Impl
 
@@ -46,6 +51,9 @@ class MockWebSocketServer::Impl : public virtual IMockWebSocketServer
 
     // Mutexes
     mutable std::mutex _messagesMutex;
+
+    // Condition variables
+    std::condition_variable _messagesCv;
 
     static constexpr int PortMin = 8000;
     static constexpr int PortMax = 8080;
@@ -95,17 +103,25 @@ public:
     }
 
     [[nodiscard]]
-    WebSocketMessageHandler GetNextMessageHandler() override
-    {
-        std::lock_guard<std::mutex> guard(_messagesMutex);
-
-        return GetNextMessageHandlerImpl();
-    }
-
-    [[nodiscard]]
     int GetPort() const override
     {
         return _server->getPort();
+    }
+
+    [[nodiscard]]
+    bool HasQueuedMessageHandlers() const override
+    {
+        std::lock_guard<std::mutex> guard(_messagesMutex);
+
+        return !_messageHandlers.empty();
+    }
+
+    [[nodiscard]]
+    bool HasUnhandledMessages() const override
+    {
+        std::lock_guard<std::mutex> guard(_messagesMutex);
+
+        return !_unhandledMessages.empty();
     }
 
     IMockWebSocketServer& IgnoreMessageType(const WebSocketMessageType type) override
@@ -202,24 +218,23 @@ public:
         _server->stop();
     }
 
+    void WaitForQueuedMessageHandlers(Milliseconds timeout) override
+    {
+        std::unique_lock<std::mutex> lock(_messagesMutex);
+
+        while (!_messageHandlers.empty() && timeout > Milliseconds::zero())
+        {
+            const auto start = Clock::now();
+            _messagesCv.wait_for(lock, timeout);
+            const auto end = Clock::now();
+
+            timeout -= std::chrono::duration_cast<Milliseconds>(end - start);
+        }
+    }
+
     // endregion IMockWebSocketServer
 
 private:
-    /// \brief Implementation function for getting the next WebSocket message handler in the handler queue.
-    /// \remarks This member-function ought to only be called when holding the lock for the message handler mutex.
-    WebSocketMessageHandler GetNextMessageHandlerImpl()
-    {
-        if (_messageHandlers.empty())
-        {
-            return {};
-        }
-
-        WebSocketMessageHandler handler = _messageHandlers.front();
-        _messageHandlers.pop();
-
-        return handler;
-    }
-
     /// \brief Creates a mock WebSocket message for a connection being closed and attempts to pass it to the message
     /// handler queue.
     void HandleClose()
@@ -265,21 +280,16 @@ private:
     /// \param msg The message.
     void HandleOrQueueMessage(WebSocketMessage msg)
     {
-        WebSocketMessageHandler handler;
+        std::lock_guard<std::mutex> guard(_messagesMutex);
 
+        if (_messageHandlers.empty())
         {
-            std::lock_guard<std::mutex> guard(_messagesMutex);
-
-            if (_messageHandlers.empty())
-            {
-                _unhandledMessages.push(std::move(msg));
-                return;
-            }
-
-            handler = GetNextMessageHandlerImpl();
+            _unhandledMessages.push(std::move(msg));
+            return;
         }
 
-        handler(std::move(msg));
+        _messageHandlers.front()(msg);
+        _messageHandlers.pop();
     }
 
     /// \brief Initializes this server.
@@ -414,15 +424,21 @@ std::string MockWebSocketServer::GetHost() const
 }
 
 [[maybe_unused]]
-WebSocketMessageHandler MockWebSocketServer::GetNextMessageHandler()
-{
-    return _pimpl->GetNextMessageHandler();
-}
-
-[[maybe_unused]]
 int MockWebSocketServer::GetPort() const
 {
     return _pimpl->GetPort();
+}
+
+[[maybe_unused]]
+bool MockWebSocketServer::HasQueuedMessageHandlers() const
+{
+    return _pimpl->HasQueuedMessageHandlers();
+}
+
+[[maybe_unused]]
+bool MockWebSocketServer::HasUnhandledMessages() const
+{
+    return _pimpl->HasUnhandledMessages();
 }
 
 [[maybe_unused]]
@@ -461,6 +477,12 @@ void MockWebSocketServer::SendWebSocketMessage(const WebSocketMessage& message)
 void MockWebSocketServer::Shutdown()
 {
     _pimpl->Shutdown();
+}
+
+[[maybe_unused]]
+void MockWebSocketServer::WaitForQueuedMessageHandlers(const Milliseconds timeout)
+{
+    _pimpl->WaitForQueuedMessageHandlers(timeout);
 }
 
 // endregion IMockWebSocketServer

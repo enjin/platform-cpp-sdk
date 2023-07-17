@@ -42,6 +42,8 @@ using namespace enjin::platform::sdk;
 using namespace ix;
 using namespace pusher;
 using namespace rapidjson;
+using Clock = std::chrono::steady_clock;
+using Milliseconds = std::chrono::milliseconds;
 
 // region Impl
 
@@ -64,18 +66,20 @@ class PusherClient::Impl : virtual public IPusherClient
     std::map<std::string, std::set<SubscriptionListenerPtr>> _listeners;
 
     // Handlers
-    const std::optional<PusherClientConnectionHandler> _onConnectionStateChangedHandler;
-    const std::optional<PusherClientErrorHandler> _onErrorHandler;
+    const PusherHandler _onConnectedHandler;
+    const PusherConnectionStateHandler _onConnectionStateChangedHandler;
+    const PusherHandler _onDisconnectedHandler;
+    const PusherErrorHandler _onErrorHandler;
+    const PusherSubscribedHandler _onSubscribedHandler;
 
     // Mutexes
-    mutable std::mutex _channelMutex;
     mutable std::mutex _connMutex;
     mutable std::mutex _listenerMutex;
 
     // Condition variables
     std::condition_variable _connCv;
 
-    static constexpr int ConnectTimeout = 10;
+    static constexpr Milliseconds MessageTimeout = Milliseconds(30000);
     static constexpr int PingInterval = 120;
 
     // Message keys
@@ -92,29 +96,22 @@ public:
         Init();
     }
 
-#ifdef __clang__
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "bugprone-throw-keyword-missing"
-
-#endif
-
     Impl(const std::string& key,
          const PusherOptions& options,
-         PusherClientConnectionHandler onConnectionHandler,
-         PusherClientErrorHandler onErrorHandler)
+         PusherHandler onConnectedHandler,
+         PusherConnectionStateHandler onConnectionStateChangedHandler,
+         PusherHandler onDisconnectedHandler,
+         PusherErrorHandler onErrorHandler,
+         PusherSubscribedHandler onSubscribedHandler)
         : _url(CreateUrl(key, options)),
-          _onConnectionStateChangedHandler(std::move(onConnectionHandler)),
-          _onErrorHandler(std::move(onErrorHandler))
+          _onConnectedHandler(std::move(onConnectedHandler)),
+          _onConnectionStateChangedHandler(std::move(onConnectionStateChangedHandler)),
+          _onDisconnectedHandler(std::move(onDisconnectedHandler)),
+          _onErrorHandler(std::move(onErrorHandler)),
+          _onSubscribedHandler(std::move(onSubscribedHandler))
     {
         Init();
     }
-
-#ifdef __clang__
-
-#pragma clang diagnostic pop
-
-#endif
 
     Impl(const Impl& other) = delete;
 
@@ -122,7 +119,7 @@ public:
 
     ~Impl() override
     {
-        Impl::Disconnect().get();
+        Impl::DisconnectAsync().get();
 
         _ws.reset();
 
@@ -158,20 +155,33 @@ public:
     }
 
     [[nodiscard]]
-    std::future<void> Connect() override
+    std::future<void> ConnectAsync() override
     {
         return std::async([this]() {
+            std::unique_lock<std::mutex> connLock(_connMutex);
+
+            if (_conn == PusherConnectionState::Connected || _conn == PusherConnectionState::Connecting)
+            {
+                return;
+            }
+
+            _conn = PusherConnectionState::Connecting;
+
+            if (_onConnectionStateChangedHandler)
+            {
+                _onConnectionStateChangedHandler(PusherConnectionState::Connecting);
+            }
+
             _ws->enableAutomaticReconnection();
             _ws->setUrl(_url);
             _ws->start();
 
-            std::unique_lock<std::mutex> lock(_connMutex);
-
-            _conn = PusherConnectionState::Connecting;
-
-            while (_conn == PusherConnectionState::Connecting)
+            Milliseconds timeout = MessageTimeout;
+            while (_conn == PusherConnectionState::Connecting && timeout > Milliseconds::zero())
             {
-                _connCv.wait(lock, [&]() {
+                const auto start = Clock::now();
+
+                _connCv.wait_for(connLock, timeout, [&]() {
                     if (_connErrorInfo.has_value())
                     {
                         WebSocketErrorInfo errorInfo = _connErrorInfo.value();
@@ -180,38 +190,48 @@ public:
                         throw std::runtime_error(errorInfo.reason);
                     }
 
-                    return _conn != PusherConnectionState::Connecting;
+                    return _conn == PusherConnectionState::Connected;
                 });
+
+                const auto end = Clock::now();
+                timeout -= std::chrono::duration_cast<Milliseconds>(end - start);
             }
         });
     }
 
     [[nodiscard]]
-    std::future<void> Disconnect() override
+    std::future<void> DisconnectAsync() override
     {
         return std::async([this]() {
+            std::unique_lock<std::mutex> connLock(_connMutex);
+
+            if (_conn == PusherConnectionState::Disconnected || _conn == PusherConnectionState::Disconnecting)
             {
-                std::lock_guard<std::mutex> guard(_connMutex);
-
-                if (_conn == PusherConnectionState::Disconnected || _conn == PusherConnectionState::Disconnecting)
-                {
-                    return;
-                }
-
-                _conn = PusherConnectionState::Disconnecting;
+                return;
             }
 
-            OnConnectionStateChanged(PusherConnectionState::Disconnecting);
+            _conn = PusherConnectionState::Disconnecting;
 
-            _ws->stop();
-
+            if (_onConnectionStateChangedHandler)
             {
-                std::lock_guard<std::mutex> guard(_connMutex);
-
-                _conn = PusherConnectionState::Disconnected;
+                _onConnectionStateChangedHandler(PusherConnectionState::Disconnecting);
             }
 
-            OnConnectionStateChanged(PusherConnectionState::Disconnected);
+            _ws->disableAutomaticReconnection();
+            _ws->close();
+
+            Milliseconds timeout = MessageTimeout;
+            while (_conn == PusherConnectionState::Disconnecting && timeout > Milliseconds::zero())
+            {
+                const auto start = Clock::now();
+
+                _connCv.wait_for(connLock, timeout, [&]() {
+                    return _conn != PusherConnectionState::Disconnecting;
+                });
+
+                const auto end = Clock::now();
+                timeout -= std::chrono::duration_cast<Milliseconds>(end - start);
+            }
         });
     }
 
@@ -226,51 +246,80 @@ public:
     [[nodiscard]]
     bool IsSubscribed(const std::string& channelName) const override
     {
-        std::lock_guard<std::mutex> guard(_channelMutex);
+        std::lock_guard<std::mutex> guard(_connMutex);
 
-        auto loc = _channels.find(channelName);
-
-        return loc != _channels.end() && loc->second.isSubscribed;
+        return IsSubscribedImpl(channelName);
     }
 
     [[nodiscard]]
     bool IsSubscribedOrPending(const std::string& channelName) const override
     {
-        std::lock_guard<std::mutex> guard(_channelMutex);
+        std::lock_guard<std::mutex> guard(_connMutex);
 
-        return _channels.find(channelName) != _channels.end();
+        return IsSubscribedOrPendingImpl(channelName);
     }
 
     [[nodiscard]]
     bool IsSubscriptionPending(const std::string& channelName) const override
     {
-        std::lock_guard<std::mutex> guard(_channelMutex);
+        std::lock_guard<std::mutex> guard(_connMutex);
 
-        auto loc = _channels.find(channelName);
-
-        return loc != _channels.end() && !loc->second.isSubscribed;
+        return IsSubscriptionPendingImpl(channelName);
     }
 
-    void Subscribe(const std::string& channelName) override
+    std::future<void> SubscribeAsync(std::string channelName) override
     {
+        std::lock_guard<std::mutex> guard(_connMutex);
+
+        if (IsSubscribedImpl(channelName))
         {
-            std::lock_guard<std::mutex> guard(_channelMutex);
+            return std::async([]() {});
+        }
 
-            auto loc = _channels.find(channelName);
+        _channels.emplace(channelName, PusherChannel());
 
-            // Ignore if already subscribed or pending
-            if (loc != _channels.end())
+        if (_conn != PusherConnectionState::Connected)
+        {
+            return std::async([]() {});
+        }
+
+        _ws->sendText(SubscribeMessage(channelName));
+
+        return std::async([this, channelName = std::move(channelName)]() {
+            std::unique_lock<std::mutex> connLock(_connMutex);
+
+            if (!IsSubscriptionPendingImpl(channelName))
             {
                 return;
             }
 
-            _channels.emplace(channelName, PusherChannel());
-        }
+            Milliseconds timeout = MessageTimeout;
 
-        if (GetState() == PusherConnectionState::Connected)
-        {
-            _ws->sendText(SubscribeMessage(channelName));
-        }
+            // Goes until the channel is either successfully subscribed to or removed
+            while (_conn == PusherConnectionState::Connected
+                   && IsSubscriptionPendingImpl(channelName)
+                   && timeout > Milliseconds::zero())
+            {
+                const auto start = Clock::now();
+
+                _connCv.wait_for(connLock, MessageTimeout, [&]() {
+                    return _conn != PusherConnectionState::Connected || !IsSubscriptionPendingImpl(channelName);
+                });
+
+                const auto end = Clock::now();
+                timeout -= std::chrono::duration_cast<Milliseconds>(end - start);
+            }
+
+            if (IsSubscribedImpl(channelName))
+            {
+                if (_onSubscribedHandler)
+                {
+                    connLock.unlock();
+
+                    _onSubscribedHandler(channelName);
+                }
+            }
+        });
     }
 
     void Unbind(const std::string& eventName) override
@@ -280,30 +329,51 @@ public:
         _listeners.erase(eventName);
     }
 
-    void Unsubscribe(const std::string& channelName) override
+    std::future<void> UnsubscribeAllAsync() override
     {
-        {
-            std::lock_guard<std::mutex> guard(_channelMutex);
+        return std::async([this]() {
+            std::lock_guard<std::mutex> guard(_connMutex);
 
-            auto loc = _channels.find(channelName);
+            if (_conn == PusherConnectionState::Connected)
+            {
+                for (const auto& [channelName, pusherChannel] : _channels)
+                {
+                    _ws->sendText(UnsubscribeMessage(channelName));
+                }
+            }
+
+            _channels.clear();
+            _connCv.notify_all();
+        });
+    }
+
+    std::future<void> UnsubscribeAsync(std::string channelName) override
+    {
+        return std::async([this, channelName = std::move(channelName)]() {
+            std::lock_guard<std::mutex> guard(_connMutex);
+
+            const auto loc = _channels.find(channelName);
 
             if (loc == _channels.end())
             {
                 return;
             }
 
-            _channels.erase(loc);
-        }
+            if (_conn == PusherConnectionState::Connected)
+            {
+                _ws->sendText(UnsubscribeMessage(channelName));
+            }
 
-        if (GetState() == PusherConnectionState::Connected)
-        {
-            _ws->sendText(UnsubscribeMessage(channelName));
-        }
+            _channels.erase(loc);
+            _connCv.notify_all();
+        });
     }
 
     // endregion IPusherClient
 
 private:
+    /// \brief Emits events to the subscribed listeners that are mapped to it.
+    /// \param evt The event.
     void EmitEvent(const PusherEvent& evt)
     {
         if (!evt.GetEventName().has_value())
@@ -330,8 +400,12 @@ private:
         }
     }
 
+    /// \brief Handles a Pusher error.
+    /// \param code The error code.
     void HandlePusherError(const uint16_t code)
     {
+        std::lock_guard<std::mutex> connGuard(_connMutex);
+
         if (code >= 4000 && code < 4100)
         {
             _ws->disableAutomaticReconnection();
@@ -340,19 +414,13 @@ private:
 
             return;
         }
-
-        /* If IXWebSocket ever enables us to listen for successful reconnection, then we will want to set our connection
-         * state to Reconnecting here while we wait for reconnection.
-         */
-
-        if (code >= 4100 && code < 4200)
-        {
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
     }
 
+    /// \brief Handles a close message.
+    /// \param msg The message.
     void HandleWebSocketClosed(const WebSocketMessagePtr& msg)
     {
+        // Pusher error codes sit within the range from 4000 (inclusive) to 4400 (exclusive)
         const uint16_t closeCode = msg->closeInfo.code;
         if (closeCode >= 4000 && closeCode < 4400)
         {
@@ -360,10 +428,21 @@ private:
         }
         else
         {
-            Disconnect().get();
+            std::lock_guard<std::mutex> connGuard(_connMutex);
+
+            if (_conn == PusherConnectionState::Disconnecting)
+            {
+                SetState(PusherConnectionState::Disconnected);
+            }
+            else
+            {
+                SetState(PusherConnectionState::Reconnecting);
+            }
         }
     }
 
+    /// \brief Handles an error message.
+    /// \param msg The error message.
     void HandleWebSocketError(const WebSocketMessagePtr& msg)
     {
         // Pusher error codes sit within the range from 4000 (inclusive) to 4400 (exclusive)
@@ -375,12 +454,17 @@ private:
         }
     }
 
+    /// \brief Handles an open message.
     void HandleWebSocketOpened(const WebSocketMessagePtr&)
     {
-        SetState(PusherConnectionState::Connected);
-        _connCv.notify_all();
+        std::lock_guard<std::mutex> connGuard(_connMutex);
 
-        std::lock_guard<std::mutex> guard(_channelMutex);
+        SetState(PusherConnectionState::Connected);
+
+        if (_onConnectedHandler)
+        {
+            _onConnectedHandler();
+        }
 
         for (auto& [channelName, pusherChannel] : _channels)
         {
@@ -390,6 +474,8 @@ private:
         }
     }
 
+    /// \brief Handles a WebSocket message.
+    /// \param msg The message.
     void HandleWebSocketMessage(const WebSocketMessagePtr& msg)
     {
         Document document;
@@ -438,6 +524,7 @@ private:
         }
     }
 
+    /// \brief Initializes this client.
     void Init()
     {
 #ifdef WIN32
@@ -474,54 +561,78 @@ private:
         });
     }
 
-    void OnConnectionStateChanged(const PusherConnectionState state)
+    /// \brief Implementation for determining if this client is subscribed to the given channel.
+    /// \param channelName The channel name.
+    /// \return Whether this client is subscribed to the channel.
+    /// \remarks Only call this when holding the lock for the connection mutex.
+    bool IsSubscribedImpl(const std::string& channelName) const
     {
-        if (_onConnectionStateChangedHandler.has_value())
-        {
-            _onConnectionStateChangedHandler.value()(state);
-        }
+        const auto loc = _channels.find(channelName);
+
+        return loc != _channels.end() && loc->second.isSubscribed;
     }
 
+    /// \brief Implementation for determining if this client is subscribed to or has a pending subscription to the given
+    /// channel.
+    /// \param channelName The channel name.
+    /// \return Whether this client is subscribed to or has a pending subscription to the channel.
+    /// \remarks Only call this when holding the lock for the connection mutex.
+    bool IsSubscribedOrPendingImpl(const std::string& channelName) const
+    {
+        return _channels.contains(channelName);
+    }
+
+    /// \brief Implementation for determining if this client has a pending subscription to the given channel.
+    /// \param channelName The channel name.
+    /// \return Whether this client has a pending subscription to the channel.
+    /// \remarks Only call this when holding the lock for the connection mutex.
+    bool IsSubscriptionPendingImpl(const std::string& channelName) const
+    {
+        const auto loc = _channels.find(channelName);
+
+        return loc != _channels.end() && !loc->second.isSubscribed;
+    }
+
+    /// \brief Calls the handler for errors if it is set.
+    /// \param e The exception.
     void OnError(const std::exception& e)
     {
-        if (_onErrorHandler.has_value())
+        if (_onErrorHandler)
         {
-            _onErrorHandler.value()(e);
+            _onErrorHandler(e);
         }
     }
 
     void SetState(const PusherConnectionState state)
     {
+        _conn = state;
+        _connCv.notify_all();
+
+        if (_onConnectionStateChangedHandler)
         {
-            std::lock_guard<std::mutex> guard(_connMutex);
-
-            _conn = state;
+            _onConnectionStateChangedHandler(state);
         }
-
-        OnConnectionStateChanged(state);
     }
 
+    /// \brief Processes a successful channel subscription message from the server.
+    /// \param channelName The channel name.
     void SubscriptionSucceeded(const std::string& channelName)
     {
-        bool listenerIsAbsent = true;
+        std::lock_guard<std::mutex> guard(_connMutex);
 
+        auto loc = _channels.find(channelName);
+        if (loc != _channels.end())
         {
-            std::lock_guard<std::mutex> guard(_channelMutex);
-
-            auto loc = _channels.find(channelName);
-            if (loc != _channels.end())
-            {
-                loc->second.isSubscribed = true;
-                listenerIsAbsent = false;
-            }
+            loc->second.isSubscribed = true;
         }
 
-        if (listenerIsAbsent)
-        {
-            OnError(std::runtime_error("Received subscription event with no listener to accept it"));
-        }
+        _connCv.notify_all();
     }
 
+    /// \brief Creates a URL to a server based on the given application key and options.
+    /// \param key The application key.
+    /// \param options The Pusher options.
+    /// \return The URL.
     [[nodiscard]]
     static std::string CreateUrl(const std::string& key, const PusherOptions& options)
     {
@@ -540,6 +651,9 @@ private:
         return urlStream.str();
     }
 
+    /// \brief Creates the payload of a subscription message to a server for subscribing to a channel.
+    /// \param channelName The channel name.
+    /// \return The message payload.
     [[nodiscard]]
     static std::string SubscribeMessage(const std::string& channelName)
     {
@@ -557,6 +671,9 @@ private:
         return RapidJsonUtil::DocumentToString(document);
     }
 
+    /// \brief Creates the payload of an unsubscription message to a server for unsubscribing from a channel.
+    /// \param channelName The channel name.
+    /// \return The message payload.
     [[nodiscard]]
     static std::string UnsubscribeMessage(const std::string& channelName)
     {
@@ -588,13 +705,27 @@ PusherClient::PusherClient(const std::string& key, const PusherOptions& options)
 [[maybe_unused]]
 PusherClient::PusherClient(const std::string& key,
                            const PusherOptions& options,
-                           PusherClientConnectionHandler onConnectionHandler,
-                           PusherClientErrorHandler onErrorHandler)
-    : _pimpl(std::make_unique<Impl>(key, options, std::move(onConnectionHandler), std::move(onErrorHandler)))
+                           PusherHandler onConnectedHandler,
+                           PusherConnectionStateHandler onConnectionStateChangedHandler,
+                           PusherHandler onDisconnectedHandler,
+                           PusherErrorHandler onErrorHandler,
+                           PusherSubscribedHandler onSubscribedHandler)
+    : _pimpl(std::make_unique<Impl>(key,
+                                    options,
+                                    std::move(onConnectedHandler),
+                                    std::move(onConnectionStateChangedHandler),
+                                    std::move(onDisconnectedHandler),
+                                    std::move(onErrorHandler),
+                                    std::move(onSubscribedHandler)))
 {
 }
 
+[[maybe_unused]]
+PusherClient::PusherClient(PusherClient&& other) noexcept = default;
+
 PusherClient::~PusherClient() = default;
+
+PusherClient& PusherClient::operator=(PusherClient&& rhs) noexcept = default;
 
 // region IPusherClient
 
@@ -605,15 +736,15 @@ void PusherClient::Bind(const std::string& eventName, SubscriptionListenerPtr li
 }
 
 [[maybe_unused]]
-std::future<void> PusherClient::Connect()
+std::future<void> PusherClient::ConnectAsync()
 {
-    return _pimpl->Connect();
+    return _pimpl->ConnectAsync();
 }
 
 [[maybe_unused]]
-std::future<void> PusherClient::Disconnect()
+std::future<void> PusherClient::DisconnectAsync()
 {
-    return _pimpl->Disconnect();
+    return _pimpl->DisconnectAsync();
 }
 
 [[maybe_unused]]
@@ -641,9 +772,9 @@ bool PusherClient::IsSubscriptionPending(const std::string& channelName) const
 }
 
 [[maybe_unused]]
-void PusherClient::Subscribe(const std::string& channelName)
+std::future<void> PusherClient::SubscribeAsync(std::string channelName)
 {
-    _pimpl->Subscribe(channelName);
+    return _pimpl->SubscribeAsync(channelName);
 }
 
 [[maybe_unused]]
@@ -653,9 +784,15 @@ void PusherClient::Unbind(const std::string& eventName)
 }
 
 [[maybe_unused]]
-void PusherClient::Unsubscribe(const std::string& channelName)
+std::future<void> PusherClient::UnsubscribeAllAsync()
 {
-    _pimpl->Unsubscribe(channelName);
+    return _pimpl->UnsubscribeAllAsync();
+}
+
+[[maybe_unused]]
+std::future<void> PusherClient::UnsubscribeAsync(std::string channelName)
+{
+    return _pimpl->UnsubscribeAsync(channelName);
 }
 
 // endregion IPusherClient

@@ -3,6 +3,7 @@
 
 #include "WebSocketMessage.hpp"
 #include "WebSocketMessageType.hpp"
+#include <chrono>
 #include <functional>
 #include <memory>
 #include <string>
@@ -26,12 +27,6 @@ public:
     [[maybe_unused]]
     virtual void Close(uint16_t code, const std::string& reason) = 0;
 
-    /// \brief Returns the next WebSocket message handler in the queue.
-    /// \return The handler.
-    [[maybe_unused]]
-    [[nodiscard]]
-    virtual WebSocketMessageHandler GetNextMessageHandler() = 0;
-
     /// \brief Returns the host address of this server.
     /// \return The host address.
     [[maybe_unused]]
@@ -43,6 +38,18 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     virtual int GetPort() const = 0;
+
+    /// \brief Returns whether this server has queued WebSocket message handlers waiting for messages to handle.
+    /// \return Whether there are queued message handlers.
+    [[maybe_unused]]
+    [[nodiscard]]
+    virtual bool HasQueuedMessageHandlers() const = 0;
+
+    /// \brief Returns whether this server has unhandled WebSocket messages waiting for a message handler.
+    /// \return Whether there are unhandled messages.
+    [[maybe_unused]]
+    [[nodiscard]]
+    virtual bool HasUnhandledMessages() const = 0;
 
     /// \brief Sets this server to ignore the given WebSocket message type for its queued message handlers.
     /// \param type The message type.
@@ -76,6 +83,11 @@ public:
     /// \brief Closes all connections and stops this server.
     [[maybe_unused]]
     virtual void Shutdown() = 0;
+
+    /// \brief Waits for all the queued message handlers to receive messages or until the timeout expires.
+    /// \param timeout The timeout period.
+    [[maybe_unused]]
+    virtual void WaitForQueuedMessageHandlers(std::chrono::milliseconds timeout) = 0;
 };
 
 #endif //ENJINPLATFORMSDK_IMOCKWEBSOCKETSERVER_HPP

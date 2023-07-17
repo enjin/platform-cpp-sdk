@@ -24,15 +24,15 @@ public:
 
     /// \brief Connects this client to the server.
     /// \return The future for this operation.
+    /// \return The future for this operation.
     [[maybe_unused]]
-    [[nodiscard]]
-    virtual std::future<void> Connect() = 0;
+    virtual std::future<void> ConnectAsync() = 0;
 
     /// \brief Disconnects this client from server.
     /// \return The future for this operation.
+    /// \return The future for this operation.
     [[maybe_unused]]
-    [[nodiscard]]
-    virtual std::future<void> Disconnect() = 0;
+    virtual std::future<void> DisconnectAsync() = 0;
 
     /// \brief Returns the connection state of this client.
     /// \return The connection state.
@@ -64,17 +64,23 @@ public:
     /// \brief Subscribes this client to the given channel to start receiving events for it.
     /// \param channelName The name of the channel.
     [[maybe_unused]]
-    virtual void Subscribe(const std::string& channelName) = 0;
+    virtual std::future<void> SubscribeAsync(std::string channelName) = 0;
 
     /// \brief Unbinds all listeners from the given event.
     /// \param eventName The name of the channel.
+    /// \return The future for this operation.
     [[maybe_unused]]
     virtual void Unbind(const std::string& eventName) = 0;
 
+    /// \brief Unsubscribes this client from currently subscribed and pending channels.
+    /// \return The future for this operation.
+    virtual std::future<void> UnsubscribeAllAsync() = 0;
+
     /// \brief Unsubscribes this client from the given channel.
     /// \param channelName The name of the channel.
+    /// \return The future for this operation.
     [[maybe_unused]]
-    virtual void Unsubscribe(const std::string& channelName) = 0;
+    virtual std::future<void> UnsubscribeAsync(std::string channelName) = 0;
 };
 }
 
