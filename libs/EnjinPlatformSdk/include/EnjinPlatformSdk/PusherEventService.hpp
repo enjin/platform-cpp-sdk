@@ -5,6 +5,8 @@
 #include "EnjinPlatformSdk/IEventListener.hpp"
 #include "EnjinPlatformSdk/IEventListenerRegistration.hpp"
 #include "EnjinPlatformSdk/IEventService.hpp"
+#include <functional>
+#include <future>
 #include <memory>
 #include <optional>
 #include <set>
@@ -76,30 +78,6 @@ public:
     EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener, EventMatcher matcher) override;
 
     [[maybe_unused]]
-    void RemoveOnConnectedHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnConnectionStateChangedHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnDisconnectedHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnSubscribedHandler() override;
-
-    [[maybe_unused]]
-    void SetOnConnectedHandler(std::function<void()> handler) override;
-
-    [[maybe_unused]]
-    void SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler) override;
-
-    [[maybe_unused]]
-    void SetOnDisconnectedHandler(std::function<void()> handler) override;
-
-    [[maybe_unused]]
-    void SetOnSubscribedHandler(std::function<void()> handler) override;
-
-    [[maybe_unused]]
     [[nodiscard]]
     std::future<void> SubscribeAsync(const std::string& channelName) override;
 
@@ -126,6 +104,12 @@ public:
         std::optional<std::string> _host;
         std::optional<bool> _isEncrypted;
         std::optional<std::string> _key;
+
+        // Handlers
+        std::function<void()> _onConnectedHandler;
+        std::function<void(ConnectionState)> _connStateHandler;
+        std::function<void()> _disconnectedHandler;
+        std::function<void(const std::string&)> _subHandler;
 
     public:
         /// \brief Class destructor.
@@ -165,6 +149,30 @@ public:
         /// \return This builder for chaining.
         [[maybe_unused]]
         PusherEventServiceBuilder& SetKey(std::string key);
+
+        /// \brief Sets the handler for when the service connects.
+        /// \param handler The handler.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PusherEventServiceBuilder& SetOnConnectedHandler(std::function<void()> handler);
+
+        /// \brief Sets the handler for when the connection state of the service changes.
+        /// \param handler The handler.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PusherEventServiceBuilder& SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler);
+
+        /// \brief Sets the handler for when the service disconnects.
+        /// \param handler The handler.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PusherEventServiceBuilder& SetOnDisconnectedHandler(std::function<void()> handler);
+
+        /// \brief Sets the handler for when the service subscribes to a channel.
+        /// \param handler The handler.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PusherEventServiceBuilder& SetSubscriptionHandler(std::function<void(const std::string&)> handler);
 
     private:
         /// \brief Constructs an instance of this class.

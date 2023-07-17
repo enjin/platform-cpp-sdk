@@ -11,6 +11,18 @@
 
 namespace pusher
 {
+/// \brief Definition for a function wrapper which receives a PusherConnectionState.
+typedef std::function<void(PusherConnectionState)> PusherConnectionStateHandler;
+
+/// \brief Definition for a function wrapper which receives an exception.
+typedef std::function<void(const std::exception&)> PusherErrorHandler;
+
+/// \brief Definition for a function wrapper which receives no arguments.
+typedef std::function<void()> PusherHandler;
+
+/// \brief Definition for a function wrapper which receives a string.
+typedef std::function<void(const std::string&)> PusherSubscribedHandler;
+
 /// \brief Pusher client for subscribing to Pusher channels and binding to events.
 class ENJINPLATFORMSDK_EXPORT PusherClient : virtual public IPusherClient
 {
@@ -22,22 +34,41 @@ class ENJINPLATFORMSDK_EXPORT PusherClient : virtual public IPusherClient
 public:
     PusherClient() = delete;
 
-    /// \brief Constructs an instance of this class with the given application key and options.
+    /// \brief Constructs an instance of this class.
     /// \param key The application key.
     /// \param options The Pusher options.
     [[maybe_unused]]
     PusherClient(const std::string& key, const PusherOptions& options);
 
+    /// \brief Constructs an instance of this class.
+    /// \param key The application key.
+    /// \param options The Pusher options.
+    /// \param onConnectedHandler The handler for when the client connects.
+    /// \param onConnectionStateChangedHandler The handler for when the connection state of the client changes.
+    /// \param onDisconnectedHandler The handler for when the client disconnects.
+    /// \param onErrorHandler The handler for when the client encounters an error.
+    /// \param onSubscribedHandler The handler for when the client subscribes to a channel.
+    [[maybe_unused]]
+    PusherClient(const std::string& key,
+                 const PusherOptions& options,
+                 PusherHandler onConnectedHandler,
+                 PusherConnectionStateHandler onConnectionStateChangedHandler,
+                 PusherHandler onDisconnectedHandler,
+                 PusherErrorHandler onErrorHandler,
+                 PusherSubscribedHandler onSubscribedHandler);
+
     PusherClient(const PusherClient& other) = delete;
 
-    PusherClient(PusherClient&& other) noexcept = delete;
+    /// \brief Move constructor.
+    /// \param other The other instance to move.
+    PusherClient(PusherClient&& other) noexcept;
 
     /// \brief Class destructor.
     ~PusherClient() override;
 
     PusherClient& operator=(const PusherClient& rhs) = delete;
 
-    PusherClient& operator=(PusherClient&& rhs) noexcept = delete;
+    PusherClient& operator=(PusherClient&& rhs) noexcept;
 
     // region IPusherClient
 
@@ -65,36 +96,6 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     bool IsSubscriptionPending(const std::string& channelName) const override;
-
-    [[maybe_unused]]
-    void RemoveOnConnectedHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnConnectionStateChangedHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnDisconnectedHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnErrorHandler() override;
-
-    [[maybe_unused]]
-    void RemoveOnSubscribedHandler() override;
-
-    [[maybe_unused]]
-    void SetOnConnectedHandler(PusherHandler handler) override;
-
-    [[maybe_unused]]
-    void SetOnConnectionStateChangedHandler(PusherConnectionStateHandler handler) override;
-
-    [[maybe_unused]]
-    void SetOnDisconnectedHandler(PusherHandler handler) override;
-
-    [[maybe_unused]]
-    void SetOnErrorHandler(PusherErrorHandler handler) override;
-
-    [[maybe_unused]]
-    void SetOnSubscribedHandler(PusherSubscribedHandler handler) override;
 
     [[maybe_unused]]
     std::future<void> SubscribeAsync(std::string channelName) override;

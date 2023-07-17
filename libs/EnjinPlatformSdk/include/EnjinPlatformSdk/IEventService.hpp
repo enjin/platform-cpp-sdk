@@ -4,7 +4,6 @@
 #include "EnjinPlatformSdk/ConnectionState.hpp"
 #include "EnjinPlatformSdk/IEventListener.hpp"
 #include "EnjinPlatformSdk/IEventListenerRegistration.hpp"
-#include <functional>
 #include <future>
 #include <set>
 #include <string>
@@ -73,42 +72,6 @@ public:
     [[nodiscard]]
     virtual EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener,
                                                                      EventMatcher matcher) = 0;
-
-    /// \brief Unsets the handler for when this service connects to a server.
-    [[maybe_unused]]
-    virtual void RemoveOnConnectedHandler() = 0;
-
-    /// \brief Unsets the handler for when the connection state of this service changes.
-    [[maybe_unused]]
-    virtual void RemoveOnConnectionStateChangedHandler() = 0;
-
-    /// \brief Unsets the handler for when this service is disconnected.
-    [[maybe_unused]]
-    virtual void RemoveOnDisconnectedHandler() = 0;
-
-    /// \brief Unsets the handler for when this service successfully subscribes to a channel.
-    [[maybe_unused]]
-    virtual void RemoveOnSubscribedHandler() = 0;
-
-    /// \brief Sets the handler for when this service connects to a server.
-    /// \param handler The handler.
-    [[maybe_unused]]
-    virtual void SetOnConnectedHandler(std::function<void()> handler) = 0;
-
-    /// \brief Sets the handler for when the connection state of this service changes.
-    /// \param handler The handler.
-    [[maybe_unused]]
-    virtual void SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler) = 0;
-
-    /// \brief Sets the handler for when this service is disconnected.
-    /// \param handler The handler.
-    [[maybe_unused]]
-    virtual void SetOnDisconnectedHandler(std::function<void()> handler) = 0;
-
-    /// \brief Sets the handler for when this service successfully subscribes to a channel.
-    /// \param handler The handler.
-    [[maybe_unused]]
-    virtual void SetOnSubscribedHandler(std::function<void()> handler) = 0;
 
     /// \brief Subscribes this service to the given event channel asynchronously.
     /// \param channelName The name of the event channel.

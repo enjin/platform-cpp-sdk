@@ -33,8 +33,25 @@ public:
     /// \brief Constructs an instance of this class with the given application key and Pusher options.
     /// \param key The application key.
     /// \param options The Pusher options.
-    PusherWrapper(const std::string& key, const PusherOptions& options)
-        : _client(std::make_unique<PusherClient>(key, options))
+    /// \param onConnectedHandler The handler for when the client connects.
+    /// \param onConnectionStateChangedHandler The handler for when the connection state of the client changes.
+    /// \param onDisconnectedHandler The handler for when the client disconnects.
+    /// \param onErrorHandler The handler for when the client encounters an error.
+    /// \param onSubscribedHandler The handler for when the client subscribes to a channel.
+    PusherWrapper(const std::string& key,
+                  const PusherOptions& options,
+                  PusherHandler onConnectedHandler,
+                  PusherConnectionStateHandler onConnectionStateChangedHandler,
+                  PusherHandler onDisconnectedHandler,
+                  PusherErrorHandler onErrorHandler,
+                  PusherSubscribedHandler onSubscribedHandler)
+        : _client(std::make_unique<PusherClient>(key,
+                                                 options,
+                                                 std::move(onConnectedHandler),
+                                                 std::move(onConnectionStateChangedHandler),
+                                                 std::move(onDisconnectedHandler),
+                                                 std::move(onErrorHandler),
+                                                 std::move(onSubscribedHandler)))
     {
     }
 
@@ -92,56 +109,6 @@ public:
         return _client->IsSubscriptionPending(channelName);
     }
 
-    void RemoveOnConnectedHandler() override
-    {
-        _client->RemoveOnConnectedHandler();
-    }
-
-    void RemoveOnConnectionStateChangedHandler() override
-    {
-        _client->RemoveOnConnectionStateChangedHandler();
-    }
-
-    void RemoveOnDisconnectedHandler() override
-    {
-        _client->RemoveOnDisconnectedHandler();
-    }
-
-    void RemoveOnErrorHandler() override
-    {
-        _client->RemoveOnErrorHandler();
-    }
-
-    void RemoveOnSubscribedHandler() override
-    {
-        _client->RemoveOnSubscribedHandler();
-    }
-
-    void SetOnConnectedHandler(PusherHandler handler) override
-    {
-        _client->SetOnConnectedHandler(std::move(handler));
-    }
-
-    void SetOnConnectionStateChangedHandler(PusherConnectionStateHandler handler) override
-    {
-        _client->SetOnConnectionStateChangedHandler(std::move(handler));
-    }
-
-    void SetOnDisconnectedHandler(PusherHandler handler) override
-    {
-        _client->SetOnDisconnectedHandler(std::move(handler));
-    }
-
-    void SetOnErrorHandler(PusherErrorHandler handler) override
-    {
-        _client->SetOnErrorHandler(std::move(handler));
-    }
-
-    void SetOnSubscribedHandler(PusherSubscribedHandler handler) override
-    {
-        _client->SetOnSubscribedHandler(std::move(handler));
-    }
-
     std::future<void> SubscribeAsync(std::string channelName) override
     {
         return _client->SubscribeAsync(channelName);
@@ -175,13 +142,7 @@ class PusherEventService::Impl : virtual public IPusherEventServiceImpl
     PusherListener _listener;
     std::vector<RegistrationPtr> _regs;
 
-    std::optional<std::function<void()>> _onConnectionHandler;
-    std::optional<std::function<void(ConnectionState)>> _onConnectionStateChangedHandler;
-    std::optional<std::function<void()>> _onDisconnectedHandler;
-    std::optional<std::function<void()>> _onSubscribedHandler;
-
     // Mutexes
-    mutable std::mutex _handlersMutex;
     mutable std::mutex _regsMutex;
 
     static constexpr Milliseconds DisconnectTimout = Milliseconds(20000); // 20 seconds
@@ -252,62 +213,6 @@ public:
     EventListenerRegistrationPtr RegisterListenerWithMatcher(EventListenerPtr listener, EventMatcher matcher) override
     {
         return RegisterListener(std::move(listener), std::move(matcher));
-    }
-
-    void RemoveOnConnectedHandler() override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onConnectionHandler.reset();
-    }
-
-    void RemoveOnConnectionStateChangedHandler() override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onConnectionStateChangedHandler.reset();
-    }
-
-    void RemoveOnDisconnectedHandler() override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onDisconnectedHandler.reset();
-    }
-
-    void RemoveOnSubscribedHandler() override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onSubscribedHandler.reset();
-    }
-
-    void SetOnConnectedHandler(std::function<void()> handler) override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onConnectionHandler = std::move(handler);
-    }
-
-    void SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler) override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onConnectionStateChangedHandler = std::move(handler);
-    }
-
-    void SetOnDisconnectedHandler(std::function<void()> handler) override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onDisconnectedHandler = std::move(handler);
-    }
-
-    void SetOnSubscribedHandler(std::function<void()> handler) override
-    {
-        std::lock_guard<std::mutex> guard(_handlersMutex);
-
-        _onSubscribedHandler = std::move(handler);
     }
 
     std::future<void> SubscribeAsync(const std::string& channelName) override
@@ -473,57 +378,6 @@ EventListenerRegistrationPtr PusherEventService::RegisterListenerWithMatcher(Eve
 }
 
 [[maybe_unused]]
-void PusherEventService::RemoveOnConnectedHandler()
-{
-    _pimpl->RemoveOnConnectedHandler();
-}
-
-[[maybe_unused]]
-void PusherEventService::RemoveOnConnectionStateChangedHandler()
-{
-
-    _pimpl->RemoveOnConnectionStateChangedHandler();
-}
-
-[[maybe_unused]]
-void PusherEventService::RemoveOnDisconnectedHandler()
-{
-
-    _pimpl->RemoveOnDisconnectedHandler();
-}
-
-[[maybe_unused]]
-void PusherEventService::RemoveOnSubscribedHandler()
-{
-
-    _pimpl->RemoveOnSubscribedHandler();
-}
-
-[[maybe_unused]]
-void PusherEventService::SetOnConnectedHandler(std::function<void()> handler)
-{
-    _pimpl->SetOnConnectedHandler(std::move(handler));
-}
-
-[[maybe_unused]]
-void PusherEventService::SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler)
-{
-    _pimpl->SetOnConnectionStateChangedHandler(std::move(handler));
-}
-
-[[maybe_unused]]
-void PusherEventService::SetOnDisconnectedHandler(std::function<void()> handler)
-{
-    _pimpl->SetOnDisconnectedHandler(std::move(handler));
-}
-
-[[maybe_unused]]
-void PusherEventService::SetOnSubscribedHandler(std::function<void()> handler)
-{
-    _pimpl->SetOnSubscribedHandler(std::move(handler));
-}
-
-[[maybe_unused]]
 std::future<void> PusherEventService::SubscribeAsync(const std::string& channelName)
 {
     return _pimpl->SubscribeAsync(channelName);
@@ -559,6 +413,62 @@ std::future<void> PusherEventService::UnsubscribeAsync(const std::string& channe
 
 // region PusherEventServiceBuilder
 
+PusherHandler CreateConnHandler(std::function<void()> innerHandler)
+{
+    if (!innerHandler)
+    {
+        return []() {};
+    }
+
+    return [innerHandler = std::move(innerHandler)]() {
+        innerHandler();
+    };
+}
+
+PusherConnectionStateHandler CreateConnStateHandler(std::function<void(ConnectionState)> innerHandler)
+{
+    if (!innerHandler)
+    {
+        return [](PusherConnectionState) {};
+    }
+
+    return [innerHandler = std::move(innerHandler)](PusherConnectionState state) {
+        switch (state)
+        {
+            case PusherConnectionState::Connecting:
+                innerHandler(ConnectionState::Connecting);
+                break;
+
+            case PusherConnectionState::Connected:
+                innerHandler(ConnectionState::Open);
+                break;
+
+            case PusherConnectionState::Disconnecting:
+                innerHandler(ConnectionState::Closing);
+                break;
+
+            case PusherConnectionState::Disconnected:
+                innerHandler(ConnectionState::Closed);
+                break;
+
+            default:
+                break;
+        }
+    };
+}
+
+PusherSubscribedHandler CreateSubHandler(std::function<void(const std::string&)> innerHandler)
+{
+    if (!innerHandler)
+    {
+        return [](const std::string&) {};
+    }
+
+    return [innerHandler = std::move(innerHandler)](const std::string& channelName) {
+        innerHandler(channelName);
+    };
+}
+
 PusherEventServiceBuilder::PusherEventServiceBuilder() = default;
 
 PusherEventServiceBuilder::~PusherEventServiceBuilder() = default;
@@ -588,7 +498,20 @@ std::unique_ptr<PusherEventService> PusherEventServiceBuilder::Build() const
         options.SetCluster(_cluster.value());
     }
 
-    std::unique_ptr<PusherWrapper> client = std::make_unique<PusherWrapper>(_key.value(), options);
+    PusherHandler connHandler = CreateConnHandler(_onConnectedHandler);
+    PusherHandler disconnectedHandler = CreateConnHandler(_disconnectedHandler);
+    PusherConnectionStateHandler connStateHandler = CreateConnStateHandler(_connStateHandler);
+    PusherSubscribedHandler subHandler = CreateSubHandler(_subHandler);
+    PusherErrorHandler errHandler = [](const std::exception&) {};
+
+    std::unique_ptr<PusherWrapper> client = std::make_unique<PusherWrapper>(_key.value(),
+                                                                            options,
+                                                                            std::move(connHandler),
+                                                                            std::move(connStateHandler),
+                                                                            std::move(disconnectedHandler),
+                                                                            std::move(errHandler),
+                                                                            std::move(subHandler));
+
     return std::unique_ptr<PusherEventService>(new PusherEventService(std::move(client)));
 }
 
@@ -620,6 +543,40 @@ PusherEventServiceBuilder& PusherEventServiceBuilder::SetHost(std::string host)
 PusherEventServiceBuilder& PusherEventServiceBuilder::SetKey(std::string key)
 {
     _key = std::move(key);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PusherEventServiceBuilder& PusherEventServiceBuilder::SetOnConnectedHandler(std::function<void()> handler)
+{
+    _onConnectedHandler = std::move(handler);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PusherEventServiceBuilder&
+PusherEventServiceBuilder::SetOnConnectionStateChangedHandler(std::function<void(ConnectionState)> handler)
+{
+    _connStateHandler = std::move(handler);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PusherEventServiceBuilder& PusherEventServiceBuilder::SetOnDisconnectedHandler(std::function<void()> handler)
+{
+    _disconnectedHandler = std::move(handler);
+
+    return *this;
+}
+
+[[maybe_unused]]
+PusherEventServiceBuilder&
+PusherEventServiceBuilder::SetSubscriptionHandler(std::function<void(const std::string&)> handler)
+{
+    _subHandler = std::move(handler);
 
     return *this;
 }

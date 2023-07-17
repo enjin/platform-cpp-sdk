@@ -204,14 +204,12 @@ TEST_F(PusherClientTest, BoundListenerIsCalledWhenEventIsRecieved)
 TEST_F(PusherClientTest, ConnectAsyncClientConnectsToServer)
 {
     // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
     const PusherConnectionState expectedConnState = PusherConnectionState::Connected;
 
     // Act
-    std::future<void> future = classUnderTest->ConnectAsync();
+    classUnderTest->ConnectAsync().get();
 
     // Assert
-    ASSERT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert future is ready";
     ASSERT_THAT(classUnderTest->GetState(), Eq(expectedConnState)) << "Assert that client is connected";
 }
 
@@ -219,7 +217,6 @@ TEST_F(PusherClientTest, ConnectAsyncWhenClientHasPendingChannelsSendsSubscribeM
 {
     // Arrange - Data
     const std::string channelName(DefaultChannelName);
-    const std::future_status expectedStatus = std::future_status::ready;
     const PusherConnectionState expectedConnState = PusherConnectionState::Connected;
     classUnderTest->SubscribeAsync(channelName);
 
@@ -232,20 +229,18 @@ TEST_F(PusherClientTest, ConnectAsyncWhenClientHasPendingChannelsSendsSubscribeM
                         << "Assume that subscription to channel is pending";
 
     // Act
-    std::future<void> future = classUnderTest->ConnectAsync();
-
-    std::this_thread::sleep_for(WaitTime);
+    classUnderTest->ConnectAsync().get();
 
     // Assert
-    ASSERT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert future is ready";
-    ASSERT_THAT(classUnderTest->GetState(), Eq(expectedConnState)) << "Assert that client is connected";
-    ASSERT_THAT(classUnderTest->IsSubscribed(channelName), IsTrue()) << "Assert that client is subscribed to channel";
+    EXPECT_THAT(classUnderTest->GetState(), Eq(expectedConnState)) << "Assert that client is connected";
+
+    // Verify
+    Verify(WaitTime);
 }
 
 TEST_F(PusherClientTest, DisconnectAsyncClientDisconnectsFromServer)
 {
     // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
     const PusherConnectionState expectedConnState = PusherConnectionState::Disconnected;
     classUnderTest->ConnectAsync().get();
 
@@ -253,10 +248,9 @@ TEST_F(PusherClientTest, DisconnectAsyncClientDisconnectsFromServer)
     ASSERT_THAT(classUnderTest->GetState(), Eq(PusherConnectionState::Connected)) << "Assume that client is connected";
 
     // Act
-    std::future<void> future = classUnderTest->DisconnectAsync();
+    classUnderTest->DisconnectAsync().get();
 
     // Assert
-    ASSERT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert future is ready";
     ASSERT_THAT(classUnderTest->GetState(), Eq(expectedConnState)) << "Assert that client is disconnected";
 }
 
@@ -280,7 +274,6 @@ TEST_F(PusherClientTest, IsSubscriptionPendingWhenClientHasPendingSubscriptionRe
 TEST_F(PusherClientTest, SubscribeAsyncWhenNotSubscribedToChannelClientSubscribesToChannel)
 {
     // Arrange - Data
-    const std::future_status expectedStatus = std::future_status::ready;
     const std::string channelName(DefaultChannelName);
     classUnderTest->ConnectAsync().get();
 
@@ -289,10 +282,9 @@ TEST_F(PusherClientTest, SubscribeAsyncWhenNotSubscribedToChannelClientSubscribe
     SetExpectedCallCount(1);
 
     // Act
-    const std::future<void> future = classUnderTest->SubscribeAsync(channelName);
+    classUnderTest->SubscribeAsync(channelName).get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert that future is ready";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName), IsTrue()) << "Assert that client is subscribed to channel";
 
     // Verify
@@ -302,7 +294,6 @@ TEST_F(PusherClientTest, SubscribeAsyncWhenNotSubscribedToChannelClientSubscribe
 TEST_F(PusherClientTest, SubscribeAsyncWhenNotConnectedToServerClientSetsChannelAsPending)
 {
     // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
     const std::string channelName(DefaultChannelName);
 
     // Assumptions
@@ -310,19 +301,16 @@ TEST_F(PusherClientTest, SubscribeAsyncWhenNotConnectedToServerClientSetsChannel
                         << "Assume that client is not subscribed to or pending subscription to channel";
 
     // Act
-    const std::future<void> future = classUnderTest->SubscribeAsync(channelName);
+    classUnderTest->SubscribeAsync(channelName).get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus))
-                    << "Assert that future is ready";
-    ASSERT_THAT(classUnderTest->IsSubscriptionPending(channelName), IsTrue())
-                        << "Assert that client has pending subscription to channel";
+    EXPECT_THAT(classUnderTest->IsSubscriptionPending(channelName), IsTrue())
+                    << "Assert that client has pending subscription to channel";
 }
 
 TEST_F(PusherClientTest, SubscribeAsyncWhenAlreadySubscribedToChannelClientDoesNothing)
 {
     // Arrange - Data
-    const std::future_status expectedStatus = std::future_status::ready;
     const std::string channelName(DefaultChannelName);
     QueueSubscriptionMessage(channelName); // Facilitates initial subscription
     classUnderTest->ConnectAsync().get();
@@ -338,10 +326,9 @@ TEST_F(PusherClientTest, SubscribeAsyncWhenAlreadySubscribedToChannelClientDoesN
     ASSERT_THAT(classUnderTest->IsSubscribed(channelName), IsTrue()) << "Assume that client is subscribed to channel";
 
     // Act
-    const std::future<void> future = classUnderTest->SubscribeAsync(channelName);
+    classUnderTest->SubscribeAsync(channelName).get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert that future is ready";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName), IsTrue()) << "Assert that client is subscribed to channel";
 
     // Verify
@@ -410,31 +397,47 @@ TEST_F(PusherClientTest, UnboundListenerIsNotCalledWhenEventIsRecieved)
 
 TEST_F(PusherClientTest, UnsubscribeAllAsyncWhenNotSubscribedToChannelsClientDoesNothing)
 {
-    // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
+    // Arrange - Data
     classUnderTest->ConnectAsync().get();
 
-    // Act
-    const std::future<void> future = classUnderTest->UnsubscribeAllAsync();
+    // Arrange - Expectations
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    SetExpectedCallCount(0);
 
-    // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert that future is ready";
+    // Act
+    classUnderTest->UnsubscribeAllAsync().get();
+
+    // Verify
+    Verify(WaitTime);
 }
 
 TEST_F(PusherClientTest, UnsubscribeAllAsyncWhenSubscribedToChannelsClientUnsubscribesFromChannels)
 {
-    // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
+    // Arrange - Data
     const std::string channelName1("Channel 1");
     const std::string channelName2("Channel 2");
     const std::string channelName3("Channel 3");
     QueueSubscriptionMessage(channelName1); // Facilitates initial subscription
-    QueueSubscriptionMessage(channelName2);
-    QueueSubscriptionMessage(channelName3);
+    QueueSubscriptionMessage(channelName2); //
+    QueueSubscriptionMessage(channelName3); //
     classUnderTest->ConnectAsync().get();
     classUnderTest->SubscribeAsync(channelName1).get();
     classUnderTest->SubscribeAsync(channelName2).get();
     classUnderTest->SubscribeAsync(channelName3).get();
+
+    // Arrange - Expectations
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    SetExpectedCallCount(3);
 
     // Assumptions
     ASSERT_THAT(classUnderTest->IsSubscribed(channelName1), IsTrue())
@@ -445,23 +448,23 @@ TEST_F(PusherClientTest, UnsubscribeAllAsyncWhenSubscribedToChannelsClientUnsubs
                         << "Assume that client is subscribed to channel 3";
 
     // Act
-    const std::future<void> future = classUnderTest->UnsubscribeAllAsync();
+    classUnderTest->UnsubscribeAllAsync().get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus))
-                    << "Assert that future is ready";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName1), IsFalse())
                     << "Assume that client is subscribed to channel 1";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName2), IsFalse())
                     << "Assume that client is subscribed to channel 2";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName3), IsFalse())
                     << "Assume that client is subscribed to channel 3";
+
+    // Verify
+    Verify(Milliseconds(WaitTime));
 }
 
 TEST_F(PusherClientTest, UnsubscribeAllAsyncWhenSubscriptionToChannelsIsPendingClientUnsubscribesFromChannels)
 {
     // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
     const std::string channelName1("Channel 1");
     const std::string channelName2("Channel 2");
     const std::string channelName3("Channel 3");
@@ -482,74 +485,114 @@ TEST_F(PusherClientTest, UnsubscribeAllAsyncWhenSubscriptionToChannelsIsPendingC
                         << "Assume that client is subscribed to channel 3";
 
     // Act
-    const std::future<void> future = classUnderTest->UnsubscribeAllAsync();
+    classUnderTest->UnsubscribeAllAsync().get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus))
-                    << "Assert that future is ready";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName1), IsFalse())
                     << "Assume that client is subscribed to channel 1";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName2), IsFalse())
                     << "Assume that client is subscribed to channel 2";
     EXPECT_THAT(classUnderTest->IsSubscribed(channelName3), IsFalse())
                     << "Assume that client is subscribed to channel 3";
+
+    // Clean up
+    preActFuture1.wait_for(Milliseconds::zero());
+    preActFuture2.wait_for(Milliseconds::zero());
+    preActFuture3.wait_for(Milliseconds::zero());
 }
 
 TEST_F(PusherClientTest, UnsubscribeAsyncWhenNotSubscribedToChannelClientDoesNothing)
 {
-    // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
+    // Arrange - Data
     const std::string channelName(DefaultChannelName);
     classUnderTest->ConnectAsync().get();
 
-    // Act
-    const std::future<void> future = classUnderTest->UnsubscribeAsync(channelName);
+    // Arrange - Expectations
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    SetExpectedCallCount(0);
 
-    // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus)) << "Assert that future is ready";
+    // Act
+    classUnderTest->UnsubscribeAsync(channelName).get();
+
+    // Verify
+    Verify(WaitTime);
 }
 
 TEST_F(PusherClientTest, UnsubscribeAsyncWhenSubscribedToChannelClientUnsubscribesFromChannel)
 {
-    // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
+    // Arrange - Data
     const std::string channelName(DefaultChannelName);
     QueueSubscriptionMessage(channelName); // Facilitates initial subscription
     classUnderTest->ConnectAsync().get();
     classUnderTest->SubscribeAsync(channelName).get();
 
+    // Arrange - Expectations
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    SetExpectedCallCount(1);
+
     // Assumptions
     ASSERT_THAT(classUnderTest->IsSubscribed(channelName), IsTrue()) << "Assume that client is subscribed to channel";
 
     // Act
-    const std::future<void> future = classUnderTest->UnsubscribeAsync(channelName);
+    classUnderTest->UnsubscribeAsync(channelName).get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus))
-                    << "Assert that future is ready";
     EXPECT_THAT(classUnderTest->IsSubscribedOrPending(channelName), IsFalse())
                     << "Assert that client is not subscribed nor pending subscription to channel";
+
+    // Verify
+    Verify(WaitTime);
 }
 
 TEST_F(PusherClientTest, UnsubscribeAsyncWhenSubscriptionIsPendingClientUnsubscribesFromChannel)
 {
     // Arrange
-    const std::future_status expectedStatus = std::future_status::ready;
     const std::string channelName(DefaultChannelName);
     mockServer->NextMessage([](const WebSocketMessage&) { /* Consumes subscription message */ });
     classUnderTest->ConnectAsync().get();
     const std::future<void> preActFuture = classUnderTest->SubscribeAsync(channelName);
+
+    // Arrange - Expectations
+    mockServer->NextMessage([this](const WebSocketMessage&) {
+        IncrementCallCount();
+    });
+    SetExpectedCallCount(1);
 
     // Assumptions
     ASSERT_THAT(classUnderTest->IsSubscriptionPending(channelName), IsTrue())
                         << "Assume that subscription to channel is pending";
 
     // Act
-    const std::future<void> future = classUnderTest->UnsubscribeAsync(channelName);
+    classUnderTest->UnsubscribeAsync(channelName).get();
 
     // Assert
-    EXPECT_THAT(future.wait_for(WaitTime), Eq(expectedStatus))
-                    << "Assert that future is ready";
     EXPECT_THAT(classUnderTest->IsSubscribedOrPending(channelName), IsFalse())
                     << "Assert that client is not subscribed nor pending subscription to channel";
+
+    // Verify
+    Verify(WaitTime);
+}
+
+TEST_F(PusherClientTest, WhenServerSendsCloseMessageClientIsDisconnected)
+{
+    // Arrange
+    const PusherConnectionState expected = PusherConnectionState::Disconnected;
+    const uint16_t code = 4000;
+    const std::string reason;
+    classUnderTest->ConnectAsync().get();
+
+    // Assumptions
+    ASSERT_THAT(classUnderTest->GetState(), Eq(PusherConnectionState::Connected)) << "Assume that client is connected";
+
+    // Act
+    mockServer->Close(code, reason);
+
+    std::this_thread::sleep_for(WaitTime);
+
+    // Assert
+    ASSERT_THAT(classUnderTest->GetState(), Eq(expected)) << "Assert that client is disconnected";
 }
