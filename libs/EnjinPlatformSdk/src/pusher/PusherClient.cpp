@@ -79,7 +79,7 @@ class PusherClient::Impl : virtual public IPusherClient
     // Condition variables
     std::condition_variable _connCv;
 
-    static constexpr Milliseconds MessageTimeout = Milliseconds(5000);
+    static constexpr Milliseconds MessageTimeout = Milliseconds(30000);
     static constexpr int PingInterval = 120;
 
     // Message keys
