@@ -5,6 +5,7 @@
 #include "EnjinPlatformSdk/IEventListener.hpp"
 #include "EnjinPlatformSdk/IEventListenerRegistration.hpp"
 #include "EnjinPlatformSdk/IEventService.hpp"
+#include "EnjinPlatformSdk/ILogger.hpp"
 #include <functional>
 #include <future>
 #include <memory>
@@ -104,6 +105,7 @@ public:
         std::optional<std::string> _host;
         std::optional<bool> _isEncrypted;
         std::optional<std::string> _key;
+        LoggerPtr _logger;
 
         // Handlers
         std::function<void()> _onConnectedHandler;
@@ -149,6 +151,12 @@ public:
         /// \return This builder for chaining.
         [[maybe_unused]]
         PusherEventServiceBuilder& SetKey(std::string key);
+
+        /// \brief Sets the logger for the event service to use.
+        /// \param logger The logger.
+        /// \return This builder for chaining.
+        [[maybe_unused]]
+        PusherEventServiceBuilder& SetLogger(LoggerPtr logger);
 
         /// \brief Sets the handler for when the service connects.
         /// \param handler The handler.
