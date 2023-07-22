@@ -15,6 +15,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "FakeJsonDeserializable.hpp"
+#include "EnjinPlatformSdk/DateTime.hpp"
 #include "EnjinPlatformSdk/JsonUtil.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include <optional>
@@ -28,7 +29,7 @@ class JsonUtilTest : public Test
 {
 };
 
-TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsNotAnArrayOutArrayIsEmpty)
+TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsNotAnArrayReturnsFalseAndOutArrayIsEmpty)
 {
     // Arrange
     const JsonValue json;
@@ -38,13 +39,14 @@ TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsNotAnArrayOutArrayIsEmpty)
     ASSERT_THAT(json.IsArray(), IsFalse()) << "Assume JSON value is not an array";
 
     // Act
-    JsonUtil::TryGetArray(json, outArray);
+    const bool result = JsonUtil::TryGetArray(json, outArray);
 
     // Assert
-    ASSERT_THAT(outArray, IsEmpty()) << "Assert out array is empty";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outArray, IsEmpty()) << "Assert that out array is empty";
 }
 
-TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsAnArrayOutArrayHasExpectedElements)
+TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsAnArrayReturnsTrueAndOutArrayHasExpectedElements)
 {
     // Arrange
     const int expectedSize = 2;
@@ -56,10 +58,11 @@ TEST_F(JsonUtilTest, TryGetArrayWhenJsonIsAnArrayOutArrayHasExpectedElements)
     ASSERT_THAT(json.IsArray(), IsTrue()) << "Assume JSON value is an array";
 
     // Act
-    JsonUtil::TryGetArray(json, outArray);
+    const bool result = JsonUtil::TryGetArray(json, outArray);
 
     // Assert
-    ASSERT_THAT(outArray, SizeIs(expectedSize)) << "Assert out array has expected size";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outArray, SizeIs(expectedSize)) << "Assert that out array has expected size";
     EXPECT_THAT(outArray, Eq(expected)) << "Assert that out array equals expected";
 }
 
@@ -71,17 +74,17 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonDoesNotHaveFieldReturnsFalseAndRe
     std::optional<FakeJsonDeserializable> outField({});
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const FakeJsonDeserializable expectedField(true);
@@ -90,14 +93,14 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeWhenJsonHasFieldGetsField)
     std::optional<FakeJsonDeserializable> outField({});
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that out field equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -108,17 +111,17 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonDoesNotHaveFieldReturnsFalse
     std::optional<std::vector<FakeJsonDeserializable>> outField({});
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const std::vector<FakeJsonDeserializable> expectedField({FakeJsonDeserializable(true)});
@@ -127,14 +130,14 @@ TEST_F(JsonUtilTest, TryGetFieldForTypeArrayWhenJsonHasFieldGetsField)
     std::optional<std::vector<FakeJsonDeserializable>> outField({});
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that out field equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -145,17 +148,17 @@ TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonDoesNotHaveFieldReturnsFalseAndRe
     std::optional<bool> outField(false);
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const bool expectedField = true;
@@ -164,14 +167,51 @@ TEST_F(JsonUtilTest, TryGetFieldForBoolWhenJsonHasFieldGetsField)
     std::optional<bool> outField(false);
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
+}
+
+TEST_F(JsonUtilTest, TryGetFieldForDateTimeWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
+{
+    // Arrange
+    const std::string fieldName("field");
+    const JsonValue json = JsonValue::FromJson(R"({})");
+    std::optional<DateTime> outField({});
+
+    // Assumptions
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
+
+    // Act
+    const bool result = JsonUtil::TryGetField(json, fieldName, outField);
+
+    // Assert
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
+}
+
+TEST_F(JsonUtilTest, TryGetFieldForDateTimeWhenJsonHasFieldReturnsTrueAndGetsField)
+{
+    // Arrange
+    const DateTime expectedField = DateTime::Parse("2000-01-01T00:00:00+00:00");
+    const std::string fieldName("field");
+    const JsonValue json = JsonValue::FromJson(R"({"field":"2000-01-01T00:00:00+00:00"})");
+    std::optional<DateTime> outField({});
+
+    // Assumptions
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
+
+    // Act
+    const bool result = JsonUtil::TryGetField(json, fieldName, outField);
+
+    // Assert
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForDoubleWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -182,33 +222,33 @@ TEST_F(JsonUtilTest, TryGetFieldForDoubleWhenJsonDoesNotHaveFieldReturnsFalseAnd
     std::optional<double> outField((double) 0.0);
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForDoubleWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForDoubleWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
-    const double expectedField = true;
+    const double expectedField = 1.0;
     const std::string fieldName("field");
     const JsonValue json = JsonValue::FromJson(R"({"field":1.0})");
     std::optional<double> outField((double) 0.0);
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -219,17 +259,17 @@ TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonDoesNotHaveFieldReturnsFalseAndR
     std::optional<float> outField((float) 0.0);
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const float expectedField = 1.0;
@@ -238,14 +278,14 @@ TEST_F(JsonUtilTest, TryGetFieldForFloatWhenJsonHasFieldGetsField)
     std::optional<float> outField((float) 0.0);
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -256,17 +296,17 @@ TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonDoesNotHaveFieldReturnsFalseAn
     std::optional<int32_t> outField((int32_t) 0);
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const int32_t expectedField = 1;
@@ -275,14 +315,14 @@ TEST_F(JsonUtilTest, TryGetFieldForIntegerWhenJsonHasFieldGetsField)
     std::optional<int32_t> outField((int32_t) 0);
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -293,17 +333,17 @@ TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonDoesNotHaveFieldReturnsFalseAnd
     std::optional<JsonValue> outField(JsonValue::FromJson("null"));
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const JsonValue expectedField = JsonValue::FromJson(R"({})");
@@ -312,14 +352,14 @@ TEST_F(JsonUtilTest, TryGetFieldForObjectWhenJsonHasFieldGetsField)
     std::optional<JsonValue> outField(JsonValue::FromJson("null"));
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -330,17 +370,17 @@ TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonDoesNotHaveFieldReturnsFalseAnd
     std::optional<std::string> outField("");
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const std::string expectedField("value");
@@ -349,14 +389,14 @@ TEST_F(JsonUtilTest, TryGetFieldForStringWhenJsonHasFieldGetsField)
     std::optional<std::string> outField("");
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }
 
 TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonDoesNotHaveFieldReturnsFalseAndResetsField)
@@ -367,17 +407,17 @@ TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonDoesNotHaveFieldReturnsFal
     std::optional<std::vector<std::string>> outField({});
 
     // Assumptions
-    ASSERT_FALSE(json.HasField(fieldName)) << "Assume object does not have field";
+    ASSERT_THAT(json.HasField(fieldName), IsFalse()) << "Assume that object does not have field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_FALSE(result) << "Expect result is false";
-    EXPECT_FALSE(outField.has_value()) << "Expect field was reset";
+    EXPECT_THAT(result, IsFalse()) << "Assert that result is false";
+    EXPECT_THAT(outField.has_value(), IsFalse()) << "Assert that field was reset";
 }
 
-TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonHasFieldGetsField)
+TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonHasFieldReturnsTrueAndGetsField)
 {
     // Arrange
     const std::vector<std::string> expectedField = {"value"};
@@ -386,12 +426,12 @@ TEST_F(JsonUtilTest, TryGetFieldForStringArrayWhenJsonHasFieldGetsField)
     std::optional<std::vector<std::string>> outField({});
 
     // Assumptions
-    ASSERT_TRUE(json.HasField(fieldName)) << "Assume object has field";
+    ASSERT_THAT(json.HasField(fieldName), IsTrue()) << "Assume that object has field";
 
     // Act
     const bool result = JsonUtil::TryGetField(json, fieldName, outField);
 
     // Assert
-    EXPECT_TRUE(result) << "Expect result is true";
-    EXPECT_EQ(outField, expectedField) << "Expect actual equals expected";
+    EXPECT_THAT(result, IsTrue()) << "Assert that result is true";
+    EXPECT_THAT(outField, Eq(expectedField)) << "Assert that actual equals expected";
 }

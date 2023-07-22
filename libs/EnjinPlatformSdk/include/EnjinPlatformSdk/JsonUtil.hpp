@@ -16,6 +16,7 @@
 #define ENJINPLATFORMSDK_JSONUTIL_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/DateTime.hpp"
 #include "EnjinPlatformSdk/IJsonDeserializable.hpp"
 #include "EnjinPlatformSdk/JsonValue.hpp"
 #include <optional>
@@ -149,6 +150,32 @@ inline bool JsonUtil::TryGetField(const JsonValue& json, const std::string& key,
     if (json.TryGetBoolField(key, newField))
     {
         outField = newField;
+
+        return true;
+    }
+
+    outField.reset();
+
+    return false;
+}
+
+/// \brief Tries to get the specified DateTime field from the given JSON value-object.
+/// \param json The JSON value-object.
+/// \param key The field key.
+/// \param outField The out optional to emplace the value to.
+/// \return Whether the field was retrieved.
+/// \remarks If the field is not retrieved, then the out optional will be cleared of any data it holds.
+template<>
+[[maybe_unused]]
+inline bool JsonUtil::TryGetField(const JsonValue& json,
+                                  const std::string& key,
+                                  std::optional<DateTime>& outField)
+{
+    std::string s;
+
+    if (json.TryGetStringField(key, s))
+    {
+        outField = DateTime::Parse(s);
 
         return true;
     }
