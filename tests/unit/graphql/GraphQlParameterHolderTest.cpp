@@ -52,13 +52,13 @@ TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasNoParametersRet
     const std::string expected;
 
     // Assumptions
-    ASSERT_FALSE(classUnderTest->HasParameters()) << "Assume holder has no parameters";
+    ASSERT_THAT(classUnderTest->HasParameters(), IsFalse()) << "Assume that holder has no parameters";
 
     // Act
     const std::string actual = classUnderTest->CompileParameters();
 
     // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
+    ASSERT_THAT(actual, Eq(expected)) << "Assert that actual equals expected";
 }
 
 TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasParametersReturnsExpected)
@@ -72,13 +72,38 @@ TEST_F(GraphQlParameterHolderTest, CompileParametersWhenHolderHasParametersRetur
         .WillRepeatedly(Return(R"("value")"));
 
     // Assumptions
-    ASSERT_TRUE(classUnderTest->HasParameters()) << "Assume holder has parameters";
+    ASSERT_THAT(classUnderTest->HasParameters(), IsTrue()) << "Assume that holder has parameters";
 
     // Act
     const std::string actual = classUnderTest->CompileParameters();
 
     // Assert
-    ASSERT_EQ(actual, expected) << "Assert actual equals expected";
+    ASSERT_THAT(actual, Eq(expected)) << "Assert that actual equals expected";
+}
+
+TEST_F(GraphQlParameterHolderTest, HasParameterWhenParameterIsNotSetReturnsFalse)
+{
+    // Arrange
+    const std::string& key("key");
+
+    // Act
+    const bool actual = classUnderTest->HasParameter(key);
+
+    // Assert
+    ASSERT_THAT(actual, IsFalse());
+}
+
+TEST_F(GraphQlParameterHolderTest, HasParameterWhenParameterIsSetReturnsTrue)
+{
+    // Arrange
+    const std::string& key("key");
+    classUnderTest->SetParameter(key, mockValue);
+
+    // Act
+    const bool actual = classUnderTest->HasParameter(key);
+
+    // Assert
+    ASSERT_THAT(actual, IsTrue());
 }
 
 TEST_F(GraphQlParameterHolderTest, HasParametersWhenHolderHasNoParametersReturnsFalse)
@@ -87,7 +112,7 @@ TEST_F(GraphQlParameterHolderTest, HasParametersWhenHolderHasNoParametersReturns
     const bool actual = classUnderTest->HasParameters();
 
     // Assert
-    ASSERT_FALSE(actual);
+    ASSERT_THAT(actual, IsFalse());
 }
 
 TEST_F(GraphQlParameterHolderTest, HasParametersWhenHolderHasParametersReturnsTrue)
@@ -99,7 +124,7 @@ TEST_F(GraphQlParameterHolderTest, HasParametersWhenHolderHasParametersReturnsTr
     const bool actual = classUnderTest->HasParameters();
 
     // Assert
-    ASSERT_TRUE(actual);
+    ASSERT_THAT(actual, IsTrue());
 }
 
 TEST_F(GraphQlParameterHolderTest, RemoveParameterWhenHolderDoesNotHaveParameterDoesNotThrowError)
@@ -108,10 +133,10 @@ TEST_F(GraphQlParameterHolderTest, RemoveParameterWhenHolderDoesNotHaveParameter
     const std::string key("key");
 
     // Assumptions
-    ASSERT_FALSE(classUnderTest->GetParameters().contains(key)) << "Assume holder does not have parameter";
+    ASSERT_THAT(classUnderTest->HasParameter(key), IsFalse()) << "Assume that holder does not have parameter";
 
     // Assert
-    ASSERT_NO_THROW(classUnderTest->RemoveParameter(key)) << "Assert error is not thrown";
+    ASSERT_NO_THROW(classUnderTest->RemoveParameter(key)) << "Assert that error is not thrown";
 }
 
 TEST_F(GraphQlParameterHolderTest, RemoveParameterWhenHolderHasParameterParameterIsRemoved)
@@ -121,11 +146,11 @@ TEST_F(GraphQlParameterHolderTest, RemoveParameterWhenHolderHasParameterParamete
     classUnderTest->SetParameter(key, mockValue);
 
     // Assumptions
-    ASSERT_TRUE(classUnderTest->GetParameters().contains(key)) << "Assume holder has parameter";
+    ASSERT_THAT(classUnderTest->HasParameter(key), IsTrue()) << "Assume that holder has parameter";
 
     // Act
     classUnderTest->RemoveParameter(key);
 
     // Assert
-    ASSERT_FALSE(classUnderTest->GetParameters().contains(key)) << "Assert parameter was removed";
+    ASSERT_THAT(classUnderTest->HasParameter(key), IsFalse()) << "Assert that parameter was removed";
 }

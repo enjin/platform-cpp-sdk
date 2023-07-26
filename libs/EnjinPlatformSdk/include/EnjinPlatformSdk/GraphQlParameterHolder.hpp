@@ -94,6 +94,13 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
+    bool HasParameter(const std::string& key) const override
+    {
+        return _parameters.contains(key);
+    }
+
+    [[maybe_unused]]
+    [[nodiscard]]
     bool HasParameters() const override
     {
         return !_parameters.empty();

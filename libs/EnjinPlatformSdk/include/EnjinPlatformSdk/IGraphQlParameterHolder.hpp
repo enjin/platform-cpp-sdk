@@ -45,6 +45,13 @@ public:
     [[nodiscard]]
     virtual const std::map<std::string, SerializablePtr>& GetParameters() const = 0;
 
+    /// \brief Determines whether this holder currently has a parameter with the given key.
+    /// \param key The parameter key.
+    /// \return Whether a parameter is being held.
+    [[maybe_unused]]
+    [[nodiscard]]
+    virtual bool HasParameter(const std::string& key) const = 0;
+
     /// \brief Determines whether this holder has any parameters stored in it.
     /// \return Whether this holder has any parameters stored in it.
     [[maybe_unused]]
