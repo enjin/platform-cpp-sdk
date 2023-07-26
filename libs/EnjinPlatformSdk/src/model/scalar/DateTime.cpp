@@ -1,7 +1,12 @@
 #include "EnjinPlatformSdk/DateTime.hpp"
 
-#include "date/date.h"
 #include <sstream>
+
+#ifndef WIN32
+
+#include "date/date.h"
+
+#endif
 
 using namespace enjin::platform::sdk;
 
@@ -106,9 +111,17 @@ DateTime DateTime::Parse(const std::string& s)
     using namespace std::chrono;
 
     DateTime dateTime;
-
     std::istringstream in(s);
+
+#ifndef WIN32
+
     in >> date::parse(Iso8601Format, dateTime._date);
+
+#else
+
+    in >> parse(Iso8601Format, dateTime._date);
+
+#endif
 
     const auto days = std::chrono::floor<std::chrono::days>(dateTime._date);
     dateTime._yearMonthDay = year_month_day(days);

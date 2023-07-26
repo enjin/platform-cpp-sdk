@@ -30,10 +30,13 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     set(ENJINSDK_USING_CONAN 1)
 else ()
     include("cmake/FindRapidJSON.cmake")
-    include("cmake/FindDate.cmake")
     include("cmake/FindCppHttpLib.cmake")
     include("cmake/FindOpenSSL.cmake")
     include("cmake/FindIXWebSocket.cmake")
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        include("cmake/FindDate.cmake")
+    endif ()
 endif ()
 
 # Setup output directories before creating any targets

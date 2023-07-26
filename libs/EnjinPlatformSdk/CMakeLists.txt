@@ -34,12 +34,6 @@ else ()
     # RapidJSON
     target_include_directories(${PROJECT_NAME} PRIVATE ${RAPIDJSON_INCLUDE_DIRS})
 
-    # Date
-    target_link_libraries(${PROJECT_NAME}
-            PRIVATE
-            date::date
-            date::date-tz)
-
     # cpp-httplib
     target_link_libraries(${PROJECT_NAME} PRIVATE httplib::httplib)
 
@@ -51,6 +45,14 @@ else ()
 
     # IXWebSocket
     target_link_libraries(${PROJECT_NAME} PRIVATE ixwebsocket::ixwebsocket)
+
+    # Date
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        target_link_libraries(${PROJECT_NAME}
+                PRIVATE
+                date::date
+                date::date-tz)
+    endif ()
 endif ()
 
 ####################################################################################################################
