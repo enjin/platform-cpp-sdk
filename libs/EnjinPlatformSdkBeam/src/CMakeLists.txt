@@ -5,3 +5,4 @@ target_include_directories(${BEAM_PROJECT_NAME}
 
 add_subdirectory(model)
 add_subdirectory(schema)
+add_subdirectory(util)
