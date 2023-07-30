@@ -1,5 +1,6 @@
 target_sources(${BEAM_PROJECT_NAME}
         PRIVATE
+        BeamMutations.cpp
         BeamQueries.cpp)
 
 add_subdirectory(fragments)
