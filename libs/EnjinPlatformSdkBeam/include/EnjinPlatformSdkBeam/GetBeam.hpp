@@ -2,6 +2,7 @@
 #define ENJINPLATFORMSDKBEAM_GETBEAM_HPP
 
 #include "enjinplatformsdkbeam_export.h"
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include "EnjinPlatformSdkBeam/BeamFragment.hpp"

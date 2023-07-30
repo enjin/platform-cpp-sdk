@@ -2,6 +2,7 @@
 #define ENJINPLATFORMSDKBEAM_GETCLAIMS_HPP
 
 #include "enjinplatformsdkbeam_export.h"
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/SerializableArray.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
