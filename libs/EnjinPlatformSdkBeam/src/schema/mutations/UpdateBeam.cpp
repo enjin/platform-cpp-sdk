@@ -11,7 +11,8 @@ using RequestType = GraphQlRequest<UpdateBeam>;
 
 [[maybe_unused]]
 UpdateBeam::UpdateBeam()
-    : RequestType("UpdateBeam", GraphQlRequestType::Mutation)
+    : RequestType("UpdateBeam", GraphQlRequestType::Mutation),
+      HasBeamCommonFields<UpdateBeam>()
 {
 }
 

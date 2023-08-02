@@ -11,7 +11,8 @@ using RequestType = GraphQlRequest<CreateBeam>;
 
 [[maybe_unused]]
 CreateBeam::CreateBeam()
-    : RequestType("CreateBeam", GraphQlRequestType::Mutation)
+    : RequestType("CreateBeam", GraphQlRequestType::Mutation),
+      HasBeamCommonFields<CreateBeam>()
 {
 }
 
