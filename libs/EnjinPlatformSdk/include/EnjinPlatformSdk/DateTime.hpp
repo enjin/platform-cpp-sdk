@@ -2,20 +2,34 @@
 #define ENJINPLATFORMSDK_DATETIME_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/ISerializable.hpp"
+#include "EnjinPlatformSdk/JsonValue.hpp"
 #include <chrono>
+#include <memory>
 #include <string>
+#include <utility>
 
 namespace enjin::platform::sdk
 {
+class DateTime;
+
+/// \brief Definition for a pointer containing a DateTime.
+using DateTimePtr [[maybe_unused]] = std::shared_ptr<DateTime>;
+
 /// \brief Represents a point in time as a date and time of day.
-class ENJINPLATFORMSDK_EXPORT DateTime
+class ENJINPLATFORMSDK_EXPORT DateTime : public virtual ISerializable
 {
     std::chrono::sys_seconds _date;
     std::chrono::year_month_day _yearMonthDay{};
     std::chrono::hh_mm_ss<std::chrono::milliseconds> _hoursMinutesSeconds{};
 
-    /// \brief The format-string used to parse dates in ISO8601 format.
-    static inline const std::string Iso8601Format = std::string("%FT%T%Ez");
+    // Formatting strings
+
+    /// \brief The string used to parse dates in a ISO8601 format.
+    static constexpr char Iso8601Format[] = "%FT%T%Ez";
+
+    /// \brief Alternative string used to parse dates in a ISO8601 format for parsers that use brackets and colons.
+    static constexpr char Iso8601FormatAlt[] = "{:%FT%T%Ez}";
 
 public:
     /// \brief Constructs an instance of this class.
@@ -33,7 +47,7 @@ public:
     DateTime(DateTime&& other) noexcept;
 
     /// \brief Class destructor.
-    ~DateTime();
+    ~DateTime() override;
 
     /// \brief Returns the date in system seconds.
     /// \return The date.
@@ -105,6 +119,18 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     static DateTime Parse(const std::string& s);
+
+    // region ISerializable
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    JsonValue ToJson() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    std::string ToString() const override;
+
+    // endregion ISerializable
 };
 }
 

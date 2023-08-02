@@ -5,10 +5,17 @@
 #ifndef WIN32
 
 #include "date/date.h"
+#include "date/tz.h"
+
+#else
+
+#include <format>
 
 #endif
 
 using namespace enjin::platform::sdk;
+using Days = std::chrono::days;
+using Milliseconds = std::chrono::milliseconds;
 
 [[maybe_unused]]
 DateTime::DateTime() = default;
@@ -108,8 +115,6 @@ bool DateTime::operator>=(const DateTime& rhs) const
 [[maybe_unused]]
 DateTime DateTime::Parse(const std::string& s)
 {
-    using namespace std::chrono;
-
     DateTime dateTime;
     std::istringstream in(s);
 
@@ -123,9 +128,37 @@ DateTime DateTime::Parse(const std::string& s)
 
 #endif
 
-    const auto days = std::chrono::floor<std::chrono::days>(dateTime._date);
-    dateTime._yearMonthDay = year_month_day(days);
-    dateTime._hoursMinutesSeconds = hh_mm_ss(floor<std::chrono::milliseconds>(dateTime._date - days));
+    const auto days = std::chrono::floor<Days>(dateTime._date);
+    dateTime._yearMonthDay = std::chrono::year_month_day(days);
+    dateTime._hoursMinutesSeconds = std::chrono::hh_mm_ss(floor < Milliseconds > (dateTime._date - days));
 
     return dateTime;
 }
+
+// region ISerializable
+
+[[maybe_unused]]
+JsonValue DateTime::ToJson() const
+{
+    return JsonValue::FromString(ToString());
+}
+
+[[maybe_unused]]
+std::string DateTime::ToString() const
+{
+#ifndef WIN32
+
+    auto utc = date::utc_clock::from_sys(_date);
+
+    return date::format(Iso8601Format, utc);
+
+#else
+
+    auto utc = std::chrono::utc_clock::from_sys(_date);
+
+    return std::format(Iso8601FormatAlt, utc);
+
+#endif
+}
+
+// endregion ISerializable

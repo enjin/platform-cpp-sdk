@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "EnjinPlatformSdk/DateTime.hpp"
+#include "EnjinPlatformSdk/JsonValue.hpp"
 #include <chrono>
 #include <string>
 #include <tuple>
@@ -24,6 +25,10 @@ public:
 };
 
 class DateTimeParseTest : public TestWithParam<DateTimeTestParam>
+{
+};
+
+class DateTimeSerializeTest : public TestWithParam<std::string>
 {
 };
 
@@ -260,7 +265,38 @@ TEST_P(DateTimeParseTest, ParseGivenValidIso8601DateReturnsExpected)
     EXPECT_THAT(actual.GetMillisecond(), Eq(expectedMillisecond)) << "Assert that millisecond equals expected";
 }
 
+TEST_P(DateTimeSerializeTest, ToStringReturnsExpected)
+{
+    // Arrange
+    const std::string expected(GetParam());
+    const DateTime dateTime = DateTime::Parse(GetParam());
+
+    // Act
+    const std::string actual = dateTime.ToString();
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
+TEST_P(DateTimeSerializeTest, ToJsonReturnsExpected)
+{
+    // Arrange
+    const JsonValue expected = JsonValue::FromString(GetParam());
+    const DateTime dateTime = DateTime::Parse(GetParam());
+
+    // Act
+    const JsonValue actual = dateTime.ToJson();
+
+    // Assert
+    ASSERT_THAT(actual, Eq(expected));
+}
+
 INSTANTIATE_TEST_SUITE_P(ValidValues,
                          DateTimeParseTest,
                          Values(DateTimeTestParam("2000-01-01T00:00:00+00:00", 2000, 1, 1, 0, 0, 0, 0),
                                 DateTimeTestParam("2011-11-11T12:30:30+00:00", 2011, 11, 11, 12, 30, 30, 0)));
+
+INSTANTIATE_TEST_SUITE_P(Serialization,
+                         DateTimeSerializeTest,
+                         Values("2000-01-01T00:00:00+00:00",
+                                "2011-11-11T12:30:30+00:00"));
