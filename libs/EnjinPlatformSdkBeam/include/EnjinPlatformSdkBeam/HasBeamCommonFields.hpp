@@ -1,6 +1,7 @@
 #ifndef ENJINPLATFORMSDKBEAM_HASBEAMCOMMONFIELDS_HPP
 #define ENJINPLATFORMSDKBEAM_HASBEAMCOMMONFIELDS_HPP
 
+#include "EnjinPlatformSdk/DateTime.hpp"
 #include "EnjinPlatformSdk/IGraphQlParameterHolder.hpp"
 #include "EnjinPlatformSdk/SerializableBool.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
@@ -43,7 +44,7 @@ public:
     }
 
     [[maybe_unused]]
-    THolder& SetStart(SerializableStringPtr start) // TODO: Change parameter to DateTime type.
+    THolder& SetStart(DateTimePtr start)
     {
         static_assert(std::is_base_of<IGraphQlParameterHolder<THolder>, THolder>::value,
                       "Type THolder does not implement IGraphQlParameterHolder<THolder>");
@@ -52,7 +53,7 @@ public:
     }
 
     [[maybe_unused]]
-    THolder& SetEnd(SerializableStringPtr end) // TODO: Change parameter to DateTime type.
+    THolder& SetEnd(DateTimePtr end)
     {
         static_assert(std::is_base_of<IGraphQlParameterHolder<THolder>, THolder>::value,
                       "Type THolder does not implement IGraphQlParameterHolder<THolder>");
