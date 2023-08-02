@@ -44,9 +44,15 @@ else ()
             OpenSSL::Crypto)
 
     # IXWebSocket
-    target_link_libraries(${PROJECT_NAME}
-            PRIVATE
-            ixwebsocket::ixwebsocket)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ixwebsocket::ixwebsocket)
+
+    # Date
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        target_link_libraries(${PROJECT_NAME}
+                PRIVATE
+                date::date
+                date::date-tz)
+    endif ()
 endif ()
 
 ####################################################################################################################

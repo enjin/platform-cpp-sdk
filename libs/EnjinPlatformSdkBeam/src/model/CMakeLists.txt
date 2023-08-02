@@ -1,0 +1,11 @@
+target_sources(${BEAM_PROJECT_NAME}
+        PRIVATE
+        Beam.cpp
+        BeamClaim.cpp
+        BeamFlag.cpp
+        BeamFlagInputType.cpp
+        BeamQr.cpp
+        BeamScan.cpp
+        BeamType.cpp
+        ClaimStatus.cpp
+        ClaimToken.cpp)

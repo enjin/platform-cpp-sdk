@@ -41,9 +41,9 @@ public:
 
     MOCK_METHOD(bool, HasFields, (), (const));
 
-    MOCK_METHOD(MockGraphQlFragment&, WithField, (std::string name, bool isIncluded), ());
+    MOCK_METHOD(MockGraphQlFragment &, WithField, (std::string name, bool isIncluded), ());
 
-    MOCK_METHOD(MockGraphQlFragment&, WithField, (std::string name, GraphQlFragmentPtr fragment), ());
+    MOCK_METHOD(MockGraphQlFragment &, WithField, (std::string name, GraphQlFragmentPtr fragment), ());
 
     // endregion IGraphQlFragment
 
@@ -53,11 +53,13 @@ public:
 
     MOCK_METHOD((const std::map<std::string, SerializablePtr>&), GetParameters, (), (const));
 
+    MOCK_METHOD(bool, HasParameter, (const std::string& key), (const));
+
     MOCK_METHOD(bool, HasParameters, (), (const));
 
-    MOCK_METHOD(MockGraphQlFragment&, RemoveParameter, (const std::string& key), ());
+    MOCK_METHOD(MockGraphQlFragment &, RemoveParameter, (const std::string& key), ());
 
-    MOCK_METHOD(MockGraphQlFragment&, SetParameter, (std::string key, SerializablePtr value), ());
+    MOCK_METHOD(MockGraphQlFragment &, SetParameter, (std::string key, SerializablePtr value), ());
 
     // endregion IGraphQlParameterHolder
 };

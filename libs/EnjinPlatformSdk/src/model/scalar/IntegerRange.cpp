@@ -41,7 +41,19 @@ IntegerRange::IntegerRange(const std::string& start, const std::string& end)
     }
 }
 
+[[maybe_unused]]
+IntegerRange::IntegerRange(const IntegerRange& other) = default;
+
+[[maybe_unused]]
+IntegerRange::IntegerRange(IntegerRange&& other) noexcept = default;
+
 IntegerRange::~IntegerRange() = default;
+
+IntegerRange& IntegerRange::operator=(const IntegerRange& rhs) = default;
+
+IntegerRange& IntegerRange::operator=(IntegerRange&& rhs) noexcept = default;
+
+// region ISerializable
 
 [[maybe_unused]]
 JsonValue IntegerRange::ToJson() const
@@ -54,3 +66,5 @@ std::string IntegerRange::ToString() const
 {
     return ToJson().ToString();
 }
+
+// endregion ISerializable

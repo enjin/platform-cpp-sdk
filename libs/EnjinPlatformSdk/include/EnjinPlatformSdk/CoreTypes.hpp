@@ -133,6 +133,16 @@ public:
     [[maybe_unused]]
     static constexpr char IntArray[] = "[Int!]!";
 
+    // IntegerRangeString
+
+    /// \brief String for IntegerRangeString type.
+    [[maybe_unused]]
+    static constexpr char IntegerRangeString[] = "IntegerRangeString!";
+
+    /// \brief String for an array of IntegerRangeString type.
+    [[maybe_unused]]
+    static constexpr char IntegerRangeStringArray[] = "[IntegerRangeString!]!";
+
     // MarketPolicy
 
     /// \brief String for MarketPolicy type.

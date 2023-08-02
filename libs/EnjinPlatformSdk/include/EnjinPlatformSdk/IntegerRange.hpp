@@ -23,33 +23,47 @@
 
 namespace enjin::platform::sdk
 {
-struct IntegerRange;
+class IntegerRange;
 
 /// \brief Definition for a pointer containing an integer range.
-using IntegerRangePtr [[maybe_unused]] = std::shared_ptr<IntegerRange>;
+[[maybe_unused]]
+typedef std::shared_ptr<IntegerRange> IntegerRangePtr;
 
 /// \brief Represents an inclusive range between two BigInt values.
-struct ENJINPLATFORMSDK_EXPORT IntegerRange : public ISerializable
+class ENJINPLATFORMSDK_EXPORT IntegerRange : public virtual ISerializable
 {
-private:
     std::string _value;
 
 public:
     IntegerRange() = delete;
 
-    /// \brief Initializes a new instance of this struct with the given value.
+    /// \brief Initializes a new instance of this class with the given value.
     /// \param value The value representing the whole range.
     [[maybe_unused]]
     explicit IntegerRange(const std::string& value);
 
-    /// \brief Initializes a new instance of this struct with the given starting and ending values.
+    /// \brief Initializes a new instance of this class with the given starting and ending values.
     /// \param start The starting value.
     /// \param end The ending value.
     [[maybe_unused]]
     IntegerRange(const std::string& start, const std::string& end);
 
-    /// \brief Struct destructor.
+    /// \brief Copy constructor.
+    /// \param other The other instance to copy from.
+    [[maybe_unused]]
+    IntegerRange(const IntegerRange& other);
+
+    /// \brief Move constructor.
+    /// \param other The other instance to move.
+    [[maybe_unused]]
+    IntegerRange(IntegerRange&& other) noexcept;
+
+    /// \brief class destructor.
     ~IntegerRange() override;
+
+    IntegerRange& operator=(const IntegerRange& rhs);
+
+    IntegerRange& operator=(IntegerRange&& rhs) noexcept;
 
     // region ISerializable
 

@@ -18,3 +18,6 @@ class EnjinPlatformSDK(ConanFile):
         self.requires("cpp-httplib/0.11.3")
         self.options["cpp-httplib"].with_openssl = True
         self.requires("ixwebsocket/11.4.3")
+
+        if self.settings.compiler == "gcc" or self.settings.compiler == "clang":
+            self.requires("date/3.0.1")
