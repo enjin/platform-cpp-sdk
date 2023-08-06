@@ -4,3 +4,4 @@ target_include_directories(${FUEL_TANKS_PROJECT_NAME}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include)
 
 add_subdirectory(model)
+add_subdirectory(schema)
