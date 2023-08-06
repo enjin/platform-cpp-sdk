@@ -1,0 +1,12 @@
+target_sources(${FUEL_TANKS_PROJECT_NAME}
+        PRIVATE
+        AccountRule.cpp
+        AccountRuleInputType.cpp
+        DispatchCall.cpp
+        DispatchInputType.cpp
+        DispatchRule.cpp
+        DispatchRuleEnum.cpp
+        DispatchRuleInputType.cpp
+        FuelBudgetInputType.cpp
+        FuelTank.cpp
+        FuelTankMutationInputType.cpp)
