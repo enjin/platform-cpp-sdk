@@ -5,3 +5,4 @@ target_include_directories(${FUEL_TANKS_PROJECT_NAME}
 
 add_subdirectory(model)
 add_subdirectory(schema)
+add_subdirectory(util)
