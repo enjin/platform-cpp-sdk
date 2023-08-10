@@ -1,0 +1,16 @@
+target_sources(${FUEL_TANKS_PROJECT_NAME}
+        PRIVATE
+        AddAccount.cpp
+        BatchAddAccount.cpp
+        BatchRemoveAccount.cpp
+        CreateFuelTank.cpp
+        DestroyFuelTank.cpp
+        Dispatch.cpp
+        DispatchAndTouch.cpp
+        InsertRuleSet.cpp
+        MutateFuelTank.cpp
+        RemoveAccount.cpp
+        RemoveAccountRuleData.cpp
+        RemoveRuleSet.cpp
+        ScheduleMutateFreeze.cpp
+        SetConsumption.cpp)
