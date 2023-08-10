@@ -35,7 +35,7 @@ jobs:
 
       - name: Restore Packages
         run: |
-          conan install ./.conan -s compiler='other' -if ./build --build missing --profile ./.conan/profiles/workflows/${{ matrix.os }}
+          conan install ./.conan -if ./build --build missing --profile ./.conan/profiles/workflows/${{ matrix.os }}
 
       - name: Run CMake
         run: |
