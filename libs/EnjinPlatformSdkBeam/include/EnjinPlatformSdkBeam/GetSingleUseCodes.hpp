@@ -2,10 +2,15 @@
 #define ENJINPLATFORMSDKBEAM_GETSINGLEUSECODES_HPP
 
 #include "enjinplatformsdkbeam_export.h"
-#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include "EnjinPlatformSdkBeam/BeamClaimFragment.hpp"
+
+#ifdef WIN32
+
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
+
+#endif
 
 namespace enjin::platform::sdk::beam
 {
