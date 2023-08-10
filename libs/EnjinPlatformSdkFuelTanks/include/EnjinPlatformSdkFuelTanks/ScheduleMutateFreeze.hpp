@@ -8,6 +8,12 @@
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include "EnjinPlatformSdk/TransactionFragment.hpp"
 
+#ifdef WIN32
+
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
+
+#endif
+
 namespace enjin::platform::sdk::fuelTanks
 {
 /// \brief A request to act as a mutation for scheduling a mutation of the is_frozen state that determines if a fuel
