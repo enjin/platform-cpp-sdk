@@ -78,6 +78,14 @@ if (${ENJINSDK_INCLUDE_BEAM})
     target_link_libraries(${TESTS_NAME} PRIVATE ${BEAM_PROJECT_NAME})
 endif ()
 
+# Marketplace library
+if (${ENJINSDK_INCLUDE_MARKETPLACE})
+    target_include_directories(${TESTS_NAME}
+            PRIVATE
+            "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/libs/${MARKETPLACE_PROJECT_NAME}/src/include")
+    target_link_libraries(${TESTS_NAME} PRIVATE ${MARKETPLACE_PROJECT_NAME})
+endif ()
+
 ####################################################################################################################
 ### Add test files
 
