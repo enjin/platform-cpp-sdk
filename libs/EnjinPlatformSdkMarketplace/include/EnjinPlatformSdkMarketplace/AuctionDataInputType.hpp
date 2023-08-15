@@ -17,7 +17,7 @@ namespace enjin::platform::sdk::marketplace
 class AuctionDataInputType;
 
 /// \brief Definition for a pointer containing an AuctionDataInputType.
-using AssetInputTypePtr [[maybe_unused]] = std::shared_ptr<AuctionDataInputType>;
+using AuctionDataInputTypePtr [[maybe_unused]] = std::shared_ptr<AuctionDataInputType>;
 
 /// \brief Models a parameter for data for an auction.
 class ENJINPLATFORMSDKMARKETPLACE_EXPORT AuctionDataInputType : public GraphQlParameter<AuctionDataInputType>
