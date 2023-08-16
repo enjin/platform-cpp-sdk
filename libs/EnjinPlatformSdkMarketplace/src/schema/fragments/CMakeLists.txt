@@ -1,0 +1,11 @@
+target_sources(${MARKETPLACE_PROJECT_NAME}
+        PRIVATE
+        AssetFragment.cpp
+        AuctionDataFragment.cpp
+        AuctionStateFragment.cpp
+        FixedPriceDataFragment.cpp
+        FixedPriceStateFragment.cpp
+        MarketplaceBidFragment.cpp
+        MarketplaceListingFragment.cpp
+        MarketplaceSaleFragment.cpp
+        MarketplaceStateFragment.cpp)

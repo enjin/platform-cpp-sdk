@@ -6,7 +6,10 @@ target_sources(${TESTS_NAME}
         ClaimStatusTest.cpp
         ClaimTokenTest.cpp
         CryptoSignatureTypeTest.cpp
+        FeeSideTest.cpp
         FreezeTypeTest.cpp
+        ListingStateEnumTest.cpp
+        ListingTypeTest.cpp
         PalletIdentifierTest.cpp
         TokenMintCapTest.cpp
         TokenMintCapTypeTest.cpp

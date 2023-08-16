@@ -7,8 +7,8 @@
 namespace enjin::platform::sdk
 {
 /// \brief Dummy class to avoid one definition rule violation when using IGraphQlFragment in other libraries.
-class ENJINPLATFORMSDK_EXPORT DummyClassToAvoidGraphQlParameterORDViolation final
-    : public GraphQlFragment<DummyClassToAvoidGraphQlParameterORDViolation>
+class ENJINPLATFORMSDK_EXPORT DummyClassToAvoidGraphQlFragmentORDViolation final
+    : public GraphQlFragment<DummyClassToAvoidGraphQlFragmentORDViolation>
 {
 };
 }
