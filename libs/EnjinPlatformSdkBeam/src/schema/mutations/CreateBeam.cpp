@@ -33,7 +33,7 @@ CreateBeam& CreateBeam::SetFlags(std::shared_ptr<SerializableArray<BeamFlagInput
 [[maybe_unused]]
 CreateBeam& CreateBeam::SetCollectionId(SerializableStringPtr collectionId)
 {
-    return RequestType::SetVariable("collectionId", CoreTypes::String, std::move(collectionId));
+    return RequestType::SetVariable("collectionId", CoreTypes::BigInt, std::move(collectionId));
 }
 
 [[maybe_unused]]

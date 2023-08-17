@@ -48,7 +48,7 @@ ClaimBeam& ClaimBeam::SetCryptoSignatureType(const CryptoSignatureType cryptoSig
     std::string s = enjin::platform::sdk::ToString(cryptoSignatureType);
     SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
 
-    return RequestType::SetVariable("cryptoSignatureType", CoreTypes::String, std::move(sPtr));
+    return RequestType::SetVariable("cryptoSignatureType", CoreTypes::CryptoSignatureType, std::move(sPtr));
 }
 
 ClaimBeam& ClaimBeam::operator=(const ClaimBeam& rhs) = default;

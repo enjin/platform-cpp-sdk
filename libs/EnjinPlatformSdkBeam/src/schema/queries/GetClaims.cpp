@@ -28,7 +28,7 @@ GetClaims::~GetClaims() = default;
 [[maybe_unused]]
 GetClaims& GetClaims::SetIds(SerializableStringArrayPtr ids)
 {
-    return RequestType::SetVariable("ids", CoreTypes::StringArray, std::move(ids));
+    return RequestType::SetVariable("ids", CoreTypes::BigIntArray, std::move(ids));
 }
 
 [[maybe_unused]]
