@@ -10,7 +10,6 @@ using namespace enjin::platform::sdk::beam;
 
 class Beam::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> id;
     std::optional<std::string> code;
     std::optional<std::string> name;
@@ -24,6 +23,7 @@ public:
     std::optional<std::vector<BeamFlag>> flags;
     std::optional<BeamQr> qr;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

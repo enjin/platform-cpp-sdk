@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk::beam;
 
 class BeamQr::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> url;
     std::optional<std::string> payload;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;
