@@ -2,9 +2,14 @@
 #define ENJINPLATFORMSDKBEAM_DELETEBEAM_HPP
 
 #include "enjinplatformsdkbeam_export.h"
-#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
+
+#ifdef WIN32
+
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
+
+#endif
 
 namespace enjin::platform::sdk::beam
 {

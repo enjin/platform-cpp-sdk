@@ -11,6 +11,12 @@
 #include "EnjinPlatformSdkBeam/BeamType.hpp"
 #include <memory>
 
+#ifdef WIN32
+
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlParameterORDViolation.hpp"
+
+#endif
+
 namespace enjin::platform::sdk::beam
 {
 class ClaimToken;

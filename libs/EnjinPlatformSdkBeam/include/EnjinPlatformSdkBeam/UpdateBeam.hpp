@@ -2,13 +2,18 @@
 #define ENJINPLATFORMSDKBEAM_UPDATEBEAM_HPP
 
 #include "enjinplatformsdkbeam_export.h"
-#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/SerializableArray.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include "EnjinPlatformSdkBeam/BeamFlagInputType.hpp"
 #include "EnjinPlatformSdkBeam/HasBeamCommonFields.hpp"
 #include <memory>
+
+#ifdef WIN32
+
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
+
+#endif
 
 namespace enjin::platform::sdk::beam
 {

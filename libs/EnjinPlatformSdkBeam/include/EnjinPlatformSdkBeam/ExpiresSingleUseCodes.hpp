@@ -2,10 +2,15 @@
 #define ENJINPLATFORMSDKBEAM_EXPIRESSINGLEUSECODES_HPP
 
 #include "enjinplatformsdkbeam_export.h"
-#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/SerializableArray.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
+
+#ifdef WIN32
+
+#include "EnjinPlatformSdk/DummyClassToAvoidGraphQlRequestORDViolation.hpp"
+
+#endif
 
 namespace enjin::platform::sdk::beam
 {
