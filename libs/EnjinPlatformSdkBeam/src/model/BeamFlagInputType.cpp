@@ -6,6 +6,7 @@
 
 using namespace enjin::platform::sdk;
 using namespace enjin::platform::sdk::beam;
+using ParameterType = GraphQlParameter<BeamFlagInputType>;
 
 [[maybe_unused]]
 BeamFlagInputType::BeamFlagInputType() = default;
@@ -31,13 +32,13 @@ BeamFlagInputType& BeamFlagInputType::SetFlag(const BeamFlag flag)
     std::string s = enjin::platform::sdk::beam::ToString(flag);
     SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
 
-    return SetParameter(key, std::move(sPtr));
+    return ParameterType::SetParameter(key, std::move(sPtr));
 }
 
 [[maybe_unused]]
 BeamFlagInputType& BeamFlagInputType::SetEnabled(SerializableBoolPtr enabled)
 {
-    return SetParameter("enabled", std::move(enabled));
+    return ParameterType::SetParameter("enabled", std::move(enabled));
 }
 
 BeamFlagInputType& BeamFlagInputType::operator=(const BeamFlagInputType& rhs) = default;

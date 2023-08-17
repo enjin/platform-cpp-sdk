@@ -31,7 +31,7 @@ RemoveTokens& RemoveTokens::SetCode(SerializableStringPtr code)
 [[maybe_unused]]
 RemoveTokens& RemoveTokens::SetTokenIds(std::shared_ptr<SerializableArray<IntegerRange>> tokenIds)
 {
-    return RequestType::SetVariable("tokenIds", CoreTypes::IntegerRangeString, std::move(tokenIds));
+    return RequestType::SetVariable("tokenIds", CoreTypes::IntegerRangeStringArray, std::move(tokenIds));
 }
 
 RemoveTokens& RemoveTokens::operator=(const RemoveTokens& rhs) = default;

@@ -26,7 +26,7 @@ using BeamQrConnectionFragment [[maybe_unused]] = ConnectionFragment<BeamQrFragm
 using BeamQrConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamQrConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a BeamQr returned by the platform.
-class BeamQrFragment : public IGraphQlFragment<BeamQrFragment>
+class ENJINPLATFORMSDKBEAM_EXPORT BeamQrFragment : public virtual IGraphQlFragment<BeamQrFragment>
 {
     /// \brief The implementation of this class.
     class Impl;

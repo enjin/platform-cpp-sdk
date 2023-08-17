@@ -26,7 +26,7 @@ using BeamScanConnectionFragment [[maybe_unused]] = ConnectionFragment<BeamScanF
 using BeamScanConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamScanConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a BeamScan returned by the platform.
-class ENJINPLATFORMSDKBEAM_EXPORT BeamScanFragment : public IGraphQlFragment<BeamScanFragment>
+class ENJINPLATFORMSDKBEAM_EXPORT BeamScanFragment : public virtual IGraphQlFragment<BeamScanFragment>
 {
     /// \brief The implementation of this class.
     class Impl;

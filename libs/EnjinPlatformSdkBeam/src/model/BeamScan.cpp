@@ -9,11 +9,11 @@ using namespace enjin::platform::sdk::beam;
 
 class BeamScan::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> id;
     std::optional<std::string> walletPublicKey;
     std::optional<std::string> message;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

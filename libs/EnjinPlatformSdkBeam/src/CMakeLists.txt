@@ -3,6 +3,7 @@ target_include_directories(${BEAM_PROJECT_NAME}
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include)
 
+add_subdirectory(event)
 add_subdirectory(model)
 add_subdirectory(schema)
 add_subdirectory(util)
