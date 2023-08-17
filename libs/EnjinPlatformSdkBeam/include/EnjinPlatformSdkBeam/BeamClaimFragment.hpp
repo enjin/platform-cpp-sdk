@@ -37,7 +37,7 @@ using BeamClaimConnectionFragment [[maybe_unused]] = ConnectionFragment<BeamClai
 using BeamClaimConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamClaimConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a BeamClaim returned by the platform.
-class ENJINPLATFORMSDKBEAM_EXPORT BeamClaimFragment : public IGraphQlFragment<BeamClaimFragment>
+class ENJINPLATFORMSDKBEAM_EXPORT BeamClaimFragment : public virtual IGraphQlFragment<BeamClaimFragment>
 {
     /// \brief The implementation of this class.
     class Impl;
