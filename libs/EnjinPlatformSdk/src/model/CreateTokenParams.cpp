@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<CreateTokenParams>;
 
 [[maybe_unused]]
 CreateTokenParams::CreateTokenParams() = default;
@@ -18,31 +19,37 @@ CreateTokenParams::~CreateTokenParams() = default;
 [[maybe_unused]]
 CreateTokenParams& CreateTokenParams::SetInitialSupply(SerializableStringPtr initialSupply)
 {
-    return GraphQlParameter<CreateTokenParams>::SetParameter("initialSupply", std::move(initialSupply));
+    return ParameterType::SetParameter("initialSupply", std::move(initialSupply));
 }
 
 [[maybe_unused]]
 CreateTokenParams& CreateTokenParams::SetUnitPrice(SerializableStringPtr unitPrice)
 {
-    return GraphQlParameter<CreateTokenParams>::SetParameter("unitPrice", std::move(unitPrice));
+    return ParameterType::SetParameter("unitPrice", std::move(unitPrice));
 }
 
 [[maybe_unused]]
 CreateTokenParams& CreateTokenParams::SetCap(TokenMintCapPtr cap)
 {
-    return GraphQlParameter<CreateTokenParams>::SetParameter("cap", std::move(cap));
+    return ParameterType::SetParameter("cap", std::move(cap));
 }
 
 [[maybe_unused]]
 CreateTokenParams& CreateTokenParams::SetBehavior(TokenMarketBehaviorInputPtr behavior)
 {
-    return GraphQlParameter<CreateTokenParams>::SetParameter("behavior", std::move(behavior));
+    return ParameterType::SetParameter("behavior", std::move(behavior));
 }
 
 [[maybe_unused]]
 CreateTokenParams& CreateTokenParams::SetListingForbidden(SerializableBoolPtr listingForbidden)
 {
-    return GraphQlParameter<CreateTokenParams>::SetParameter("listingForbidden", std::move(listingForbidden));
+    return ParameterType::SetParameter("listingForbidden", std::move(listingForbidden));
+}
+
+[[maybe_unused]]
+CreateTokenParams& CreateTokenParams::SetAttributes(std::shared_ptr<SerializableArray<AttributeInput>> attributes)
+{
+    return ParameterType::SetParameter("attributes", std::move(attributes));
 }
 
 CreateTokenParams& CreateTokenParams::operator=(const CreateTokenParams& rhs) = default;

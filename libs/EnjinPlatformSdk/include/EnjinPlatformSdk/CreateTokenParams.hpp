@@ -2,8 +2,10 @@
 #define ENJINPLATFORMSDK_CREATETOKENPARAMS_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/AttributeInput.hpp"
 #include "EnjinPlatformSdk/GraphQlParameter.hpp"
 #include "EnjinPlatformSdk/HasEncodableTokenId.hpp"
+#include "EnjinPlatformSdk/SerializableArray.hpp"
 #include "EnjinPlatformSdk/SerializableBool.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include "EnjinPlatformSdk/TokenMarketBehaviorInput.hpp"
@@ -72,6 +74,12 @@ public:
     /// \return This parameter for chaining.
     [[maybe_unused]]
     CreateTokenParams& SetListingForbidden(SerializableBoolPtr listingForbidden);
+
+    /// \brief Sets the initial attributes for the token.
+    /// \param attributes The attributes.
+    /// \return This parameter for chaining.
+    [[maybe_unused]]
+    CreateTokenParams& SetAttributes(std::shared_ptr<SerializableArray<AttributeInput>> attributes);
 
     CreateTokenParams& operator=(const CreateTokenParams& rhs);
 
