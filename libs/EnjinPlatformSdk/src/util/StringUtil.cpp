@@ -5,12 +5,12 @@
 
 using namespace enjin::platform::sdk;
 
-StringUtil::~StringUtil() = default;
-
 [[maybe_unused]]
 std::string StringUtil::ToLower(std::string s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), [](char ch) { return std::tolower(ch); });
+    std::transform(s.begin(), s.end(), s.begin(), [](char ch) {
+        return std::tolower(ch);
+    });
 
     return s;
 }
@@ -18,7 +18,9 @@ std::string StringUtil::ToLower(std::string s)
 [[maybe_unused]]
 std::string StringUtil::ToUpper(std::string s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), [](char ch) { return std::toupper(ch); });
+    std::transform(s.begin(), s.end(), s.begin(), [](char ch) {
+        return std::toupper(ch);
+    });
 
     return s;
 }
