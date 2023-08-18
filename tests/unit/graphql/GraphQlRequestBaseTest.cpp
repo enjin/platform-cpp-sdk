@@ -149,6 +149,31 @@ TEST_F(GraphQlRequestBaseTest, GetVariablesWithoutTypesWhenRequestHasVariablesRe
     ASSERT_THAT(actual, Eq(expected));
 }
 
+TEST_F(GraphQlRequestBaseTest, HasVariableWhenRequestDoesNotHaveTheGivenVariableReturnsFalse)
+{
+    // Arrange
+    const std::string name("var");
+
+    // Act
+    const bool actual = classUnderTest->HasVariable(name);
+
+    // Assert
+    ASSERT_THAT(actual, IsFalse());
+}
+
+TEST_F(GraphQlRequestBaseTest, HasVariableWhenRequestHasTheGivenVariableReturnsTrue)
+{
+    // Arrange
+    const std::string name("var");
+    classUnderTest->SetVariable(name, "String!", mockVariableValue);
+
+    // Act
+    const bool actual = classUnderTest->HasVariable(name);
+
+    // Assert
+    ASSERT_THAT(actual, IsTrue());
+}
+
 TEST_F(GraphQlRequestBaseTest, HasVariablesWhenRequestHasNoVariablesReturnsFalse)
 {
     // Act
@@ -168,4 +193,37 @@ TEST_F(GraphQlRequestBaseTest, HasVariablesWhenRequestHasVariablesReturnsTrue)
 
     // Assert
     ASSERT_TRUE(actual);
+}
+
+TEST_F(GraphQlRequestBaseTest, SetVariableVariableIsSetForRequest)
+{
+    // Arrange
+    const std::string name("var");
+    const std::string type("type");
+    const std::shared_ptr<ISerializable> value = mockVariableValue;
+
+    // Act
+    classUnderTest->SetVariable(name, type, value);
+
+    // Assert
+    ASSERT_THAT(classUnderTest->GetVariablesWithoutTypes(), Contains(Key(name)));
+    ASSERT_THAT(classUnderTest->GetVariablesWithoutTypes().find(name)->second, Eq(value));
+}
+
+TEST_F(GraphQlRequestBaseTest, RemoveVariableWhenVariableIsSetRemovesVariable)
+{
+    // Arrange
+    const std::string name("var");
+    classUnderTest->SetVariable(name, "type", mockVariableValue);
+
+    // Assumptions
+    ASSERT_THAT(classUnderTest->GetVariablesWithoutTypes(), Contains(Key(name)))
+                        << "Assume that variable is set";
+
+    // Act
+    classUnderTest->RemoveVariable(name);
+
+    // Assert
+    ASSERT_THAT(classUnderTest->GetVariablesWithoutTypes(), Not(Contains(Key(name))))
+                        << "Assume that variable was removed";
 }

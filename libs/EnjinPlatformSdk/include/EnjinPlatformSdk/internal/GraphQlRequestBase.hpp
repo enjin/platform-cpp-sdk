@@ -68,11 +68,19 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
+    bool HasVariable(const std::string& name) const override
+    {
+        return _variables.contains(name);
+    }
+
+    [[maybe_unused]]
+    [[nodiscard]]
     bool HasVariables() const override
     {
         return !_variables.empty();
     }
 
+    [[maybe_unused]]
     TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) override
     {
         if (value == nullptr)
@@ -91,6 +99,18 @@ public:
         return static_cast<TRequest&>(*this);
     }
 
+    [[maybe_unused]]
+    TRequest& RemoveVariable(const std::string& name) override
+    {
+        if (_variables.contains(name))
+        {
+            _variables.erase(name);
+            _variablesWithoutTypes.erase(name);
+        }
+
+        return static_cast<TRequest&>(*this);
+    }
+
     // endregion IGraphQlRequest
 
 protected:
@@ -98,6 +118,7 @@ protected:
     /// \param name The name of the request.
     /// \param type The type of the request.
     /// \throws std::out_of_range If request type is not a valid value.
+    [[maybe_unused]]
     GraphQlRequestBase(std::string name, GraphQlRequestType type)
         : _name(std::move(name)),
           _type(type)
@@ -122,6 +143,7 @@ protected:
     /// \brief Appends the necessary beginning portion for the compiled request to the given string stream, leaving only
     /// the closing brace and any fragment fields to be appended.
     /// \param ss The string stream to write to.
+    [[maybe_unused]]
     void AppendHeader(std::stringstream& ss) const
     {
         ss << _typeName;

@@ -41,6 +41,13 @@ public:
     [[nodiscard]]
     virtual const std::map<std::string, SerializablePtr>& GetVariablesWithoutTypes() const = 0;
 
+    /// \brief Determines whether this request has a variable of the given name.
+    /// \param name The variable name.
+    /// \return Whether this request has the variable.
+    [[maybe_unused]]
+    [[nodiscard]]
+    virtual bool HasVariable(const std::string& name) const = 0;
+
     /// \brief Determines whether this request has variables.
     /// \return Whether this request has variables.
     [[maybe_unused]]
@@ -64,6 +71,12 @@ public:
     /// \return This request for chaining.
     [[maybe_unused]]
     virtual TRequest& SetVariable(std::string name, std::string type, SerializablePtr value) = 0;
+
+    /// \brief Removes a variable with the given name from this request.
+    /// \param name The variable name.
+    /// \return This request for chaining.
+    [[maybe_unused]]
+    virtual TRequest& RemoveVariable(const std::string& name) = 0;
 };
 
 /// \brief Interface for GraphQL requests with a settable fragment for response data.
