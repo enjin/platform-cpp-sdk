@@ -24,7 +24,7 @@ using RegistrationPtr = std::shared_ptr<EventListenerRegistration>;
 
 // region PusherWrapper
 
-class PusherEventService::PusherWrapper : virtual public IPusherClient
+class PusherEventService::PusherWrapper : public virtual IPusherClient
 {
     std::unique_ptr<IPusherClient> _client;
 
@@ -137,7 +137,7 @@ public:
 
 // region Impl
 
-class PusherEventService::Impl : virtual public IPusherEventServiceImpl
+class PusherEventService::Impl : public virtual IPusherEventServiceImpl
 {
     std::unique_ptr<PusherWrapper> _client;
     PusherListener _listener;

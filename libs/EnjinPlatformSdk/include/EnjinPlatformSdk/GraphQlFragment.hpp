@@ -14,7 +14,7 @@ namespace enjin::platform::sdk
 /// \tparam TFragment The fragment type. Must extend this class.
 template<class TFragment>
 class GraphQlFragment : public GraphQlParameterHolder<TFragment>,
-                        virtual public IGraphQlFragment<TFragment>
+                        public virtual IGraphQlFragment<TFragment>
 {
     std::map<std::string, GraphQlFragmentPtr> _fragmentFields;
     std::set<std::string> _scalarFields;

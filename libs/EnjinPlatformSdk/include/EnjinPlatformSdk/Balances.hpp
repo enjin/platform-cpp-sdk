@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief  Models the EFI balances of a wallet.
-class ENJINPLATFORMSDK_EXPORT Balances : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Balances : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

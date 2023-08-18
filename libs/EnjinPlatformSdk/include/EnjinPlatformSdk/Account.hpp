@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a substrate account.
-class ENJINPLATFORMSDK_EXPORT Account : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Account : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

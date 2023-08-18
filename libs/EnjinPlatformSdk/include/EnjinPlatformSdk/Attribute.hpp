@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models an attribute attached to a type.
-class ENJINPLATFORMSDK_EXPORT Attribute : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Attribute : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

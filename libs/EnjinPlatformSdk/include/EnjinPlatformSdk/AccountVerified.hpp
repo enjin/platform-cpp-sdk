@@ -12,7 +12,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models the verification status of an account.
-class ENJINPLATFORMSDK_EXPORT AccountVerified : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT AccountVerified : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

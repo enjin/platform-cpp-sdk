@@ -24,7 +24,7 @@ typedef std::function<void()> PusherHandler;
 typedef std::function<void(const std::string&)> PusherSubscribedHandler;
 
 /// \brief Pusher client for subscribing to Pusher channels and binding to events.
-class ENJINPLATFORMSDK_EXPORT PusherClient : virtual public IPusherClient
+class ENJINPLATFORMSDK_EXPORT PusherClient : public virtual IPusherClient
 {
     /// \brief Implementation for this class.
     class Impl;

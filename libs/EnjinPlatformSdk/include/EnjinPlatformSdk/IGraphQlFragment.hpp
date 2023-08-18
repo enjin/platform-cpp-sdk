@@ -15,7 +15,7 @@ using GraphQlFragmentPtr [[maybe_unused]] = std::shared_ptr<IGraphQlFragment<>>;
 
 /// \brief Interface for GraphQL fragments.
 template<class...>
-class IGraphQlFragment : virtual public IGraphQlParameterHolder<>
+class IGraphQlFragment : public virtual IGraphQlParameterHolder<>
 {
 public:
     /// \brief Class destructor.
@@ -46,8 +46,8 @@ public:
 /// \brief Interface for GraphQL fragments with settable fields.
 /// \tparam TFragment The fragment type. Must implement this interface.
 template<class TFragment>
-class IGraphQlFragment<TFragment> : virtual public IGraphQlParameterHolder<TFragment>,
-                                    virtual public IGraphQlFragment<>
+class IGraphQlFragment<TFragment> : public virtual IGraphQlParameterHolder<TFragment>,
+                                    public virtual IGraphQlFragment<>
 {
 public:
     /// \brief Class destructor.

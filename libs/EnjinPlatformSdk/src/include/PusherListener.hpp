@@ -16,7 +16,7 @@ class PusherEventService;
 
 /// \brief A listener class used by a <see cref="IPusherEventServiceImpl"/> for processing events received broadcasted
 /// through a Pusher client.
-class ENJINPLATFORMSDK_EXPORT PusherListener : virtual public pusher::ISubscriptionListener
+class ENJINPLATFORMSDK_EXPORT PusherListener : public virtual pusher::ISubscriptionListener
 {
     IPusherEventServiceImpl& _service;
 

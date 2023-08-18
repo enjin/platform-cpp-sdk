@@ -32,7 +32,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a collection on the platform.
-class ENJINPLATFORMSDK_EXPORT Collection : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Collection : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

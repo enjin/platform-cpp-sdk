@@ -21,7 +21,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a wallet that has been approved to use a token account.
-class ENJINPLATFORMSDK_EXPORT TokenAccountApproval : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT TokenAccountApproval : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

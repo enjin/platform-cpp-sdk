@@ -21,7 +21,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models the wallet that has been approved to use the collection account.
-class ENJINPLATFORMSDK_EXPORT CollectionAccountApproval : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT CollectionAccountApproval : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models an event parameter.
-class ENJINPLATFORMSDK_EXPORT EventParam : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT EventParam : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

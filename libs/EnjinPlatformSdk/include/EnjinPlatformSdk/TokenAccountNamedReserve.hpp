@@ -12,7 +12,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a pallet that has reserved some tokens and the amount.
-class ENJINPLATFORMSDK_EXPORT TokenAccountNamedReserve : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT TokenAccountNamedReserve : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

@@ -31,7 +31,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a token account, which stores the balances of tokens.
-class ENJINPLATFORMSDK_EXPORT TokenAccount : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT TokenAccount : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

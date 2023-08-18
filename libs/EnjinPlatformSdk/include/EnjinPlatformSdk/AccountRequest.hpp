@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a request to verify an account.
-class ENJINPLATFORMSDK_EXPORT AccountRequest : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT AccountRequest : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;
