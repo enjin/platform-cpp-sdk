@@ -44,10 +44,17 @@ VerifyAccount& VerifyAccount::SetAccount(SerializableStringPtr account)
 [[maybe_unused]]
 VerifyAccount& VerifyAccount::SetCryptoSignatureType(const CryptoSignatureType cryptoSignatureType)
 {
+    constexpr char name[] = "cryptoSignatureType";
+
+    if (cryptoSignatureType == CryptoSignatureType::None)
+    {
+        return RequestType::RemoveVariable(name);
+    }
+
     std::string s = enjin::platform::sdk::ToString(cryptoSignatureType);
     SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
 
-    return RequestType::SetVariable("cryptoSignatureType", CoreTypes::CryptoSignatureType, std::move(sPtr));
+    return RequestType::SetVariable(name, CoreTypes::CryptoSignatureType, std::move(sPtr));
 }
 
 VerifyAccount& VerifyAccount::operator=(const VerifyAccount& rhs) = default;
