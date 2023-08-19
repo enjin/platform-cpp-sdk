@@ -595,7 +595,7 @@ PusherEventServiceBuilder& PusherEventServiceBuilder::SetOnDisconnectedHandler(s
 
 [[maybe_unused]]
 PusherEventServiceBuilder&
-PusherEventServiceBuilder::SetSubscriptionHandler(std::function<void(const std::string&)> handler)
+PusherEventServiceBuilder::SetOnSubscribedHandler(std::function<void(const std::string&)> handler)
 {
     _subHandler = std::move(handler);
 

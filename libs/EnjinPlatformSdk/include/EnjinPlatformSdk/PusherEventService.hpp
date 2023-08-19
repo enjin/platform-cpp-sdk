@@ -185,7 +185,7 @@ public:
         /// \param handler The handler.
         /// \return This builder for chaining.
         [[maybe_unused]]
-        PusherEventServiceBuilder& SetSubscriptionHandler(std::function<void(const std::string&)> handler);
+        PusherEventServiceBuilder& SetOnSubscribedHandler(std::function<void(const std::string&)> handler);
 
     private:
         /// \brief Constructs an instance of this class.
