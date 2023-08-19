@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<TokenMarketBehaviorInput>;
 
 [[maybe_unused]]
 TokenMarketBehaviorInput::TokenMarketBehaviorInput() = default;
@@ -18,13 +19,13 @@ TokenMarketBehaviorInput::~TokenMarketBehaviorInput() = default;
 [[maybe_unused]]
 TokenMarketBehaviorInput& TokenMarketBehaviorInput::SetHasRoyalty(RoyaltyInputPtr input)
 {
-    return GraphQlParameter<TokenMarketBehaviorInput>::SetParameter("input", std::move(input));
+    return ParameterType::SetParameter("input", std::move(input));
 }
 
 [[maybe_unused]]
 TokenMarketBehaviorInput& TokenMarketBehaviorInput::SetIsCurrency(SerializableBoolPtr isCurrency)
 {
-    return GraphQlParameter<TokenMarketBehaviorInput>::SetParameter("isCurrency", std::move(isCurrency));
+    return ParameterType::SetParameter("isCurrency", std::move(isCurrency));
 }
 
 TokenMarketBehaviorInput& TokenMarketBehaviorInput::operator=(const TokenMarketBehaviorInput& rhs) = default;

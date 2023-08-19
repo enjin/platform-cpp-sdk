@@ -18,7 +18,7 @@ namespace enjin::platform::sdk::fuelTanks
 {
 class AccountRuleInputType;
 
-/// \brief Definition for a pointer containing a AccountRuleInputType.
+/// \brief Definition for a pointer containing an AccountRuleInputType.
 using AccountRuleInputTypePtr [[maybe_unused]] = std::shared_ptr<AccountRuleInputType>;
 
 /// \brief Models a parameter for account rules of a fuel tank.

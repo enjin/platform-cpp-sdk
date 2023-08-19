@@ -27,13 +27,13 @@ using BeamFragmentPtr = std::shared_ptr<BeamFragment>;
 
 class BeamClaimFragment;
 
-/// \brief Definition for a pointer containing a beam claim fragment.
+/// \brief Definition for a pointer containing a BeamClaimFragment.
 using BeamClaimFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamClaimFragment>;
 
-/// \brief Definition for a beam claim connection fragment.
+/// \brief Definition for a ConnectionFragment containing a BeamClaimFragment.
 using BeamClaimConnectionFragment [[maybe_unused]] = ConnectionFragment<BeamClaimFragment>;
 
-/// \brief Definition for a pointer containing a beam claim connection fragment.
+/// \brief Definition for a pointer containing a BeamClaimConnectionFragment.
 using BeamClaimConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamClaimConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a BeamClaim returned by the platform.
@@ -151,6 +151,10 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
 
     [[maybe_unused]]
     [[nodiscard]]

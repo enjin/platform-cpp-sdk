@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk;
 
 class AccountRequest::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> qrCode;
     std::optional<std::string> verificationId;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

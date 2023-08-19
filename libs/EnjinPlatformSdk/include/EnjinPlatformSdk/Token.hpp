@@ -30,7 +30,7 @@ class TokenAccount;
 // endregion Forward declarations
 
 /// \brief Models a token on the blockchain.
-class ENJINPLATFORMSDK_EXPORT Token : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Token : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

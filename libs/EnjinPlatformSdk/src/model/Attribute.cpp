@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk;
 
 class Attribute::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> key;
     std::optional<std::string> value;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

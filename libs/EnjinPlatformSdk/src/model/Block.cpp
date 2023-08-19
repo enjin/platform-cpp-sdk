@@ -9,7 +9,6 @@ using namespace enjin::platform::sdk;
 
 class Block::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<int32_t> id;
     std::optional<std::string> number;
     std::optional<std::string> hash;
@@ -17,6 +16,7 @@ public:
     std::optional<bool> failed;
     std::optional<std::string> exception;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

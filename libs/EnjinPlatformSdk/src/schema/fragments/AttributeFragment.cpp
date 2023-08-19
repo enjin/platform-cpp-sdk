@@ -118,6 +118,12 @@ const std::map<std::string, SerializablePtr>& AttributeFragment::GetParameters()
 }
 
 [[maybe_unused]]
+bool AttributeFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool AttributeFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

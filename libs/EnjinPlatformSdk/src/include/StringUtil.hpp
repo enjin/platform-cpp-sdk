@@ -12,9 +12,6 @@ class ENJINPLATFORMSDK_EXPORT StringUtil final
 public:
     StringUtil() = delete;
 
-    /// \brief Class destructor.
-    ~StringUtil();
-
     /// \brief Converts the given string to all lowercase.
     /// \param s The string.
     /// \return The converted string.

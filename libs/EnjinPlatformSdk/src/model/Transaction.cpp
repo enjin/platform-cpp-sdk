@@ -9,7 +9,6 @@ using namespace enjin::platform::sdk;
 
 class Transaction::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<int32_t> id;
     std::optional<std::string> transactionId;
     std::optional<std::string> transactionHash;
@@ -21,6 +20,7 @@ public:
     std::optional<std::string> idempotencyKey;
     std::optional<Connection<Event>> events;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

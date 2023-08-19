@@ -8,7 +8,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Interface to be implemented by internal Pusher event services.
-class IPusherEventServiceImpl : virtual public IEventService
+class IPusherEventServiceImpl : public virtual IEventService
 {
 public:
     /// \brief Class destructor.

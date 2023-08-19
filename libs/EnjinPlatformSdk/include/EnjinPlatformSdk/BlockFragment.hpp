@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class BlockFragment;
 
-/// \brief Definition for a pointer containing a block fragment.
+/// \brief Definition for a pointer containing a BlockFragment.
 using BlockFragmentPtr [[maybe_unused]] = std::shared_ptr<BlockFragment>;
 
-/// \brief Definition for a block connection fragment.
+/// \brief Definition for a ConnectionFragment containing a BlockFragment.
 using BlockConnectionFragment [[maybe_unused]] = ConnectionFragment<BlockFragment>;
 
-/// \brief Definition for a pointer containing a block connection fragment.
+/// \brief Definition for a pointer containing a BlockConnectionFragment.
 using BlockConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BlockConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a block returned by the platform.
@@ -116,6 +116,10 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
 
     [[maybe_unused]]
     [[nodiscard]]

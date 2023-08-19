@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class RoyaltyInput;
 
-/// \brief Definition for a pointer containing a royalty input.
+/// \brief Definition for a pointer containing a RoyaltyInput.
 using RoyaltyInputPtr [[maybe_unused]] = std::shared_ptr<RoyaltyInput>;
 
 /// \brief Models a parameter for the royalty for a new collection or token.

@@ -11,10 +11,10 @@ namespace enjin::platform::sdk
 {
 struct SerializableFloat;
 
-/// \brief Definition for a pointer containing a serializable floating-point number.
+/// \brief Definition for a pointer containing a SerializableFloat.
 using SerializableFloatPtr [[maybe_unused]] = std::shared_ptr<SerializableFloat>;
 
-/// \brief Struct for serializable floating point number.
+/// \brief Struct for serializable floating-point number.
 struct ENJINPLATFORMSDK_EXPORT SerializableFloat : public ISerializable
 {
     /// \brief The value of this instance.

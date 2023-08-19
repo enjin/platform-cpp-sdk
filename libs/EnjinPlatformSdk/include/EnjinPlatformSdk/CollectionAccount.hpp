@@ -26,7 +26,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models an account for a Collection.
-class ENJINPLATFORMSDK_EXPORT CollectionAccount : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT CollectionAccount : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

@@ -16,7 +16,7 @@ namespace enjin::platform::sdk
 template<class TParameter>
 class GraphQlParameter : public GraphQlParameterHolder<TParameter>,
                          public GraphQlUploadHolder,
-                         virtual public IGraphQlParameter<TParameter>
+                         public virtual IGraphQlParameter<TParameter>
 {
 public:
     /// \brief Class destructor.

@@ -12,7 +12,7 @@ namespace enjin::platform::sdk
 {
 class MintRecipient;
 
-/// \brief Definition for a pointer containing a mint recipient.
+/// \brief Definition for a pointer containing a MintRecipient.
 using MintRecipientPtr [[maybe_unused]] = std::shared_ptr<MintRecipient>;
 
 /// \brief Models a parameter for a recipient account for a mint.

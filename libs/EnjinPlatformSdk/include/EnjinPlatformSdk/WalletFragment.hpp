@@ -60,13 +60,13 @@ using TransactionConnectionFragmentPtr = std::shared_ptr<TransactionConnectionFr
 
 class WalletFragment;
 
-/// \brief Definition for a pointer containing a wallet fragment.
+/// \brief Definition for a pointer containing a WalletFragment.
 using WalletFragmentPtr [[maybe_unused]] = std::shared_ptr<WalletFragment>;
 
-/// \brief Definition for a wallet connection fragment.
+/// \brief Definition for a ConnectionFragment containing a WalletFragment.
 using WalletConnectionFragment [[maybe_unused]] = ConnectionFragment<WalletFragment>;
 
-/// \brief Definition for a pointer containing a wallet connection fragment.
+/// \brief Definition for a pointer containing a WalletConnectionFragment.
 using WalletConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<WalletConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a wallet returned by the platform.
@@ -209,6 +209,10 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
 
     [[maybe_unused]]
     [[nodiscard]]

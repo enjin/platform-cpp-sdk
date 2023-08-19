@@ -8,9 +8,8 @@ namespace enjin::platform::sdk
 {
 class IEventListener;
 
-/// \brief Definition for a pointer containing an event listener.
-[[maybe_unused]]
-typedef std::shared_ptr<IEventListener> EventListenerPtr;
+/// \brief Definition for a pointer containing an IEventListener.
+using EventListenerPtr [[maybe_unused]] = std::shared_ptr<IEventListener>;
 
 /// \brief Interface to be implemented by event listeners for receiving a platform event from an event service.
 class IEventListener

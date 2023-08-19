@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class MintPolicy;
 
-/// \brief Definition for a pointer containing a mint policy.
+/// \brief Definition for a pointer containing a MintPolicy.
 using MintPolicyPtr [[maybe_unused]] = std::shared_ptr<MintPolicy>;
 
 /// \brief Models the parameter for the mint policy for a new collection.

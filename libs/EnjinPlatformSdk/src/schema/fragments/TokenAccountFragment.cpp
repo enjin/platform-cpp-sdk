@@ -154,6 +154,12 @@ const std::map<std::string, SerializablePtr>& TokenAccountFragment::GetParameter
 }
 
 [[maybe_unused]]
+bool TokenAccountFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool TokenAccountFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

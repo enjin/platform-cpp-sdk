@@ -16,13 +16,13 @@ namespace enjin::platform::sdk::fuelTanks
 {
 class FuelTankFragment;
 
-/// \brief Definition for a pointer containing a fuel tank fragment.
+/// \brief Definition for a pointer containing a FuelTankFragment.
 using FuelTankFragmentPtr [[maybe_unused]] = std::shared_ptr<FuelTankFragment>;
 
-/// \brief Definition for a fuel tank connection fragment.
+/// \brief Definition for a ConnectionFragment containing a FuelTankFragment.
 using FuelTankConnectionFragment [[maybe_unused]] = ConnectionFragment<FuelTankFragment>;
 
-/// \brief Definition for a pointer containing a fuel tank connection fragment.
+/// \brief Definition for a pointer containing a FuelTankConnectionFragment.
 using FuelTankConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<FuelTankConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a FuelTank returned by the platform.

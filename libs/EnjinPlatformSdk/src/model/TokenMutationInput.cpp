@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<TokenMutationInput>;
 
 [[maybe_unused]]
 TokenMutationInput::TokenMutationInput() = default;
@@ -18,13 +19,13 @@ TokenMutationInput::~TokenMutationInput() = default;
 [[maybe_unused]]
 TokenMutationInput& TokenMutationInput::SetBehavior(TokenMarketBehaviorInputPtr behavior)
 {
-    return GraphQlParameter<TokenMutationInput>::SetParameter("behavior", std::move(behavior));
+    return ParameterType::SetParameter("behavior", std::move(behavior));
 }
 
 [[maybe_unused]]
 TokenMutationInput& TokenMutationInput::SetListingForbidden(SerializableBoolPtr listingForbidden)
 {
-    return GraphQlParameter<TokenMutationInput>::SetParameter("listingForbidden", std::move(listingForbidden));
+    return ParameterType::SetParameter("listingForbidden", std::move(listingForbidden));
 }
 
 TokenMutationInput& TokenMutationInput::operator=(const TokenMutationInput& rhs) = default;

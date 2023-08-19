@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class TokenMutationInput;
 
-/// \brief Definition for a pointer containing a token mutation input.
+/// \brief Definition for a pointer containing a TokenMutationInput.
 using TokenMutationInputPtr [[maybe_unused]] = std::shared_ptr<TokenMutationInput>;
 
 /// \brief Models a parameter for parameters that can be mutated for a token.

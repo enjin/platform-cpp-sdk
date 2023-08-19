@@ -9,9 +9,9 @@ using namespace enjin::platform::sdk;
 
 class WalletLink::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> code;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

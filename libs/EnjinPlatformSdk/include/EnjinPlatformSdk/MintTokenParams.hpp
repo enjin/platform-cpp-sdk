@@ -10,7 +10,7 @@ namespace enjin::platform::sdk
 {
 class MintTokenParams;
 
-/// \brief Definition for a pointer containing a mint token parameters.
+/// \brief Definition for a pointer containing a MintTokenParams.
 using MintTokenParamsPtr [[maybe_unused]] = std::shared_ptr<MintTokenParams>;
 
 /// \brief Models a parameter for parameters to mint a token.

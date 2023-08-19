@@ -17,7 +17,7 @@ class IGraphQlRequest;
 
 /// \brief Interface for GraphQL requests.
 template<class...>
-class IGraphQlRequest : virtual public IGraphQlUploadHolder
+class IGraphQlRequest : public virtual IGraphQlUploadHolder
 {
 public:
     /// \brief Class destructor.
@@ -58,7 +58,7 @@ public:
 /// \brief Interface for GraphQL requests with a settable variables for the operation.
 /// \tparam TRequest The type of the request. Must implement this interface.
 template<class TRequest>
-class IGraphQlRequest<TRequest> : virtual public IGraphQlRequest<>
+class IGraphQlRequest<TRequest> : public virtual IGraphQlRequest<>
 {
 public:
     /// \brief Class destructor.
@@ -83,7 +83,7 @@ public:
 /// \tparam TRequest The type of the request. Must implement this interface.
 /// \tparam TFragment The type of the fragment. Must implement IGraphQlFragment.
 template<class TRequest, class TFragment>
-class IGraphQlRequest<TRequest, TFragment> : virtual public IGraphQlRequest<TRequest>
+class IGraphQlRequest<TRequest, TFragment> : public virtual IGraphQlRequest<TRequest>
 {
     static_assert(std::is_base_of<IGraphQlFragment<>, TFragment>::value,
                   "Type TFragment does not implement IGraphQlFragment<>");

@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class MutateRoyaltyInput;
 
-/// \brief Definition for a pointer containing a mutate royalty input.
+/// \brief Definition for a pointer containing a MutateRoyaltyInput.
 using MutateRoyaltyInputPtr [[maybe_unused]] = std::shared_ptr<MutateRoyaltyInput>;
 
 /// \brief Models a parameter for mutating the royalty for a new collection or token.

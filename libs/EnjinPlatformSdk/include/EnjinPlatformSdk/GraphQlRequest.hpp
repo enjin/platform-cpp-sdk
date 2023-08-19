@@ -71,7 +71,7 @@ protected:
 /// \tparam TFragment The type of the fragment. Must implement IGraphQlFragment.
 template<class TRequest, class TFragment>
 class GraphQlRequest<TRequest, TFragment> : public GraphQlRequestBase<TRequest>,
-                                            virtual public IGraphQlRequest<TRequest, TFragment>
+                                            public virtual IGraphQlRequest<TRequest, TFragment>
 {
     std::shared_ptr<TFragment> _fragment;
 

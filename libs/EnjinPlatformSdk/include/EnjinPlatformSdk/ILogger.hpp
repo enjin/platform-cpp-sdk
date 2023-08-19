@@ -11,8 +11,7 @@ namespace enjin::platform::sdk
 class ILogger;
 
 /// \brief Definition for a pointer wrapping an ILogger.
-[[maybe_unused]]
-typedef std::shared_ptr<ILogger> LoggerPtr;
+using LoggerPtr [[maybe_unused]] = std::shared_ptr<ILogger>;
 
 /// \brief Interface for logging.
 class ILogger

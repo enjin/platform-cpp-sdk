@@ -130,6 +130,12 @@ const std::map<std::string, SerializablePtr>& PageInfoFragment::GetParameters() 
 }
 
 [[maybe_unused]]
+bool PageInfoFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool PageInfoFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

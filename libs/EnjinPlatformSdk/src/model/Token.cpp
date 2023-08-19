@@ -9,7 +9,6 @@ using namespace enjin::platform::sdk;
 
 class Token::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> tokenId;
     std::optional<std::string> supply;
     std::optional<TokenMintCapType> cap;
@@ -27,6 +26,7 @@ public:
     std::optional<JsonValue> metadata;
     std::optional<bool> nonFungible;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

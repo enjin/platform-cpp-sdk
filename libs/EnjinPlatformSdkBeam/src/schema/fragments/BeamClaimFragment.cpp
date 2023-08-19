@@ -161,6 +161,12 @@ const std::map<std::string, SerializablePtr>& BeamClaimFragment::GetParameters()
 }
 
 [[maybe_unused]]
+bool BeamClaimFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool BeamClaimFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

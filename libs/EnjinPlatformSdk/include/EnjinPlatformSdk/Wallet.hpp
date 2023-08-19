@@ -39,7 +39,7 @@ class Transaction;
 // endregion Forward declarations
 
 /// \brief Models a blockchain wallet.
-class ENJINPLATFORMSDK_EXPORT Wallet : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Wallet : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

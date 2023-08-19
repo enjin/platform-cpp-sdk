@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<AttributeInput>;
 
 [[maybe_unused]]
 AttributeInput::AttributeInput() = default;
@@ -18,13 +19,13 @@ AttributeInput::~AttributeInput() = default;
 [[maybe_unused]]
 AttributeInput& AttributeInput::SetKey(SerializableStringPtr key)
 {
-    return GraphQlParameter<AttributeInput>::SetParameter("key", std::move(key));
+    return ParameterType::SetParameter("key", std::move(key));
 }
 
 [[maybe_unused]]
 AttributeInput& AttributeInput::SetValue(SerializableStringPtr value)
 {
-    return GraphQlParameter<AttributeInput>::SetParameter("value", std::move(value));
+    return ParameterType::SetParameter("value", std::move(value));
 }
 
 AttributeInput& AttributeInput::operator=(const AttributeInput& rhs) = default;

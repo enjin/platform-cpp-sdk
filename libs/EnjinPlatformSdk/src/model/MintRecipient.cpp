@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<MintRecipient>;
 
 [[maybe_unused]]
 MintRecipient::MintRecipient() = default;
@@ -18,19 +19,19 @@ MintRecipient::~MintRecipient() = default;
 [[maybe_unused]]
 MintRecipient& MintRecipient::SetAccount(SerializableStringPtr account)
 {
-    return GraphQlParameter<MintRecipient>::SetParameter("account", std::move(account));
+    return ParameterType::SetParameter("account", std::move(account));
 }
 
 [[maybe_unused]]
 MintRecipient& MintRecipient::SetCreateParams(CreateTokenParamsPtr createParams)
 {
-    return GraphQlParameter<MintRecipient>::SetParameter("createParams", std::move(createParams));
+    return ParameterType::SetParameter("createParams", std::move(createParams));
 }
 
 [[maybe_unused]]
 MintRecipient& MintRecipient::SetMintParams(MintTokenParamsPtr mintParams)
 {
-    return GraphQlParameter<MintRecipient>::SetParameter("mintParams", std::move(mintParams));
+    return ParameterType::SetParameter("mintParams", std::move(mintParams));
 }
 
 MintRecipient& MintRecipient::operator=(const MintRecipient& rhs) = default;

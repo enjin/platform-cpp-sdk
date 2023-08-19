@@ -33,7 +33,7 @@ using Milliseconds = std::chrono::milliseconds;
 
 // region Impl
 
-class PusherClient::Impl : virtual public IPusherClient
+class PusherClient::Impl : public virtual IPusherClient
 {
     struct PusherChannel
     {

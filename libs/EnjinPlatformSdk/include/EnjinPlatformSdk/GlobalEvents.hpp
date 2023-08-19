@@ -17,9 +17,6 @@ public:
     static inline const std::string TransactionUpdated = "platform:transaction-updated";
 
     GlobalEvents() = delete;
-
-    /// \brief Class destructor.
-    ~GlobalEvents();
 };
 }
 

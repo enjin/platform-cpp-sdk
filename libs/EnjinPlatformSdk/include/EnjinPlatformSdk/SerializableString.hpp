@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 struct SerializableString;
 
-/// \brief Definition for a pointer containing a serializable string.
+/// \brief Definition for a pointer containing a SerializableString.
 using SerializableStringPtr [[maybe_unused]] = std::shared_ptr<SerializableString>;
 
 /// \brief Struct for serializable string.

@@ -15,7 +15,7 @@ using namespace testing;
 class PusherEventServiceTest : public Test
 {
 public:
-    std::unique_ptr<PusherEventService> classUnderTest;
+    PusherEventServicePtr classUnderTest;
 
     // Mocks
     inline static std::unique_ptr<MockWebSocketServer> mockServer;

@@ -11,9 +11,8 @@ namespace enjin::platform::sdk
 {
 class IntegerRange;
 
-/// \brief Definition for a pointer containing an integer range.
-[[maybe_unused]]
-typedef std::shared_ptr<IntegerRange> IntegerRangePtr;
+/// \brief Definition for a pointer containing an IntegerRange.
+using IntegerRangePtr [[maybe_unused]] = std::shared_ptr<IntegerRange>;
 
 /// \brief Represents an inclusive range between two BigInt values.
 class ENJINPLATFORMSDK_EXPORT IntegerRange : public virtual ISerializable

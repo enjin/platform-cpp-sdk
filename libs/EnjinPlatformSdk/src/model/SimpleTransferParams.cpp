@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<SimpleTransferParams>;
 
 [[maybe_unused]]
 SimpleTransferParams::SimpleTransferParams() = default;
@@ -18,13 +19,13 @@ SimpleTransferParams::~SimpleTransferParams() = default;
 [[maybe_unused]]
 SimpleTransferParams& SimpleTransferParams::SetAmount(SerializableStringPtr amount)
 {
-    return GraphQlParameter<SimpleTransferParams>::SetParameter("amount", std::move(amount));
+    return ParameterType::SetParameter("amount", std::move(amount));
 }
 
 [[maybe_unused]]
 SimpleTransferParams& SimpleTransferParams::SetKeepAlive(SerializableBoolPtr keepAlive)
 {
-    return GraphQlParameter<SimpleTransferParams>::SetParameter("keepAlive", std::move(keepAlive));
+    return ParameterType::SetParameter("keepAlive", std::move(keepAlive));
 }
 
 SimpleTransferParams& SimpleTransferParams::operator=(const SimpleTransferParams& rhs) = default;

@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a blockchain block.
-class ENJINPLATFORMSDK_EXPORT Block : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Block : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

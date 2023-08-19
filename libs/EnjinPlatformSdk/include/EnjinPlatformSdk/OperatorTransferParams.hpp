@@ -12,7 +12,7 @@ namespace enjin::platform::sdk
 {
 class OperatorTransferParams;
 
-/// \brief Definition for a pointer containing an operator transfer parameters.
+/// \brief Definition for a pointer containing an OperatorTransferParams.
 using OperatorTransferParamsPtr [[maybe_unused]] = std::shared_ptr<OperatorTransferParams>;
 
 /// \brief Models a parameter for parameters to make an operator transfer.

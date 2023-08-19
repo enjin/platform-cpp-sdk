@@ -17,6 +17,11 @@
 
 namespace enjin::platform::sdk
 {
+class PlatformClient;
+
+/// \brief Definition for a pointer containing a PlatformClient.
+using PlatformClientPtr = std::unique_ptr<PlatformClient>;
+
 /// \brief Client class for sending and receiving data with the platform.
 class ENJINPLATFORMSDK_EXPORT PlatformClient final
 {
@@ -119,7 +124,7 @@ public:
         /// \throws std::logic_error Thrown if the base address is not set at the time this method is called.
         [[maybe_unused]]
         [[nodiscard]]
-        std::unique_ptr<PlatformClient> Build() const;
+        PlatformClientPtr Build() const;
 
         /// \brief Sets the URI for the client to use as the base address for the platform.
         /// \param baseAddress The base address.

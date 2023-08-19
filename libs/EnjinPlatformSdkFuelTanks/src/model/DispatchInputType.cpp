@@ -5,6 +5,7 @@
 
 using namespace enjin::platform::sdk;
 using namespace enjin::platform::sdk::fuelTanks;
+using ParameterType = GraphQlParameter<DispatchInputType>;
 
 [[maybe_unused]]
 DispatchInputType::DispatchInputType() = default;
@@ -23,19 +24,19 @@ DispatchInputType& DispatchInputType::SetCall(const DispatchCall call)
     std::string s = enjin::platform::sdk::fuelTanks::ToString(call);
     SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
 
-    return SetParameter("call", std::move(sPtr));
+    return ParameterType::SetParameter("call", std::move(sPtr));
 }
 
 [[maybe_unused]]
 DispatchInputType& DispatchInputType::SetQuery(SerializableStringPtr query)
 {
-    return SetParameter("query", std::move(query));
+    return ParameterType::SetParameter("query", std::move(query));
 }
 
 [[maybe_unused]]
 DispatchInputType& DispatchInputType::SetVariables(SerializableJsonValuePtr variables)
 {
-    return SetParameter("variables", std::move(variables));
+    return ParameterType::SetParameter("variables", std::move(variables));
 }
 
 DispatchInputType& DispatchInputType::operator=(const DispatchInputType& rhs) = default;

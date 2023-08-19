@@ -19,7 +19,7 @@ class EventParam;
 // endregion Forward declarations
 
 /// \brief Models an Efinity event.
-class ENJINPLATFORMSDK_EXPORT Event : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Event : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

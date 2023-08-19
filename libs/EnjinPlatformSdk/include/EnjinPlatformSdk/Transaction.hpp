@@ -25,7 +25,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models an Efinity transaction.
-class ENJINPLATFORMSDK_EXPORT Transaction : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Transaction : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

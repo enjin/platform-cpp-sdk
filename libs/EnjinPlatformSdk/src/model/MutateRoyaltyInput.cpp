@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<MutateRoyaltyInput>;
 
 [[maybe_unused]]
 MutateRoyaltyInput::MutateRoyaltyInput() = default;
@@ -18,13 +19,13 @@ MutateRoyaltyInput::~MutateRoyaltyInput() = default;
 [[maybe_unused]]
 MutateRoyaltyInput& MutateRoyaltyInput::SetBeneficiary(SerializableStringPtr beneficiary)
 {
-    return GraphQlParameter<MutateRoyaltyInput>::SetParameter("beneficiary", std::move(beneficiary));
+    return ParameterType::SetParameter("beneficiary", std::move(beneficiary));
 }
 
 [[maybe_unused]]
 MutateRoyaltyInput& MutateRoyaltyInput::SetPercentage(SerializableDoublePtr percentage)
 {
-    return GraphQlParameter<MutateRoyaltyInput>::SetParameter("percentage", std::move(percentage));
+    return ParameterType::SetParameter("percentage", std::move(percentage));
 }
 
 MutateRoyaltyInput& MutateRoyaltyInput::operator=(const MutateRoyaltyInput& rhs) = default;

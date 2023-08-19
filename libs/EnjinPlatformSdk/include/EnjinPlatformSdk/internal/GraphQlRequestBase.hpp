@@ -20,7 +20,7 @@ namespace enjin::platform::sdk
 template<class TRequest>
 class GraphQlRequestBase : public GraphQlParameterHolder<TRequest>,
                            public GraphQlUploadHolder,
-                           virtual public IGraphQlRequest<TRequest>
+                           public virtual IGraphQlRequest<TRequest>
 {
     std::string _name;
     GraphQlRequestType _type;

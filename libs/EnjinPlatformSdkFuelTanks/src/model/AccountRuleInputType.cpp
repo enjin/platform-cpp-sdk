@@ -4,6 +4,7 @@
 
 using namespace enjin::platform::sdk;
 using namespace enjin::platform::sdk::fuelTanks;
+using ParameterType = GraphQlParameter<AccountRuleInputType>;
 
 [[maybe_unused]]
 AccountRuleInputType::AccountRuleInputType() = default;
@@ -19,13 +20,13 @@ AccountRuleInputType::~AccountRuleInputType() = default;
 [[maybe_unused]]
 AccountRuleInputType& AccountRuleInputType::SetWhitelistedCallers(SerializableStringArrayPtr whitelistedCallers)
 {
-    return SetParameter("whitelistedCallers", std::move(whitelistedCallers));
+    return ParameterType::SetParameter("whitelistedCallers", std::move(whitelistedCallers));
 }
 
 [[maybe_unused]]
 AccountRuleInputType& AccountRuleInputType::SetRequireToken(MultiTokenIdInputPtr requireToken)
 {
-    return SetParameter("requireToken", std::move(requireToken));
+    return ParameterType::SetParameter("requireToken", std::move(requireToken));
 }
 
 AccountRuleInputType& AccountRuleInputType::operator=(const AccountRuleInputType& rhs) = default;

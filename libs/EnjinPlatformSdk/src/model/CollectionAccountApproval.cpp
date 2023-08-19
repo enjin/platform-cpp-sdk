@@ -9,11 +9,11 @@ using namespace enjin::platform::sdk;
 
 class CollectionAccountApproval::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<int32_t> expiration;
     std::optional<CollectionAccount> account;
     std::optional<Wallet> wallet;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

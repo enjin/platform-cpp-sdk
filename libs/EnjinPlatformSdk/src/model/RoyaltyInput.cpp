@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<RoyaltyInput>;
 
 [[maybe_unused]]
 RoyaltyInput::RoyaltyInput() = default;
@@ -18,13 +19,13 @@ RoyaltyInput::~RoyaltyInput() = default;
 [[maybe_unused]]
 RoyaltyInput& RoyaltyInput::SetBeneficiary(SerializableStringPtr beneficiary)
 {
-    return GraphQlParameter<RoyaltyInput>::SetParameter("beneficiary", std::move(beneficiary));
+    return ParameterType::SetParameter("beneficiary", std::move(beneficiary));
 }
 
 [[maybe_unused]]
 RoyaltyInput& RoyaltyInput::SetPercentage(SerializableDoublePtr percentage)
 {
-    return GraphQlParameter<RoyaltyInput>::SetParameter("percentage", std::move(percentage));
+    return ParameterType::SetParameter("percentage", std::move(percentage));
 }
 
 RoyaltyInput& RoyaltyInput::operator=(const RoyaltyInput& rhs) = default;

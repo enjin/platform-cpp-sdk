@@ -8,7 +8,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Implementation class for event listener registrations.
-class ENJINPLATFORMSDK_EXPORT EventListenerRegistration : virtual public IEventListenerRegistration
+class ENJINPLATFORMSDK_EXPORT EventListenerRegistration : public virtual IEventListenerRegistration
 {
     bool _isRegistered = false;
     EventListenerPtr _listener;

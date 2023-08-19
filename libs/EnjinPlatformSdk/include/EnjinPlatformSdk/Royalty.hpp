@@ -18,7 +18,7 @@ class Wallet;
 // endregion Forward declarations
 
 /// \brief Models a royalty policy.
-class ENJINPLATFORMSDK_EXPORT Royalty : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT Royalty : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

@@ -10,7 +10,7 @@ namespace enjin::platform::sdk
 {
 class Erc1155EncoderInput;
 
-/// \brief Definition for a pointer containing a ERC1155 encoder input.
+/// \brief Definition for a pointer containing an Erc1155EncoderInput.
 using Erc1155EncoderInputPtr [[maybe_unused]] = std::shared_ptr<Erc1155EncoderInput>;
 
 /// \brief Models a parameter for a ERC1155 style token ID.

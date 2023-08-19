@@ -12,9 +12,10 @@ namespace enjin::platform::sdk
 {
 class TransferRecipient;
 
-/// \brief Definition for a pointer containing an attribute input.
+/// \brief Definition for a pointer containing a TransferRecipient.
 using TransferRecipientPtr [[maybe_unused]] = std::shared_ptr<TransferRecipient>;
 
+/// \brief Models a parameter for setting the recipient account of a transfer.
 class ENJINPLATFORMSDK_EXPORT TransferRecipient : public GraphQlParameter<TransferRecipient>
 {
 public:

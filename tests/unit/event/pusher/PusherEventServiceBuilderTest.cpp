@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "EnjinPlatformSdk/PusherEventService.hpp"
-#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -20,7 +19,7 @@ TEST_F(PusherEventServiceBuilderTest, BuildWhenKeyIsSetReturnsEventServiceInstan
         .SetKey("Dummy Key");
 
     // Act
-    const std::unique_ptr<PusherEventService> service = builder.Build();
+    const PusherEventServicePtr service = builder.Build();
 
     // Assert
     ASSERT_THAT(service, NotNull());
@@ -43,7 +42,7 @@ TEST_F(PusherEventServiceBuilderTest, BuildWhenKeyAndClusterAreSetReturnsEventSe
         .SetCluster("Dummy Cluster");
 
     // Act
-    const std::unique_ptr<PusherEventService> service = builder.Build();
+    const PusherEventServicePtr service = builder.Build();
 
     // Assert
     ASSERT_THAT(service, NotNull());
@@ -57,7 +56,7 @@ TEST_F(PusherEventServiceBuilderTest, BuildWhenKeyAndHostAreSetReturnsEventServi
         .SetHost("Dummy Host");
 
     // Act
-    const std::unique_ptr<PusherEventService> service = builder.Build();
+    const PusherEventServicePtr service = builder.Build();
 
     // Assert
     ASSERT_THAT(service, NotNull());

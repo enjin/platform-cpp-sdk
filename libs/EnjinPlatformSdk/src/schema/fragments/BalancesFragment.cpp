@@ -130,6 +130,12 @@ const std::map<std::string, SerializablePtr>& BalancesFragment::GetParameters() 
 }
 
 [[maybe_unused]]
+bool BalancesFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool BalancesFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

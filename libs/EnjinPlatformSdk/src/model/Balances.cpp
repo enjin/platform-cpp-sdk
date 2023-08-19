@@ -9,12 +9,12 @@ using namespace enjin::platform::sdk;
 
 class Balances::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> free;
     std::optional<std::string> reserved;
     std::optional<std::string> miscFrozen;
     std::optional<std::string> feeFrozen;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

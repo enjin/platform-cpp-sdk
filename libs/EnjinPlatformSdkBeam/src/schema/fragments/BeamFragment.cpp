@@ -173,6 +173,12 @@ const std::map<std::string, SerializablePtr>& BeamFragment::GetParameters() cons
 }
 
 [[maybe_unused]]
+bool BeamFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool BeamFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

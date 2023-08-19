@@ -118,6 +118,12 @@ const std::map<std::string, SerializablePtr>& RoyaltyFragment::GetParameters() c
 }
 
 [[maybe_unused]]
+bool RoyaltyFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool RoyaltyFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

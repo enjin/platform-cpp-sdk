@@ -15,6 +15,11 @@
 
 namespace enjin::platform::sdk
 {
+class PusherEventService;
+
+/// \brief Definition for a pointer containing a PusherEventService.
+using PusherEventServicePtr = std::unique_ptr<PusherEventService>;
+
 /// \brief Implementation for an event service utilizing Pusher.
 class ENJINPLATFORMSDK_EXPORT PusherEventService final : public virtual IEventService
 {
@@ -126,7 +131,7 @@ public:
         /// to true.
         [[maybe_unused]]
         [[nodiscard]]
-        std::unique_ptr<PusherEventService> Build() const;
+        PusherEventServicePtr Build() const;
 
         /// \brief Sets the cluster to be used within the Pusher network.
         /// \param cluster The cluster.
@@ -180,7 +185,7 @@ public:
         /// \param handler The handler.
         /// \return This builder for chaining.
         [[maybe_unused]]
-        PusherEventServiceBuilder& SetSubscriptionHandler(std::function<void(const std::string&)> handler);
+        PusherEventServiceBuilder& SetOnSubscribedHandler(std::function<void(const std::string&)> handler);
 
     private:
         /// \brief Constructs an instance of this class.

@@ -24,7 +24,7 @@ using RegistrationPtr = std::shared_ptr<EventListenerRegistration>;
 
 // region PusherWrapper
 
-class PusherEventService::PusherWrapper : virtual public IPusherClient
+class PusherEventService::PusherWrapper : public virtual IPusherClient
 {
     std::unique_ptr<IPusherClient> _client;
 
@@ -137,7 +137,7 @@ public:
 
 // region Impl
 
-class PusherEventService::Impl : virtual public IPusherEventServiceImpl
+class PusherEventService::Impl : public virtual IPusherEventServiceImpl
 {
     std::unique_ptr<PusherWrapper> _client;
     PusherListener _listener;
@@ -487,7 +487,7 @@ PusherEventServiceBuilder::PusherEventServiceBuilder() = default;
 PusherEventServiceBuilder::~PusherEventServiceBuilder() = default;
 
 [[maybe_unused]]
-std::unique_ptr<PusherEventService> PusherEventServiceBuilder::Build() const
+PusherEventServicePtr PusherEventServiceBuilder::Build() const
 {
     if (!_key.has_value())
     {
@@ -595,7 +595,7 @@ PusherEventServiceBuilder& PusherEventServiceBuilder::SetOnDisconnectedHandler(s
 
 [[maybe_unused]]
 PusherEventServiceBuilder&
-PusherEventServiceBuilder::SetSubscriptionHandler(std::function<void(const std::string&)> handler)
+PusherEventServiceBuilder::SetOnSubscribedHandler(std::function<void(const std::string&)> handler)
 {
     _subHandler = std::move(handler);
 

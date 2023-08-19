@@ -19,13 +19,13 @@ using WalletFragmentPtr = std::shared_ptr<WalletFragment>;
 
 class RoyaltyFragment;
 
-/// \brief Definition for a pointer containing a royalty fragment.
+/// \brief Definition for a pointer containing a RoyaltyFragment.
 using RoyaltyFragmentPtr [[maybe_unused]] = std::shared_ptr<RoyaltyFragment>;
 
-/// \brief Definition for a royalty connection fragment.
+/// \brief Definition for a ConnectionFragment containing a RoyaltyFragment.
 using RoyaltyConnectionFragment [[maybe_unused]] = ConnectionFragment<RoyaltyFragment>;
 
-/// \brief Definition for a pointer containing a royalty connection fragment.
+/// \brief Definition for a pointer containing a RoyaltyConnectionFragment.
 using RoyaltyConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<RoyaltyConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a royalty returned by the platform.
@@ -101,6 +101,10 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
 
     [[maybe_unused]]
     [[nodiscard]]

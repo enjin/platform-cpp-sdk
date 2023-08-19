@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class TokenMintCap;
 
-/// \brief Definition for a pointer containing a token mint cap.
+/// \brief Definition for a pointer containing a TokenMintCap.
 using TokenMintCapPtr [[maybe_unused]] = std::shared_ptr<TokenMintCap>;
 
 /// \brief Models a parameter for setting the attribute of a collection or token.

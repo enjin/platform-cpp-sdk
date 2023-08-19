@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class WalletLinkFragment;
 
-/// \brief Definition for a pointer containing a wallet link fragment.
+/// \brief Definition for a pointer containing a WalletLinkFragment.
 using WalletLinkFragmentPtr [[maybe_unused]] = std::shared_ptr<WalletLinkFragment>;
 
-/// \brief Definition for a wallet link connection fragment.
+/// \brief Definition for a ConnectionFragment containing a WalletLinkFragment.
 using WalletLinkConnectFragment [[maybe_unused]] = ConnectionFragment<WalletLinkFragment>;
 
-/// \brief Definition for a pointer containing a wallet link connection fragment.
+/// \brief Definition for a pointer containing a WalletLinkConnectFragment.
 using WalletLinkConnectFragmentPtr [[maybe_unused]] = std::shared_ptr<WalletLinkConnectFragment>;
 
 /// \brief A fragment for requesting properties of a wallet link returned by the platform.
@@ -86,6 +86,10 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
 
     [[maybe_unused]]
     [[nodiscard]]

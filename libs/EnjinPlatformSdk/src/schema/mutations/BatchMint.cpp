@@ -7,6 +7,7 @@
 using namespace enjin::platform::sdk;
 using RequestType = GraphQlRequest<BatchMint, TransactionFragment>;
 
+[[maybe_unused]]
 BatchMint::BatchMint()
     : RequestType("BatchMint", GraphQlRequestType::Mutation)
 {

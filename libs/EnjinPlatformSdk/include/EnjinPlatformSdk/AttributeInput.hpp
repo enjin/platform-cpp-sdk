@@ -10,7 +10,7 @@ namespace enjin::platform::sdk
 {
 class AttributeInput;
 
-/// \brief Definition for a pointer containing an attribute input.
+/// \brief Definition for a pointer containing an AttributeInput.
 using AttributeInputPtr [[maybe_unused]] = std::shared_ptr<AttributeInput>;
 
 /// \brief Models a parameter for setting the attribute of a collection or token.

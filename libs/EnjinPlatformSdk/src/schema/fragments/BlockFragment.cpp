@@ -142,6 +142,12 @@ const std::map<std::string, SerializablePtr>& BlockFragment::GetParameters() con
 }
 
 [[maybe_unused]]
+bool BlockFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool BlockFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

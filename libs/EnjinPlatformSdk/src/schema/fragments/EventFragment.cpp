@@ -136,6 +136,12 @@ const std::map<std::string, SerializablePtr>& EventFragment::GetParameters() con
 }
 
 [[maybe_unused]]
+bool EventFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool EventFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

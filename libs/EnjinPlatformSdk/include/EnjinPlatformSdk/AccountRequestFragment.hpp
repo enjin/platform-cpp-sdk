@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class AccountRequestFragment;
 
-/// \brief Definition for a pointer containing an account request fragment.
+/// \brief Definition for a pointer containing an AccountRequestFragment.
 using AccountRequestFragmentPtr [[maybe_unused]] = std::shared_ptr<AccountRequestFragment>;
 
-/// \brief Definition for an account request connection fragment.
+/// \brief Definition for a ConnectionFragment containing an AccountRequestFragment.
 using AccountRequestConnectionFragment [[maybe_unused]] = ConnectionFragment<AccountRequestFragment>;
 
-/// \brief Definition for a pointer containing an account request connection fragment.
+/// \brief Definition for a pointer containing an AccountRequestConnectionFragment.
 using AccountRequestConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<AccountRequestConnectionFragment>;
 
 /// \brief A fragment for requesting properties of an account request returned by the platform.
@@ -92,6 +92,10 @@ public:
     [[maybe_unused]]
     [[nodiscard]]
     const std::map<std::string, SerializablePtr>& GetParameters() const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
 
     [[maybe_unused]]
     [[nodiscard]]

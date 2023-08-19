@@ -11,7 +11,7 @@
 namespace enjin::platform::sdk
 {
 /// \brief Models a linking code used to associate an external ID to a wallet account.
-class ENJINPLATFORMSDK_EXPORT WalletLink : virtual public IJsonDeserializable
+class ENJINPLATFORMSDK_EXPORT WalletLink : public virtual IJsonDeserializable
 {
     /// \brief The implementation of this class.
     class Impl;

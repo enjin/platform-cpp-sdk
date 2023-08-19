@@ -12,10 +12,10 @@ namespace enjin::platform::sdk
 {
 class CollectionMutationInput;
 
-/// \brief Definition for a pointer containing a collection mutation input.
+/// \brief Definition for a pointer containing a CollectionMutationInput.
 using CollectionMutationInputPtr [[maybe_unused]] = std::shared_ptr<CollectionMutationInput>;
 
-/// \brief Models a parameter for parameters that can be mutated for a collection.
+/// \brief Models a parameter for parameters that can be mutated for a Collection.
 class ENJINPLATFORMSDK_EXPORT CollectionMutationInput : public GraphQlParameter<CollectionMutationInput>
 {
 public:

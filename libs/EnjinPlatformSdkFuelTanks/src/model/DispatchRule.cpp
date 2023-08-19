@@ -10,12 +10,12 @@ using namespace enjin::platform::sdk::fuelTanks;
 
 class DispatchRule::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> rule;
     std::optional<int> ruleSetId;
     std::optional<JsonValue> value;
     std::optional<bool> isFrozen;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

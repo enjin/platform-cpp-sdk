@@ -9,13 +9,13 @@ using namespace enjin::platform::sdk;
 
 class CollectionAccount::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<int32_t> accountCount;
     std::optional<bool> isFrozen;
     std::optional<Collection> collection;
     std::optional<Wallet> wallet;
     std::optional<std::vector<CollectionAccountApproval>> approvals;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

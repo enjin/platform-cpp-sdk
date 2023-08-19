@@ -12,7 +12,7 @@ namespace enjin::platform::sdk
 {
 class EncodableTokenIdInput;
 
-/// \brief Definition for a pointer containing an encodable token ID input.
+/// \brief Definition for a pointer containing an EncodableTokenIdInput.
 using EncodableTokenIdInputPtr [[maybe_unused]] = std::shared_ptr<EncodableTokenIdInput>;
 
 /// \brief Models a parameter for setting parameters to encode a token ID.

@@ -10,12 +10,11 @@ namespace enjin::platform::sdk
 {
 class IEventListenerRegistration;
 
-/// \brief Definition for a pointer containing an event listener registration.
-[[maybe_unused]]
-typedef std::shared_ptr<IEventListenerRegistration> EventListenerRegistrationPtr;
+/// \brief Definition for a pointer containing an IEventListenerRegistration.
+using EventListenerRegistrationPtr [[maybe_unused]] = std::shared_ptr<IEventListenerRegistration>;
 
 /// \brief Definition for a function wrapper that takes a string and returns a boolean.
-typedef std::function<bool(std::string)> EventMatcher;
+using EventMatcher = std::function<bool(const std::string&)>;
 
 /// \brief Interface to be implemented by event listener registrations.
 class IEventListenerRegistration

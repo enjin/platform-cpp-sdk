@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 template<class TResult>
 class IPlatformResponse;
 
-/// \brief Definition for a pointer containing a platform response type.
+/// \brief Definition for a pointer containing an IPlatformResponse.
 template<class TResult>
 using PlatformResponsePtr = std::shared_ptr<IPlatformResponse<TResult>>;
 

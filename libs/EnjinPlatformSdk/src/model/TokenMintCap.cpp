@@ -1,10 +1,10 @@
 #include "EnjinPlatformSdk/TokenMintCap.hpp"
 
+#include <string>
 #include <utility>
 
 using namespace enjin::platform::sdk;
-
-constexpr char TypeKey[] = "type";
+using ParameterType = GraphQlParameter<TokenMintCap>;
 
 [[maybe_unused]]
 TokenMintCap::TokenMintCap() = default;
@@ -20,13 +20,17 @@ TokenMintCap::~TokenMintCap() = default;
 [[maybe_unused]]
 TokenMintCap& TokenMintCap::SetType(const TokenMintCapType type)
 {
+    constexpr char key[] = "type";
+
     if (type == TokenMintCapType::None)
     {
-        return GraphQlParameter<TokenMintCap>::RemoveParameter(TypeKey);
+        return GraphQlParameter<TokenMintCap>::RemoveParameter(key);
     }
 
-    SerializableStringPtr s = std::make_shared<SerializableString>(enjin::platform::sdk::ToString(type));
-    return GraphQlParameter<TokenMintCap>::SetParameter(TypeKey, std::move(s));
+    std::string s = enjin::platform::sdk::ToString(type);
+    SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
+
+    return GraphQlParameter<TokenMintCap>::SetParameter(key, std::move(sPtr));
 }
 
 [[maybe_unused]]
