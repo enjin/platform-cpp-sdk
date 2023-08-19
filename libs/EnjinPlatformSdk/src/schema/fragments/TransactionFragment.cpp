@@ -160,6 +160,12 @@ const std::map<std::string, SerializablePtr>& TransactionFragment::GetParameters
 }
 
 [[maybe_unused]]
+bool TransactionFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool TransactionFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

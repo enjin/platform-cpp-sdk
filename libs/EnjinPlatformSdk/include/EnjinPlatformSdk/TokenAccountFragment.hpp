@@ -161,6 +161,10 @@ public:
 
     [[maybe_unused]]
     [[nodiscard]]
+    bool HasParameter(const std::string& key) const override;
+
+    [[maybe_unused]]
+    [[nodiscard]]
     bool HasParameters() const override;
 
     [[maybe_unused]]

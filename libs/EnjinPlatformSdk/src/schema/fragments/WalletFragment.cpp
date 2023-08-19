@@ -184,6 +184,12 @@ const std::map<std::string, SerializablePtr>& WalletFragment::GetParameters() co
 }
 
 [[maybe_unused]]
+bool WalletFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool WalletFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

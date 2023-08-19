@@ -128,6 +128,12 @@ const std::map<std::string, SerializablePtr>& CollectionAccountApprovalFragment:
 }
 
 [[maybe_unused]]
+bool CollectionAccountApprovalFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool CollectionAccountApprovalFragment::HasParameters() const
 {
     return _pimpl->HasParameters();

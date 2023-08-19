@@ -118,6 +118,12 @@ const std::map<std::string, SerializablePtr>& AccountFragment::GetParameters() c
 }
 
 [[maybe_unused]]
+bool AccountFragment::HasParameter(const std::string& key) const
+{
+    return _pimpl->HasParameter(key);
+}
+
+[[maybe_unused]]
 bool AccountFragment::HasParameters() const
 {
     return _pimpl->HasParameters();
