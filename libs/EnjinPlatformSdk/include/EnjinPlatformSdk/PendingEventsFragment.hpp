@@ -7,6 +7,11 @@
 
 namespace enjin::platform::sdk
 {
+class PendingEventsFragment;
+
+/// \brief Definition for a pointer containing a PendingEventsFragment.
+using PendingEventsFragmentPtr [[maybe_unused]] = std::shared_ptr<PendingEventsFragment>;
+
 /// \brief A fragment for requesting properties of a pending events returned by the platform.
 class ENJINPLATFORMSDK_EXPORT PendingEventsFragment : public ConnectionFragment<>
 {
