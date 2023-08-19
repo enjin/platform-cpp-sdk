@@ -1,4 +1,4 @@
-message(STATUS "Enjin: Making SDK fuel-tanks library")
+message(STATUS "Enjin: Making SDK fuel tanks library")
 
 include(GenerateExportHeader)
 
