@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['verifyaccount_0',['VerifyAccount',['../classenjin_1_1platform_1_1sdk_1_1_verify_account.html#a7c83e96e94d1d57836320e4cdacbf7f7',1,'enjin::platform::sdk::VerifyAccount::VerifyAccount()'],['../classenjin_1_1platform_1_1sdk_1_1_verify_account.html#a3aa981ade80774d68ec8b9fbbbb5adaa',1,'enjin::platform::sdk::VerifyAccount::VerifyAccount(const VerifyAccount &amp;other)'],['../classenjin_1_1platform_1_1sdk_1_1_verify_account.html#a54f2f2aa1b560314bb989df76a11703b',1,'enjin::platform::sdk::VerifyAccount::VerifyAccount(VerifyAccount &amp;&amp;other) noexcept']]],
+  ['verifymessage_1',['VerifyMessage',['../classenjin_1_1platform_1_1sdk_1_1_verify_message.html#a3e7abcebffb08a0e6c23f66f4289d63d',1,'enjin::platform::sdk::VerifyMessage::VerifyMessage()'],['../classenjin_1_1platform_1_1sdk_1_1_verify_message.html#affd696dc7233535071ac6d1092ff5900',1,'enjin::platform::sdk::VerifyMessage::VerifyMessage(const VerifyMessage &amp;other)'],['../classenjin_1_1platform_1_1sdk_1_1_verify_message.html#ac701844b53d3fb3edcf7ecfa0b3df51f',1,'enjin::platform::sdk::VerifyMessage::VerifyMessage(VerifyMessage &amp;&amp;other) noexcept']]]
+];
