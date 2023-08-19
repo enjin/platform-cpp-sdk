@@ -8,12 +8,12 @@ using namespace enjin::platform::sdk;
 
 class PageInfo::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<bool> hasNextPage;
     std::optional<bool> hasPreviousPage;
     std::optional<std::string> startCursor;
     std::optional<std::string> endCursor;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

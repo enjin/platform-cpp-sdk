@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk;
 
 class AccountVerified::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<bool> verified;
     std::optional<Account> account;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

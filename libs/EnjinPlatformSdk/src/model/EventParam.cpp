@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk;
 
 class EventParam::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> type;
     std::optional<JsonValue> value;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

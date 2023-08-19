@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk;
 
 class TokenAccountNamedReserve::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<PalletIdentifier> pallet;
     std::optional<std::string> amount;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

@@ -9,13 +9,13 @@ using namespace enjin::platform::sdk;
 
 class Event::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<int32_t> phase;
     std::optional<std::string> lookup;
     std::optional<std::string> moduleId;
     std::optional<std::string> eventId;
     std::optional<std::vector<EventParam>> params;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

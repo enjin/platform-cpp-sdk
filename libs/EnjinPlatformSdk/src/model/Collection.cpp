@@ -9,7 +9,6 @@ using namespace enjin::platform::sdk;
 
 class Collection::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> collectionId;
     std::optional<int32_t> maxTokenCount;
     std::optional<std::string> maxTokenSupply;
@@ -22,6 +21,7 @@ public:
     std::optional<Connection<CollectionAccount>> accounts;
     std::optional<Connection<Token>> tokens;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

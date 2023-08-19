@@ -9,12 +9,12 @@ using namespace enjin::platform::sdk;
 
 class TokenAccountApproval::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> amount;
     std::optional<int32_t> expiration;
     std::optional<TokenAccount> account;
     std::optional<Wallet> wallet;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

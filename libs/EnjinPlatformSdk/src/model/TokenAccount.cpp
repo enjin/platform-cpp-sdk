@@ -9,7 +9,6 @@ using namespace enjin::platform::sdk;
 
 class TokenAccount::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> balance;
     std::optional<std::string> reservedBalance;
     std::optional<bool> isFrozen;
@@ -19,6 +18,7 @@ public:
     std::optional<std::vector<TokenAccountApproval>> approvals;
     std::optional<std::vector<TokenAccountNamedReserve>> namedReserves;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

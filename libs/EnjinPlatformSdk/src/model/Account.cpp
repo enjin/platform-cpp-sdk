@@ -9,10 +9,10 @@ using namespace enjin::platform::sdk;
 
 class Account::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<std::string> publicKey;
     std::optional<std::string> address;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;

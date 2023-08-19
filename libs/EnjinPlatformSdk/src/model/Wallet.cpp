@@ -9,7 +9,6 @@ using namespace enjin::platform::sdk;
 
 class Wallet::Impl : public JsonDeserializableBase
 {
-public:
     std::optional<int32_t> id;
     std::optional<Account> account;
     std::optional<std::string> externalId;
@@ -24,6 +23,7 @@ public:
     std::optional<Connection<Transaction>> transactions;
     std::optional<Connection<Collection>> ownedCollections;
 
+public:
     Impl() = default;
 
     Impl(const Impl& other) = default;
