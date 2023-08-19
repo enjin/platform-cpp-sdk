@@ -230,7 +230,7 @@ PlatformClientBuilder::PlatformClientBuilder() = default;
 PlatformClientBuilder::~PlatformClientBuilder() = default;
 
 [[maybe_unused]]
-std::unique_ptr<PlatformClient> PlatformClientBuilder::Build() const
+PlatformClientPtr PlatformClientBuilder::Build() const
 {
     if (!_baseAddress.has_value())
     {

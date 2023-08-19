@@ -25,7 +25,7 @@ class PlatformClientTest : public Test,
                            public VerificationTestSuite
 {
 public:
-    std::unique_ptr<PlatformClient> classUnderTest;
+    PlatformClientPtr classUnderTest;
 
     // Mocks
     MockPlatformRequestPtr mockRequest;

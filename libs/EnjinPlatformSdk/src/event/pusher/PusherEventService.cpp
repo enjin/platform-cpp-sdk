@@ -487,7 +487,7 @@ PusherEventServiceBuilder::PusherEventServiceBuilder() = default;
 PusherEventServiceBuilder::~PusherEventServiceBuilder() = default;
 
 [[maybe_unused]]
-std::unique_ptr<PusherEventService> PusherEventServiceBuilder::Build() const
+PusherEventServicePtr PusherEventServiceBuilder::Build() const
 {
     if (!_key.has_value())
     {
