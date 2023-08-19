@@ -14,7 +14,7 @@ class IEventListenerRegistration;
 using EventListenerRegistrationPtr [[maybe_unused]] = std::shared_ptr<IEventListenerRegistration>;
 
 /// \brief Definition for a function wrapper that takes a string and returns a boolean.
-using EventMatcher = std::function<bool(std::string)>;
+using EventMatcher = std::function<bool(const std::string&)>;
 
 /// \brief Interface to be implemented by event listener registrations.
 class IEventListenerRegistration
