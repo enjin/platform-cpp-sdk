@@ -4,6 +4,7 @@
 
 using namespace enjin::platform::sdk;
 using namespace enjin::platform::sdk::fuelTanks;
+using ParameterType = GraphQlParameter<FuelBudgetInputType>;
 
 [[maybe_unused]]
 FuelBudgetInputType::FuelBudgetInputType() = default;
@@ -19,13 +20,13 @@ FuelBudgetInputType::~FuelBudgetInputType() = default;
 [[maybe_unused]]
 FuelBudgetInputType& FuelBudgetInputType::SetAmount(SerializableStringPtr amount)
 {
-    return SetParameter("amount", std::move(amount));
+    return ParameterType::SetParameter("amount", std::move(amount));
 }
 
 [[maybe_unused]]
 FuelBudgetInputType& FuelBudgetInputType::SetResetPeriod(SerializableIntPtr resetPeriod)
 {
-    return SetParameter("resetPeriod", std::move(resetPeriod));
+    return ParameterType::SetParameter("resetPeriod", std::move(resetPeriod));
 }
 
 FuelBudgetInputType& FuelBudgetInputType::operator=(const FuelBudgetInputType& rhs) = default;

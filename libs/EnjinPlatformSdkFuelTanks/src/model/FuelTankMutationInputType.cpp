@@ -4,6 +4,7 @@
 
 using namespace enjin::platform::sdk;
 using namespace enjin::platform::sdk::fuelTanks;
+using ParameterType = GraphQlParameter<FuelTankMutationInputType>;
 
 [[maybe_unused]]
 FuelTankMutationInputType::FuelTankMutationInputType() = default;
@@ -20,26 +21,26 @@ FuelTankMutationInputType::~FuelTankMutationInputType() = default;
 FuelTankMutationInputType&
 FuelTankMutationInputType::SetReservesExistentialDeposit(SerializableBoolPtr reservesExistentialDeposit)
 {
-    return SetParameter("reservesExistentialDeposit", std::move(reservesExistentialDeposit));
+    return ParameterType::SetParameter("reservesExistentialDeposit", std::move(reservesExistentialDeposit));
 }
 
 [[maybe_unused]]
 FuelTankMutationInputType&
 FuelTankMutationInputType::SetReservesAccountCreationDeposit(SerializableBoolPtr reservesAccountCreationDeposit)
 {
-    return SetParameter("reservesAccountCreationDeposit", std::move(reservesAccountCreationDeposit));
+    return ParameterType::SetParameter("reservesAccountCreationDeposit", std::move(reservesAccountCreationDeposit));
 }
 
 [[maybe_unused]]
 FuelTankMutationInputType& FuelTankMutationInputType::SetProvidesDeposit(SerializableBoolPtr providesDeposit)
 {
-    return SetParameter("providesDeposit", std::move(providesDeposit));
+    return ParameterType::SetParameter("providesDeposit", std::move(providesDeposit));
 }
 
 [[maybe_unused]]
 FuelTankMutationInputType& FuelTankMutationInputType::SetAccountRules(AccountRuleInputTypePtr accountRules)
 {
-    return SetParameter("accountRules", std::move(accountRules));
+    return ParameterType::SetParameter("accountRules", std::move(accountRules));
 }
 
 FuelTankMutationInputType& FuelTankMutationInputType::operator=(const FuelTankMutationInputType& rhs) = default;

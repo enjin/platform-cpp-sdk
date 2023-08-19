@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<MultiTokenIdInput>;
 
 [[maybe_unused]]
 MultiTokenIdInput::MultiTokenIdInput() = default;
@@ -18,7 +19,7 @@ MultiTokenIdInput::~MultiTokenIdInput() = default;
 [[maybe_unused]]
 MultiTokenIdInput& MultiTokenIdInput::SetCollectionId(SerializableStringPtr collectionId)
 {
-    return GraphQlParameter<MultiTokenIdInput>::SetParameter("collectionId", std::move(collectionId));
+    return ParameterType::SetParameter("collectionId", std::move(collectionId));
 }
 
 MultiTokenIdInput& MultiTokenIdInput::operator=(const MultiTokenIdInput& rhs) = default;

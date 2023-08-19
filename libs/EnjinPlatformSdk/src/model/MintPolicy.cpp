@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<MintPolicy>;
 
 [[maybe_unused]]
 MintPolicy::MintPolicy() = default;
@@ -18,19 +19,19 @@ MintPolicy::~MintPolicy() = default;
 [[maybe_unused]]
 MintPolicy& MintPolicy::SetMaxTokenCount(SerializableStringPtr maxTokenCount)
 {
-    return GraphQlParameter<MintPolicy>::SetParameter("maxTokenCount", std::move(maxTokenCount));
+    return ParameterType::SetParameter("maxTokenCount", std::move(maxTokenCount));
 }
 
 [[maybe_unused]]
 MintPolicy& MintPolicy::SetMaxTokenSupply(SerializableStringPtr maxTokenSupply)
 {
-    return GraphQlParameter<MintPolicy>::SetParameter("maxTokenSupply", std::move(maxTokenSupply));
+    return ParameterType::SetParameter("maxTokenSupply", std::move(maxTokenSupply));
 }
 
 [[maybe_unused]]
 MintPolicy& MintPolicy::SetForceSingleMint(SerializableBoolPtr forceSingleMint)
 {
-    return GraphQlParameter<MintPolicy>::SetParameter("forceSingleMint", std::move(forceSingleMint));
+    return ParameterType::SetParameter("forceSingleMint", std::move(forceSingleMint));
 }
 
 MintPolicy& MintPolicy::operator=(const MintPolicy& rhs) = default;

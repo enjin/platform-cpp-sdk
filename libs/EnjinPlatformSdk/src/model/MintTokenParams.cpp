@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<MintTokenParams>;
 
 [[maybe_unused]]
 MintTokenParams::MintTokenParams() = default;
@@ -18,13 +19,13 @@ MintTokenParams::~MintTokenParams() = default;
 [[maybe_unused]]
 MintTokenParams& MintTokenParams::SetAmount(SerializableStringPtr amount)
 {
-    return GraphQlParameter<MintTokenParams>::SetParameter("amount", std::move(amount));
+    return ParameterType::SetParameter("amount", std::move(amount));
 }
 
 [[maybe_unused]]
 MintTokenParams& MintTokenParams::SetUnitPrice(SerializableStringPtr unitPrice)
 {
-    return GraphQlParameter<MintTokenParams>::SetParameter("unitPrice", std::move(unitPrice));
+    return ParameterType::SetParameter("unitPrice", std::move(unitPrice));
 }
 
 MintTokenParams& MintTokenParams::operator=(const MintTokenParams& rhs) = default;

@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<MarketPolicy>;
 
 [[maybe_unused]]
 MarketPolicy::MarketPolicy() = default;
@@ -18,7 +19,7 @@ MarketPolicy::~MarketPolicy() = default;
 [[maybe_unused]]
 MarketPolicy& MarketPolicy::SetRoyalty(RoyaltyInputPtr royalty)
 {
-    return GraphQlParameter<MarketPolicy>::SetParameter("royalty", std::move(royalty));
+    return ParameterType::SetParameter("royalty", std::move(royalty));
 }
 
 MarketPolicy& MarketPolicy::operator=(const MarketPolicy& rhs) = default;

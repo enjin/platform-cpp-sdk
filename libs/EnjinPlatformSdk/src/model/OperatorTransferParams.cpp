@@ -3,6 +3,7 @@
 #include <utility>
 
 using namespace enjin::platform::sdk;
+using ParameterType = GraphQlParameter<OperatorTransferParams>;
 
 [[maybe_unused]]
 OperatorTransferParams::OperatorTransferParams() = default;
@@ -18,19 +19,19 @@ OperatorTransferParams::~OperatorTransferParams() = default;
 [[maybe_unused]]
 OperatorTransferParams& OperatorTransferParams::SetSource(SerializableStringPtr source)
 {
-    return GraphQlParameter<OperatorTransferParams>::SetParameter("source", std::move(source));
+    return ParameterType::SetParameter("source", std::move(source));
 }
 
 [[maybe_unused]]
 OperatorTransferParams& OperatorTransferParams::SetAmount(SerializableStringPtr amount)
 {
-    return GraphQlParameter<OperatorTransferParams>::SetParameter("amount", std::move(amount));
+    return ParameterType::SetParameter("amount", std::move(amount));
 }
 
 [[maybe_unused]]
 OperatorTransferParams& OperatorTransferParams::SetKeepAlive(SerializableBoolPtr keepAlive)
 {
-    return GraphQlParameter<OperatorTransferParams>::SetParameter("keepAlive", std::move(keepAlive));
+    return ParameterType::SetParameter("keepAlive", std::move(keepAlive));
 }
 
 OperatorTransferParams& OperatorTransferParams::operator=(const OperatorTransferParams& rhs) = default;
