@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class BurnParamsInput;
 
-/// \brief Definition for a pointer containing a burn parameter input.
+/// \brief Definition for a pointer containing a BurnParamsInput.
 using BurnParamsInputPtr [[maybe_unused]] = std::shared_ptr<BurnParamsInput>;
 
 class ENJINPLATFORMSDK_EXPORT BurnParamsInput : public GraphQlParameter<BurnParamsInput>

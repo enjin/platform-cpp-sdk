@@ -35,13 +35,13 @@ using TokenAccountConnectionFragmentPtr = std::shared_ptr<TokenAccountConnection
 
 class TokenFragment;
 
-/// \brief Definition for a pointer containing a token fragment.
+/// \brief Definition for a pointer containing a TokenFragment.
 using TokenFragmentPtr [[maybe_unused]] = std::shared_ptr<TokenFragment>;
 
-/// \brief Definition for a token connection fragment.
+/// \brief Definition for a ConnectionFragment containing a TokenFragment.
 using TokenConnectionFragment [[maybe_unused]] = ConnectionFragment<TokenFragment>;
 
-/// \brief Definition for a pointer containing a token connection fragment.
+/// \brief Definition for a pointer containing a TokenConnectionFragment.
 using TokenConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<TokenConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a token returned by the platform.

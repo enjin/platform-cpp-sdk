@@ -16,13 +16,13 @@ namespace enjin::platform::sdk::beam
 {
 class BeamScanFragment;
 
-/// \brief Definition for a pointer containing a beam scan fragment.
+/// \brief Definition for a pointer containing a BeamScanFragment.
 using BeamScanFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamScanFragment>;
 
-/// \brief Definition for a beam scan connection fragment.
+/// \brief Definition for a ConnectionFragment containing a BeamScanFragment.
 using BeamScanConnectionFragment [[maybe_unused]] = ConnectionFragment<BeamScanFragment>;
 
-/// \brief Definition for a pointer containing a beam scan connection fragment.
+/// \brief Definition for a pointer containing a BeamScanConnectionFragment.
 using BeamScanConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamScanConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a BeamScan returned by the platform.

@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class BalancesFragment;
 
-/// \brief Definition for a pointer containing a balance fragment.
+/// \brief Definition for a pointer containing a BalancesFragment.
 using BalancesFragmentPtr [[maybe_unused]] = std::shared_ptr<BalancesFragment>;
 
-/// \brief Definition for a balance connection fragment.
+/// \brief Definition for a ConnectionFragment containing a BalancesFragment.
 using BalancesConnectionFragment [[maybe_unused]] = ConnectionFragment<BalancesFragment>;
 
-/// \brief Definition for a pointer containing a balance connection fragment.
+/// \brief Definition for a pointer containing a BalancesConnectionFragment.
 using BalancesConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BalancesConnectionFragment>;
 
 /// \brief A fragment for requesting properties of balances returned by the platform.

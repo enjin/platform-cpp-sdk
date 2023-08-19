@@ -10,7 +10,7 @@ namespace enjin::platform::sdk
 {
 struct SerializableJsonValue;
 
-/// \brief Definition for a pointer containing a serializable JSON value.
+/// \brief Definition for a pointer containing a SerializableJsonValue.
 using SerializableJsonValuePtr [[maybe_unused]] = std::shared_ptr<SerializableJsonValue>;
 
 /// \brief Struct for serializable JSON value.

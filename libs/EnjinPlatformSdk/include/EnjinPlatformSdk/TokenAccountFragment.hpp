@@ -39,13 +39,13 @@ using WalletFragmentPtr = std::shared_ptr<WalletFragment>;
 
 class TokenAccountFragment;
 
-/// \brief Definition for a pointer containing a token account fragment.
+/// \brief Definition for a pointer containing a TokenAccountFragment.
 using TokenAccountFragmentPtr [[maybe_unused]] = std::shared_ptr<TokenAccountFragment>;
 
-/// \brief Definition for a token account connection fragment.
+/// \brief Definition for a ConnectionFragment containing a TokenAccountFragment.
 using TokenAccountConnectionFragment [[maybe_unused]] = ConnectionFragment<TokenAccountFragment>;
 
-/// \brief Definition for a pointer containing a token account connection fragment.
+/// \brief Definition for a pointer containing a TokenAccountConnectionFragment.
 using TokenAccountConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<TokenAccountConnectionFragment>;
 
 class ENJINPLATFORMSDK_EXPORT TokenAccountFragment : public IGraphQlFragment<TokenAccountFragment>

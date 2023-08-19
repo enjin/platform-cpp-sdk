@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 class TokenMarketBehaviorInput;
 
-/// \brief Definition for a pointer containing a token market behavior input.
+/// \brief Definition for a pointer containing a TokenMarketBehaviorInput.
 using TokenMarketBehaviorInputPtr [[maybe_unused]] = std::shared_ptr<TokenMarketBehaviorInput>;
 
 /// \brief Models a parameter for the market behavior for a token.

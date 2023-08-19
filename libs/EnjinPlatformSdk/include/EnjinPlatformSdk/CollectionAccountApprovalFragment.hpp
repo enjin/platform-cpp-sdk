@@ -24,14 +24,14 @@ using WalletFragmentPtr = std::shared_ptr<WalletFragment>;
 
 class CollectionAccountApprovalFragment;
 
-/// \brief Definition for a pointer containing a collection account approval fragment.
+/// \brief Definition for a pointer containing a CollectionAccountApprovalFragment.
 using CollectionAccountApprovalFragmentPtr [[maybe_unused]] = std::shared_ptr<CollectionAccountApprovalFragment>;
 
-/// \brief Definition for a collection account approval connection fragment.
+/// \brief Definition for a ConnectionFragment containing a CollectionAccountApprovalFragment.
 using CollectionAccountApprovalConnectionFragment [[maybe_unused]] =
     ConnectionFragment<CollectionAccountApprovalFragment>;
 
-/// \brief Definition for a pointer containing a collection account approval connection fragment.
+/// \brief Definition for a pointer containing a CollectionAccountApprovalConnectionFragment.
 using CollectionAccountApprovalConnectionFragmentPtr [[maybe_unused]] =
     std::shared_ptr<CollectionAccountApprovalConnectionFragment>;
 

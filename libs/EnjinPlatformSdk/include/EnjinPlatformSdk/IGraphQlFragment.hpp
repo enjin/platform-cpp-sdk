@@ -10,7 +10,7 @@ namespace enjin::platform::sdk
 template<class...>
 class IGraphQlFragment;
 
-/// \brief Definition for a pointer containing a GraphQL fragment type.
+/// \brief Definition for a pointer containing an IGraphQlFragment.
 using GraphQlFragmentPtr [[maybe_unused]] = std::shared_ptr<IGraphQlFragment<>>;
 
 /// \brief Interface for GraphQL fragments.

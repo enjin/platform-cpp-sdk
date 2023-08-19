@@ -11,10 +11,10 @@ namespace enjin::platform::sdk
 {
 struct SerializableDouble;
 
-/// \brief Definition for a pointer containing a serializable double-precision floating-point number.
+/// \brief Definition for a pointer containing a SerializableDouble.
 using SerializableDoublePtr [[maybe_unused]] = std::shared_ptr<SerializableDouble>;
 
-/// \brief Struct for serializable double precision floating point number.
+/// \brief Struct for serializable double-precision floating-point number.
 struct ENJINPLATFORMSDK_EXPORT SerializableDouble : public ISerializable
 {
     /// \brief The value of this instance.

@@ -9,7 +9,7 @@ namespace enjin::platform::sdk
 {
 class PageInfoFragment;
 
-/// \brief Definition for a pointer containing a page info fragment.
+/// \brief Definition for a pointer containing a PageInfoFragment.
 using PageInfoFragmentPtr [[maybe_unused]] = std::shared_ptr<PageInfoFragment>;
 
 /// \brief A fragment for requesting properties of a PageInfo returned by the platform.

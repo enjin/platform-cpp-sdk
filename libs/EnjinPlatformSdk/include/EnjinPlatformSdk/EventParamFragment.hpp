@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class EventParamFragment;
 
-/// \brief Definition for a pointer containing an event parameter fragment.
+/// \brief Definition for a pointer containing an EventParamFragment.
 using EventParamFragmentPtr [[maybe_unused]] = std::shared_ptr<EventParamFragment>;
 
-/// \brief Definition for an event parameter connection fragment.
+/// \brief Definition for a ConnectionFragment containing a EventParamFragment.
 using EventParamConnectionFragment [[maybe_unused]] = ConnectionFragment<EventParamFragment>;
 
-/// \brief Definition for a pointer containing an event parameter connection fragment.
+/// \brief Definition for a pointer containing an EventParamConnectionFragment.
 using EventParamConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<EventParamConnectionFragment>;
 
 /// \brief A fragment for requesting properties of an event parameter returned by the platform.

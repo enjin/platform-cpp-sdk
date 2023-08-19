@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 template<class...>
 class IGraphQlParameter;
 
-/// \brief Definition for a pointer containing a GraphQL parameter type.
+/// \brief Definition for a pointer containing an IGraphQlParameter.
 using GraphQlParameterPtr [[maybe_unused]] = std::unique_ptr<IGraphQlParameter<>>;
 
 /// \brief Interface for complex GraphQL parameters.

@@ -22,8 +22,7 @@ namespace enjin::platform::sdk::beam
 class ClaimToken;
 
 /// \brief Definition for a pointer containing a ClaimToken.
-[[maybe_unused]]
-typedef std::shared_ptr<ClaimToken> ClaimTokenPtr;
+using ClaimTokenPtr [[maybe_unused]] = std::shared_ptr<ClaimToken>;
 
 /// \brief Models a parameter for setting the claimable tokens of a beam.
 class ENJINPLATFORMSDKBEAM_EXPORT ClaimToken : public GraphQlParameter<ClaimToken>

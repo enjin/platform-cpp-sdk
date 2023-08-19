@@ -12,7 +12,7 @@ namespace enjin::platform::sdk
 {
 class IPlatformRequest;
 
-/// \brief Definition for a pointer containing a platform request type.
+/// \brief Definition for a pointer containing an IPlatformRequest.
 using PlatformRequestPtr [[maybe_unused]] = std::shared_ptr<IPlatformRequest>;
 
 /// \brief Interface for platform requests to implement.

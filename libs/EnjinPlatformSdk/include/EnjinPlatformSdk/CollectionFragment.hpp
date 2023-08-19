@@ -41,16 +41,16 @@ using WalletFragmentPtr = std::shared_ptr<WalletFragment>;
 
 class CollectionFragment;
 
-/// \brief Definition for a pointer containing a collection fragment.
+/// \brief Definition for a pointer containing a CollectionFragment.
 using CollectionFragmentPtr [[maybe_unused]] = std::shared_ptr<CollectionFragment>;
 
-/// \brief Definition for a collection connection fragment.
+/// \brief Definition for a ConnectionFragment containing a CollectionFragment.
 using CollectionConnectionFragment [[maybe_unused]] = ConnectionFragment<CollectionFragment>;
 
-/// \brief Definition for a pointer containing a collection connection fragment.
+/// \brief Definition for a pointer containing a CollectionConnectionFragment.
 using CollectionConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<CollectionConnectionFragment>;
 
-/// \brief A fragment for requesting properties of a collection returned by the platform.
+/// \brief A fragment for requesting properties of a Collection returned by the platform.
 class ENJINPLATFORMSDK_EXPORT CollectionFragment : public IGraphQlFragment<CollectionFragment>
 {
     /// \brief The implementation of this class.

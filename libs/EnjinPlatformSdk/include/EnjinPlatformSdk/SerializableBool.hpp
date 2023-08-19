@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 struct SerializableBool;
 
-/// \brief Definition for a pointer containing a serializable boolean.
+/// \brief Definition for a pointer containing a SerializableBool.
 using SerializableBoolPtr [[maybe_unused]] = std::shared_ptr<SerializableBool>;
 
 /// \brief Struct for serializable boolean.

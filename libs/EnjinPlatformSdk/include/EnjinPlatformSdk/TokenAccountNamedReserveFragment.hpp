@@ -10,14 +10,14 @@ namespace enjin::platform::sdk
 {
 class TokenAccountNamedReserveFragment;
 
-/// \brief Definition for a pointer containing a token account named reserve fragment.
+/// \brief Definition for a pointer containing a TokenAccountNamedReserveFragment.
 using TokenAccountNamedReserveFragmentPtr [[maybe_unused]] = std::shared_ptr<TokenAccountNamedReserveFragment>;
 
-/// \brief Definition for a token account named reserve connection fragment.
+/// \brief Definition for a ConnectionFragment containing a TokenAccountNamedReserveFragment.
 using TokenAccountNamedReserveConnectionFragment [[maybe_unused]] =
     ConnectionFragment<TokenAccountNamedReserveFragment>;
 
-/// \brief Definition for a pointer containing a token account named reserve connection fragment.
+/// \brief Definition for a pointer containing a TokenAccountNamedReserveConnectionFragment.
 using TokenAccountNamedReserveConnectionFragmentPtr [[maybe_unused]] =
     std::shared_ptr<TokenAccountNamedReserveConnectionFragment>;
 

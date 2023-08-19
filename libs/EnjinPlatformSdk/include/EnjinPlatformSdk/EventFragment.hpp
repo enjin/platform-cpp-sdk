@@ -19,13 +19,13 @@ using EventParamFragmentPtr = std::shared_ptr<EventParamFragment>;
 
 class EventFragment;
 
-/// \brief Definition for a pointer containing an event fragment.
+/// \brief Definition for a pointer containing an EventFragment.
 using EventFragmentPtr [[maybe_unused]] = std::shared_ptr<EventFragment>;
 
-/// \brief Definition for an event connection fragment.
+/// \brief Definition for a ConnectionFragment containing an EventFragment.
 using EventConnectionFragment [[maybe_unused]] = ConnectionFragment<EventFragment>;
 
-/// \brief Definition for a pointer containing an event connection fragment.
+/// \brief Definition for a pointer containing an EventConnectionFragment.
 using EventConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<EventConnectionFragment>;
 
 /// \brief A fragment for requesting properties of an event returned by the platform.

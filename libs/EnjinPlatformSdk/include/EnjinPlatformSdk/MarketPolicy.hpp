@@ -10,7 +10,7 @@ namespace enjin::platform::sdk
 {
 class MarketPolicy;
 
-/// \brief Definition for a pointer containing a market policy.
+/// \brief Definition for a pointer containing a MarketPolicy.
 using MarketPolicyPtr [[maybe_unused]] = std::shared_ptr<MarketPolicy>;
 
 /// \brief Models a parameter for the marketplace policy of a collection.

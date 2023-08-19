@@ -19,13 +19,13 @@ using AccountFragmentPtr = std::shared_ptr<AccountFragment>;
 
 class AccountVerifiedFragment;
 
-/// \brief Definition for a pointer containing an account fragment.
+/// \brief Definition for a pointer containing an AccountVerifiedFragment.
 using AccountVerifiedFragmentPtr [[maybe_unused]] = std::shared_ptr<AccountVerifiedFragment>;
 
-/// \brief Definition for an account connection fragment.
+/// \brief Definition for a ConnectionFragment containing an AccountVerifiedFragment.
 using AccountVerifiedConnectionFragment [[maybe_unused]] = ConnectionFragment<AccountVerifiedFragment>;
 
-/// \brief Definition for a pointer containing an account connection fragment.
+/// \brief Definition for a pointer containing an AccountVerifiedConnectionFragment.
 using AccountVerifiedConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<AccountVerifiedConnectionFragment>;
 
 /// \brief A fragment for requesting properties of an account verified returned by the platform.

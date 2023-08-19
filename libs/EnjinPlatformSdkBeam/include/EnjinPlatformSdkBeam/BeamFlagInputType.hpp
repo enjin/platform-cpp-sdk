@@ -18,8 +18,7 @@ namespace enjin::platform::sdk::beam
 class BeamFlagInputType;
 
 /// \brief Definition for a pointer containing a BeamFlagInputType.
-[[maybe_unused]]
-typedef std::shared_ptr<BeamFlagInputType> BeamFlagInputTypePtr;
+using BeamFlagInputTypePtr [[maybe_unused]] = std::shared_ptr<BeamFlagInputType>;
 
 /// \brief Models a parameter for inputting a beam flag.
 class ENJINPLATFORMSDKBEAM_EXPORT BeamFlagInputType : public GraphQlParameter<BeamFlagInputType>

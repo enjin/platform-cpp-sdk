@@ -9,7 +9,7 @@ namespace enjin::platform::sdk
 {
 class ISerializable;
 
-/// \brief Definition for a pointer containing a serializable type.
+/// \brief Definition for a pointer containing an ISerializable.
 using SerializablePtr [[maybe_unused]] = std::shared_ptr<ISerializable>;
 
 /// \brief Interface for serializable types.

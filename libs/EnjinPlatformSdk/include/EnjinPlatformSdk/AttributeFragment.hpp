@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class AttributeFragment;
 
-/// \brief Definition for a pointer containing an attribute fragment.
+/// \brief Definition for a pointer containing an AttributeFragment.
 using AttributeFragmentPtr [[maybe_unused]] = std::shared_ptr<AttributeFragment>;
 
-/// \brief Definition for an attribute connection fragment.
+/// \brief Definition for a ConnectionFragment containing an AttributeFragment.
 using AttributeConnectionFragment [[maybe_unused]] = ConnectionFragment<AttributeFragment>;
 
-/// \brief Definition for a pointer containing an attribute connection fragment.
+/// \brief Definition for a pointer containing an AttributeConnectionFragment.
 using AttributeConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<AttributeConnectionFragment>;
 
 /// \brief A fragment for requesting properties of an attribute returned by the platform.

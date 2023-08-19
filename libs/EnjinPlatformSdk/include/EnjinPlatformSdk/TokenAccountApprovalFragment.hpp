@@ -24,13 +24,13 @@ using WalletFragmentPtr = std::shared_ptr<WalletFragment>;
 
 class TokenAccountApprovalFragment;
 
-/// \brief Definition for a pointer containing a token account approval fragment.
+/// \brief Definition for a pointer containing a TokenAccountApprovalFragment.
 using TokenAccountApprovalFragmentPtr [[maybe_unused]] = std::shared_ptr<TokenAccountApprovalFragment>;
 
-/// \brief Definition for a token account approval connection fragment.
+/// \brief Definition for a ConnectionFragment containing a TokenAccountApprovalFragment.
 using TokenAccountApprovalConnectionFragment [[maybe_unused]] = ConnectionFragment<TokenAccountApprovalFragment>;
 
-/// \brief Definition for a pointer containing a token account approval connection fragment.
+/// \brief Definition for a pointer containing a TokenAccountApprovalConnectionFragment.
 using TokenAccountApprovalConnectionFragmentPtr = std::shared_ptr<TokenAccountApprovalConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a token account approval returned by the platform.

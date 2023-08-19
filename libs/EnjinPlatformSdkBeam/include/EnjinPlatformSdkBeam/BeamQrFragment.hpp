@@ -16,13 +16,13 @@ namespace enjin::platform::sdk::beam
 {
 class BeamQrFragment;
 
-/// \brief Definition for a pointer containing a beam QR fragment.
+/// \brief Definition for a pointer containing a BeamQrFragment.
 using BeamQrFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamQrFragment>;
 
-/// \brief Definition for a beam QR connection fragment.
+/// \brief Definition for a ConnectionFragment containing a BeamQrFragment.
 using BeamQrConnectionFragment [[maybe_unused]] = ConnectionFragment<BeamQrFragment>;
 
-/// \brief Definition for a pointer containing a beam QR connection fragment.
+/// \brief Definition for a pointer containing a BeamQrConnectionFragment.
 using BeamQrConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<BeamQrConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a BeamQr returned by the platform.

@@ -12,7 +12,7 @@ namespace enjin::platform::sdk
 {
 class SimpleTransferParams;
 
-/// \brief Definition for a pointer containing a simple transfer parameters.
+/// \brief Definition for a pointer containing a SimpleTransferParams.
 using SimpleTransferParamsPtr [[maybe_unused]] = std::shared_ptr<SimpleTransferParams>;
 
 /// \brief Models a parameter for parameters to make a simple transfer.

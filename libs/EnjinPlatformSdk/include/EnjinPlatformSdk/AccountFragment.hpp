@@ -10,13 +10,13 @@ namespace enjin::platform::sdk
 {
 class AccountFragment;
 
-/// \brief Definition for a pointer containing an account fragment.
+/// \brief Definition for a pointer containing an AccountFragment.
 using AccountFragmentPtr [[maybe_unused]] = std::shared_ptr<AccountFragment>;
 
-/// \brief Definition for an account connection fragment.
+/// \brief Definition for a ConnectionFragment containing an AccountFragment.
 using AccountConnectFragment [[maybe_unused]] = ConnectionFragment<AccountFragment>;
 
-/// \brief Definition for a pointer containing an account connection fragment.
+/// \brief Definition for a pointer containing an AccountConnectFragment.
 using AccountConnectFragmentPtr [[maybe_unused]] = std::shared_ptr<AccountConnectFragment>;
 
 /// \brief A fragment for requesting properties of an account returned by the platform.

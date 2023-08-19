@@ -29,13 +29,13 @@ using WalletFragmentPtr = std::shared_ptr<WalletFragment>;
 
 class CollectionAccountFragment;
 
-/// \brief Definition for a pointer containing a collection account fragment.
+/// \brief Definition for a pointer containing a CollectionAccountFragment.
 using CollectionAccountFragmentPtr [[maybe_unused]] = std::shared_ptr<CollectionAccountFragment>;
 
-/// \brief Definition for a collection account connection fragment.
+/// \brief Definition for a ConnectionFragment containing a CollectionAccountFragment.
 using CollectionAccountConnectionFragment [[maybe_unused]] = ConnectionFragment<CollectionAccountFragment>;
 
-/// \brief Definition for a pointer containing a collection account connection fragment.
+/// \brief Definition for a pointer containing a CollectionAccountConnectionFragment.
 using CollectionAccountConnectionFragmentPtr [[maybe_unused]] = std::shared_ptr<CollectionAccountConnectionFragment>;
 
 /// \brief A fragment for requesting properties of a collection account returned by the platform.

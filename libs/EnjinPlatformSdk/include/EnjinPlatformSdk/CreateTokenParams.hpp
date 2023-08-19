@@ -16,7 +16,7 @@ namespace enjin::platform::sdk
 {
 class CreateTokenParams;
 
-/// \brief Definition for a pointer containing a create token params.
+/// \brief Definition for a pointer containing a CreateTokenParams.
 using CreateTokenParamsPtr [[maybe_unused]] = std::shared_ptr<CreateTokenParams>;
 
 /// \brief Models a parameter for the parameters to create a token.

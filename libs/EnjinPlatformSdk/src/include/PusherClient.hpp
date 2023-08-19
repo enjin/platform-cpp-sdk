@@ -12,16 +12,16 @@
 namespace pusher
 {
 /// \brief Definition for a function wrapper which receives a PusherConnectionState.
-typedef std::function<void(PusherConnectionState)> PusherConnectionStateHandler;
+using PusherConnectionStateHandler = std::function<void(PusherConnectionState)>;
 
 /// \brief Definition for a function wrapper which receives an exception.
-typedef std::function<void(const std::exception&)> PusherErrorHandler;
+using PusherErrorHandler = std::function<void(const std::exception&)>;
 
 /// \brief Definition for a function wrapper which receives no arguments.
-typedef std::function<void()> PusherHandler;
+using PusherHandler = std::function<void()>;
 
 /// \brief Definition for a function wrapper which receives a string.
-typedef std::function<void(const std::string&)> PusherSubscribedHandler;
+using PusherSubscribedHandler = std::function<void(const std::string&)>;
 
 /// \brief Pusher client for subscribing to Pusher channels and binding to events.
 class ENJINPLATFORMSDK_EXPORT PusherClient : public virtual IPusherClient

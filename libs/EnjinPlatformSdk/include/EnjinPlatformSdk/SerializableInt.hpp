@@ -11,7 +11,7 @@ namespace enjin::platform::sdk
 {
 struct SerializableInt;
 
-/// \brief Definition for a pointer containing a serializable 32-bit integer.
+/// \brief Definition for a pointer containing a SerializableInt.
 using SerializableIntPtr [[maybe_unused]] = std::shared_ptr<SerializableInt>;
 
 /// \brief Struct for serializable 32-bit integers.
