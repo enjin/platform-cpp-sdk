@@ -21,6 +21,9 @@ std::string enjin::platform::sdk::ToString(const TokenMintCapType value)
         case TokenMintCapType::Supply:
             return Supply;
 
+        case TokenMintCapType::Infinite:
+            return Infinite;
+
         default:
             throw std::out_of_range("Value out of range for TokenMintCapType enum");
     }
@@ -47,6 +50,10 @@ bool enjin::platform::sdk::TryGetField(const JsonValue& json,
     else if (value == Supply)
     {
         outField = TokenMintCapType::Supply;
+    }
+    else if (value == Infinite)
+    {
+        outField = TokenMintCapType::Infinite;
     }
 
     return outField.has_value();

@@ -20,6 +20,9 @@ enum class TokenMintCapType
     /// \brief Indicates that a limit may be set on the total number of circulating tokens. This type allows for burned
     /// tokens to be re-minted even if the supply amount is 1.
     Supply,
+
+    /// \brief Indicates that there should be no limit on the total number of circulating tokens.
+    Infinite,
 };
 
 /// \brief Returns the string name of the given enum value.
