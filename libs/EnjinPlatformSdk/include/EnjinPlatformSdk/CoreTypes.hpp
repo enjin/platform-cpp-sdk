@@ -99,6 +99,16 @@ public:
     [[maybe_unused]]
     static constexpr char EncodableTokenIdInputArray[] = "[EncodableTokenIdInput!]!";
 
+    // FreezeState
+
+    /// \brief String for FreezeState type.
+    [[maybe_unused]]
+    static constexpr char FreezeState[] = "FreezeState!";
+
+    /// \brief String for an array of FreezeState type.
+    [[maybe_unused]]
+    static constexpr char FreezeStateArray[] = "[FreezeState!]!";
+
     // FreezeType
 
     /// \brief String for FreezeType type.

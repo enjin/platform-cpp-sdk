@@ -44,6 +44,12 @@ public:
     [[maybe_unused]]
     Freeze& SetFreezeType(FreezeType freezeType);
 
+    /// \brief Sets the freeze state type.
+    /// \param freezeState The freeze state type.
+    /// \return This request for chaining.
+    [[maybe_unused]]
+    Freeze& SetFreezeState(FreezeState freezeState);
+
     /// \brief Sets the collection ID to freeze.
     /// \param collectionId The collection ID.
     /// \return This request for chaining.
