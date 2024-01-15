@@ -53,8 +53,15 @@ public:
     /// \brief Sets the collection ID to freeze.
     /// \param collectionId The collection ID.
     /// \return This request for chaining.
+    /// \deprecated This function is now deprecated and will be removed in a future release.  Use SetCollectionId(SerializableStringPtr collectionId) instead.
     [[maybe_unused]]
     Freeze& SetCollection(SerializableStringPtr collectionId);
+
+    /// \brief Sets the collection ID to freeze.
+    /// \param collectionId The collection ID.
+    /// \return This request for chaining.
+    [[maybe_unused]]
+    Freeze& SetCollectionId(SerializableStringPtr collectionId);
 
     /// \brief Sets the collection account to freeze.
     /// \param collectionAccount The collection account.

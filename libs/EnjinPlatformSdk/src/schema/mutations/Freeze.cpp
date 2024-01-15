@@ -48,6 +48,12 @@ Freeze& Freeze::SetCollection(SerializableStringPtr collectionId)
 }
 
 [[maybe_unused]]
+Freeze& Freeze::SetCollectionId(SerializableStringPtr collectionId)
+{
+    return RequestType::SetVariable("collectionId", CoreTypes::BigInt, std::move(collectionId));
+}
+
+[[maybe_unused]]
 Freeze& Freeze::SetCollectionAccount(SerializableStringPtr collectionAccount)
 {
     return RequestType::SetVariable("collectionAccount", CoreTypes::String, std::move(collectionAccount));
