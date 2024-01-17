@@ -6,6 +6,7 @@ using namespace enjin::platform::sdk;
 
 constexpr char SingleMint[] = "SINGLE_MINT";
 constexpr char Supply[] = "SUPPLY";
+constexpr char Infinite[] = "INFINITE";
 
 [[maybe_unused]]
 std::string enjin::platform::sdk::ToString(const TokenMintCapType value)

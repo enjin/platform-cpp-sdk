@@ -2,6 +2,7 @@
 #define ENJINPLATFORMSDK_FREEZE_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/FreezeState.hpp"
 #include "EnjinPlatformSdk/FreezeType.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/HasEncodableTokenId.hpp"

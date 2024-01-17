@@ -8,7 +8,7 @@ constexpr char Permanent[] = "PERMANENT";
 constexpr char Temporary[] = "TEMPORARY";
 constexpr char Never[] = "NEVER";
 
-std::string enjin::platform::sdk::ToString(const FreezeType value)
+std::string enjin::platform::sdk::ToString(const FreezeState value)
 {
     switch (value)
     {
@@ -22,7 +22,7 @@ std::string enjin::platform::sdk::ToString(const FreezeType value)
             return Never;
 
         default:
-            throw std::out_of_range("Value out of range for FreezeType enum");
+            throw std::out_of_range("Value out of range for FreezeState enum");
     }
 }
 
