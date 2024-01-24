@@ -173,14 +173,14 @@ public:
     [[nodiscard]]
     JsonValue ToJson() const override
     {
-        JsonValue json = JsonValue::FromJson("[]");
+        std::vector<JsonValue> json_array;
 
         for (const T& el : _array)
         {
-            json.AddArrayElement(el.ToJson());
+            json_array.push_back(el.ToJson());
         }
 
-        return json;
+        return JsonValue::FromArray(json_array);
     }
 
     [[maybe_unused]]
