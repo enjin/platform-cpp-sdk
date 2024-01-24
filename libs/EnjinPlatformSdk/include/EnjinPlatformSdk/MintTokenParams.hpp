@@ -3,6 +3,7 @@
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/GraphQlParameter.hpp"
+#include "EnjinPlatformSdk/HasEncodableTokenId.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include <memory>
 
