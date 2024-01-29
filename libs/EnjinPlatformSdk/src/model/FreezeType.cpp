@@ -4,7 +4,7 @@
 
 using namespace enjin::platform::sdk;
 
-constexpr char Collect[] = "COLLECTION";
+constexpr char Collection[] = "COLLECTION";
 constexpr char CollectionAccount[] = "COLLECTION_ACCOUNT";
 constexpr char Token[] = "TOKEN";
 constexpr char TokenAccount[] = "TOKEN_ACCOUNT";
