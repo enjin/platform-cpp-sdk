@@ -150,7 +150,10 @@ std::string DateTime::ToString() const
 
     auto utc = date::utc_clock::from_sys(_date);
 
-    return std::format("\"{}\"", date::format(Iso8601Format, utc));
+    std::ostringstream oss;
+    oss << "\"" << date::format(Iso8601Format, utc) << "\"";
+
+    return oss.str();
 
 #else
 
