@@ -111,10 +111,10 @@ public:
     BeamClaimFragment& WithCode(bool isIncluded = true);
 
     /// \brief Sets whether the BeamClaim is to be returned with its qr property.
-    /// \param isIncluded Whether the field is included.
+    /// \param fragment The Beam QR fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    BeamClaimFragment& WithQr(bool isIncluded = true);
+    BeamClaimFragment& WithQr(BeamQrFragmentPtr fragment);
 
     BeamClaimFragment& operator=(const BeamClaimFragment& rhs);
 
