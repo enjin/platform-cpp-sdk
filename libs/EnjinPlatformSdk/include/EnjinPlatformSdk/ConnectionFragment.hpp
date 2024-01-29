@@ -39,9 +39,9 @@ public:
     /// \param fragment The scalar edge fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    ConnectionFragment& WithEdge(std::shared_ptr<EdgeFragment<>> fragment)
+    ConnectionFragment& WithEdges(std::shared_ptr<EdgeFragment<>> fragment)
     {
-        return GraphQlFragment<ConnectionFragment<>>::WithField("edge", std::move(fragment));
+        return GraphQlFragment<ConnectionFragment<>>::WithField("edges", std::move(fragment));
     }
 
     ConnectionFragment& operator=(const ConnectionFragment& rhs) = default;
@@ -79,9 +79,9 @@ public:
     /// \param fragment The fragment.
     /// \return This fragment for chaining.
     [[maybe_unused]]
-    ConnectionFragment& WithEdge(std::shared_ptr<EdgeFragment<TFragment>> fragment)
+    ConnectionFragment& WithEdges(std::shared_ptr<EdgeFragment<TFragment>> fragment)
     {
-        return GraphQlFragment<ConnectionFragment<TFragment>>::WithField("edge", std::move(fragment));
+        return GraphQlFragment<ConnectionFragment<TFragment>>::WithField("edges", std::move(fragment));
     }
 
     ConnectionFragment& operator=(const ConnectionFragment<TFragment>& rhs) = default;

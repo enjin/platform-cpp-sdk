@@ -27,7 +27,7 @@ public:
 
         switch (value)
         {
-            case FreezeType::Collect:
+            case FreezeType::Collection:
                 json.TrySetStringField(key, "COLLECTION");
                 break;
 
@@ -65,7 +65,7 @@ TEST_F(FreezeTypeTest, TryGetFieldWhenGivenJsonWithNoFieldReturnsFalseAndResetsO
     // Arrange
     const JsonValue json = JsonValue::FromJson(R"({})");
     const std::string key("key");
-    std::optional<FreezeType> outField = FreezeType::Collect;
+    std::optional<FreezeType> outField = FreezeType::Collection;
 
     // Assumptions
     ASSERT_THAT(outField.has_value(), IsTrue()) << "Assume that out field has value before act";
@@ -83,7 +83,7 @@ TEST_F(FreezeTypeTest, TryGetFieldWhenGivenJsonWithNonStringFieldReturnsFalseAnd
     // Arrange
     const JsonValue json = JsonValue::FromJson(R"({"key":null})");
     const std::string key("key");
-    std::optional<FreezeType> outField = FreezeType::Collect;
+    std::optional<FreezeType> outField = FreezeType::Collection;
 
     // Assumptions
     ASSERT_THAT(outField.has_value(), IsTrue()) << "Assume that out field has value before act";
@@ -101,7 +101,7 @@ TEST_F(FreezeTypeTest, TryGetFieldWhenGivenJsonWithInvalidStringFieldReturnsFals
     // Arrange
     const JsonValue json = JsonValue::FromJson(R"({"key":""})");
     const std::string key("key");
-    std::optional<FreezeType> outField = FreezeType::Collect;
+    std::optional<FreezeType> outField = FreezeType::Collection;
 
     // Assumptions
     ASSERT_THAT(outField.has_value(), IsTrue()) << "Assume that out field has value before act";
@@ -150,14 +150,14 @@ TEST_P(FreezeTypeTryGetValidValueTest, TryGetFieldWhenGivenJsonWithValidStringFi
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          FreezeTypeToStringValidValueTest,
                          Values(std::pair<std::string, FreezeType>("", FreezeType::None),
-                                std::pair<std::string, FreezeType>("COLLECTION", FreezeType::Collect),
+                                std::pair<std::string, FreezeType>("COLLECTION", FreezeType::Collection),
                                 std::pair<std::string, FreezeType>("COLLECTION_ACCOUNT", FreezeType::CollectionAccount),
                                 std::pair<std::string, FreezeType>("TOKEN", FreezeType::Token),
                                 std::pair<std::string, FreezeType>("TOKEN_ACCOUNT", FreezeType::TokenAccount)));
 
 INSTANTIATE_TEST_SUITE_P(MatchValues,
                          FreezeTypeTryGetValidValueTest,
-                         Values(FreezeType::Collect,
+                         Values(FreezeType::Collection,
                                 FreezeType::CollectionAccount,
                                 FreezeType::Token,
                                 FreezeType::TokenAccount));
