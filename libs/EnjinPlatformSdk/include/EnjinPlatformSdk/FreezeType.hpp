@@ -15,7 +15,7 @@ enum class FreezeType
     None,
 
     /// \brief Represents the Collection type.
-    Collect,
+    Collection,
 
     /// \brief Represents the CollectionAccount type.
     CollectionAccount,
