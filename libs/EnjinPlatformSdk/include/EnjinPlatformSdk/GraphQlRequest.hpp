@@ -128,7 +128,7 @@ public:
             ss << _fragment->CompileParameters();
         }
 
-        ss << GraphQlParameterHolder<TRequest>::CompileParameters();
+        //ss << GraphQlParameterHolder<TRequest>::CompileParameters();
 
         return ss.str();
     }

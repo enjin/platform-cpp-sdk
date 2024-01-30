@@ -1,5 +1,5 @@
-#ifndef ENJINPLATFORMSDK_FREEZETYPE_HPP
-#define ENJINPLATFORMSDK_FREEZETYPE_HPP
+#ifndef ENJINPLATFORMSDK_FREEZESTATE_HPP
+#define ENJINPLATFORMSDK_FREEZESTATE_HPP
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/JsonValue.hpp"
@@ -8,23 +8,17 @@
 
 namespace enjin::platform::sdk
 {
-/// \brief The freezable objects supported on-chain.
-enum class FreezeType
+/// \brief The freeze states supported on-chain.
+enum class FreezeState
 {
-    /// \brief Value used by the SDK for parameter setting to indicate the enum parameter should be unset.
-    None,
+    /// \brief Indicates the token will be permanently frozen.
+    Permanent,
 
-    /// \brief Represents the Collection type.
-    Collection,
+    /// \brief Indicates the token will be frozen temporarily.
+    Temporary,
 
-    /// \brief Represents the CollectionAccount type.
-    CollectionAccount,
-
-    /// \brief Represents the Token type.
-    Token,
-
-    /// \brief Represents the TokenAccount type.
-    TokenAccount,
+    /// \brief RIndicates the the token cannot be frozen.
+    Never,
 };
 
 /// \brief Returns the string name of the given enum value.
@@ -33,7 +27,7 @@ enum class FreezeType
 /// \throws std::out_of_range Thrown if the given value is out of range.
 [[maybe_unused]]
 ENJINPLATFORMSDK_EXPORT
-std::string ToString(FreezeType value);
+std::string ToString(FreezeState value);
 
 /// \brief Tries to get the specified field from the given JSON value-object.
 /// \param json The JSON value-object.
@@ -43,7 +37,7 @@ std::string ToString(FreezeType value);
 /// \remarks If the field is not retrieved, then the out optional will be cleared of any data it holds.
 [[maybe_unused]]
 ENJINPLATFORMSDK_EXPORT
-bool TryGetField(const JsonValue& json, const std::string& key, std::optional<FreezeType>& outField);
+bool TryGetField(const JsonValue& json, const std::string& key, std::optional<FreezeState>& outField);
 }
 
-#endif //ENJINPLATFORMSDK_FREEZETYPE_HPP
+#endif //ENJINPLATFORMSDK_FREEZESTATE_HPP

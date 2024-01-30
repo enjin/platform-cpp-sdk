@@ -94,9 +94,9 @@ BeamClaimFragment& BeamClaimFragment::WithCode(const bool isIncluded)
 }
 
 [[maybe_unused]]
-BeamClaimFragment& BeamClaimFragment::WithQr(const bool isIncluded)
+BeamClaimFragment& BeamClaimFragment::WithQr(BeamQrFragmentPtr fragment)
 {
-    return WithField("qr", isIncluded);
+    return WithField("qr", std::move(fragment));
 }
 
 BeamClaimFragment& BeamClaimFragment::operator=(const BeamClaimFragment& rhs)

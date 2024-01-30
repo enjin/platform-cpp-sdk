@@ -293,10 +293,10 @@ TEST_P(DateTimeSerializeTest, ToJsonReturnsExpected)
 
 INSTANTIATE_TEST_SUITE_P(ValidValues,
                          DateTimeParseTest,
-                         Values(DateTimeTestParam("2000-01-01T00:00:00+00:00", 2000, 1, 1, 0, 0, 0, 0),
-                                DateTimeTestParam("2011-11-11T12:30:30+00:00", 2011, 11, 11, 12, 30, 30, 0)));
+                         Values(DateTimeTestParam("2000-01-01T00:00:00+0", 2000, 1, 1, 0, 0, 0, 0),
+                                DateTimeTestParam("2011-11-11T12:30:30+0", 2011, 11, 11, 12, 30, 30, 0)));
 
 INSTANTIATE_TEST_SUITE_P(Serialization,
                          DateTimeSerializeTest,
-                         Values("2000-01-01T00:00:00+00:00",
-                                "2011-11-11T12:30:30+00:00"));
+                         Values("\"2000-01-01T00:00:00+00:00\"",
+                                "\"2011-11-11T12:30:30+00:00\""));

@@ -18,6 +18,7 @@ target_sources(${PROJECT_NAME}
         Erc1155EncoderInput.cpp
         Event.cpp
         EventParam.cpp
+        FreezeState.cpp
         FreezeType.cpp
         MarketPolicy.cpp
         MintPolicy.cpp

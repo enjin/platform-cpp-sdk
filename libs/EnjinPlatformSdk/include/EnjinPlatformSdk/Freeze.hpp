@@ -2,6 +2,7 @@
 #define ENJINPLATFORMSDK_FREEZE_HPP
 
 #include "enjinplatformsdk_export.h"
+#include "EnjinPlatformSdk/FreezeState.hpp"
 #include "EnjinPlatformSdk/FreezeType.hpp"
 #include "EnjinPlatformSdk/GraphQlRequest.hpp"
 #include "EnjinPlatformSdk/HasEncodableTokenId.hpp"
@@ -44,11 +45,24 @@ public:
     [[maybe_unused]]
     Freeze& SetFreezeType(FreezeType freezeType);
 
+    /// \brief Sets the freeze state type.
+    /// \param freezeState The freeze state type.
+    /// \return This request for chaining.
+    [[maybe_unused]]
+    Freeze& SetFreezeState(FreezeState freezeState);
+
+    /// \brief Sets the collection ID to freeze.
+    /// \param collectionId The collection ID.
+    /// \return This request for chaining.
+    /// \deprecated This function is now deprecated and will be removed in a future release.  Use SetCollectionId(SerializableStringPtr collectionId) instead.
+    [[maybe_unused]]
+    Freeze& SetCollection(SerializableStringPtr collectionId);
+
     /// \brief Sets the collection ID to freeze.
     /// \param collectionId The collection ID.
     /// \return This request for chaining.
     [[maybe_unused]]
-    Freeze& SetCollection(SerializableStringPtr collectionId);
+    Freeze& SetCollectionId(SerializableStringPtr collectionId);
 
     /// \brief Sets the collection account to freeze.
     /// \param collectionAccount The collection account.

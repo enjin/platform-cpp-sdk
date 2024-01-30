@@ -4,7 +4,7 @@
 
 using namespace enjin::platform::sdk;
 
-constexpr char Collect[] = "COLLECTION";
+constexpr char Collection[] = "COLLECTION";
 constexpr char CollectionAccount[] = "COLLECTION_ACCOUNT";
 constexpr char Token[] = "TOKEN";
 constexpr char TokenAccount[] = "TOKEN_ACCOUNT";
@@ -16,8 +16,8 @@ std::string enjin::platform::sdk::ToString(const FreezeType value)
         case FreezeType::None:
             return {};
 
-        case FreezeType::Collect:
-            return Collect;
+        case FreezeType::Collection:
+            return Collection;
 
         case FreezeType::CollectionAccount:
             return CollectionAccount;
@@ -46,9 +46,9 @@ bool enjin::platform::sdk::TryGetField(const JsonValue& json,
         return false;
     }
 
-    if (value == Collect)
+    if (value == Collection)
     {
-        outField = FreezeType::Collect;
+        outField = FreezeType::Collection;
     }
     else if (value == CollectionAccount)
     {

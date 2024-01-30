@@ -3,6 +3,7 @@
 
 #include "enjinplatformsdk_export.h"
 #include "EnjinPlatformSdk/GraphQlParameter.hpp"
+#include "EnjinPlatformSdk/HasEncodableTokenId.hpp"
 #include "EnjinPlatformSdk/SerializableString.hpp"
 #include <memory>
 
@@ -14,7 +15,8 @@ class MintTokenParams;
 using MintTokenParamsPtr [[maybe_unused]] = std::shared_ptr<MintTokenParams>;
 
 /// \brief Models a parameter for parameters to mint a token.
-class ENJINPLATFORMSDK_EXPORT MintTokenParams : public GraphQlParameter<MintTokenParams>
+class ENJINPLATFORMSDK_EXPORT MintTokenParams : public GraphQlParameter<MintTokenParams>,
+                                                public HasEncodableTokenId<MintTokenParams>
 {
 public:
     /// \brief Constructs an instance of this class.

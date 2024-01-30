@@ -60,7 +60,11 @@ public:
                 continue;
             }
 
-            ss << k << ColonSeparator << v->ToString();
+            std::string value = v->ToString();
+//            value.erase(0, 1);
+//            value.erase(value.find('\"', 0), 1);
+
+            ss << k << ColonSeparator << value;
 
             if (parameterIdx < parametersCount)
             {

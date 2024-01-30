@@ -29,11 +29,26 @@ Freeze& Freeze::SetFreezeType(const FreezeType freezeType)
     std::string s = enjin::platform::sdk::ToString(freezeType);
     SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
 
-    return RequestType::SetVariable("freezeType", CoreTypes::BigInt, std::move(sPtr));
+    return RequestType::SetVariable("freezeType", CoreTypes::FreezeType, std::move(sPtr));
+}
+
+[[maybe_unused]]
+Freeze& Freeze::SetFreezeState(const FreezeState freezeState)
+{
+    std::string s = enjin::platform::sdk::ToString(freezeState);
+    SerializableStringPtr sPtr = std::make_shared<SerializableString>(std::move(s));
+
+    return RequestType::SetVariable("freezeState", CoreTypes::FreezeState, std::move(sPtr));
 }
 
 [[maybe_unused]]
 Freeze& Freeze::SetCollection(SerializableStringPtr collectionId)
+{
+    return RequestType::SetVariable("collectionId", CoreTypes::BigInt, std::move(collectionId));
+}
+
+[[maybe_unused]]
+Freeze& Freeze::SetCollectionId(SerializableStringPtr collectionId)
 {
     return RequestType::SetVariable("collectionId", CoreTypes::BigInt, std::move(collectionId));
 }
