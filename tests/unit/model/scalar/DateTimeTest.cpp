@@ -298,5 +298,5 @@ INSTANTIATE_TEST_SUITE_P(ValidValues,
 
 INSTANTIATE_TEST_SUITE_P(Serialization,
                          DateTimeSerializeTest,
-                         Values("2000-01-01T00:00:00+00:00",
-                                "2011-11-11T12:30:30+00:00"));
+                         Values("\"2000-01-01T00:00:00+00:00\"",
+                                "\"2011-11-11T12:30:30+00:00\""));
